@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Services from "./pages/Services";
+import ServiceDetails from "./pages/services/ServiceDetails";
 import GovernanceProposals from "./pages/governance/GovernanceProposals";
 import GovernanceVoting from "./pages/governance/GovernanceVoting";
 import GovernanceDeliberation from "./pages/governance/GovernanceDeliberation";
@@ -21,6 +22,9 @@ import DAOProjects from "./pages/dao/DAOProjects";
 import Tools from "./pages/Tools";
 import ToolsAIAgent from "./pages/tools/ToolsAIAgent";
 import NotFound from "./pages/NotFound";
+import About from "./pages/About";
+import Mission from "./pages/Mission";
+import HowItWorks from "./pages/HowItWorks";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +37,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/services" element={<Services />} />
+          <Route path="/services/details/:serviceId" element={<ServiceDetails />} />
           <Route path="/services/integrations" element={<Services />} />
           <Route path="/governance" element={<Governance />} />
           <Route path="/governance/proposals" element={<GovernanceProposals />} />
@@ -48,6 +53,9 @@ const App = () => (
           <Route path="/dao/projects" element={<DAOProjects />} />
           <Route path="/tools" element={<Tools />} />
           <Route path="/tools/ai-agent" element={<ToolsAIAgent />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/mission" element={<Mission />} />
+          <Route path="/how-it-works" element={<HowItWorks />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
