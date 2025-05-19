@@ -8,6 +8,8 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ShoppingCart, Users, BarChart3, Store, Building, FileCheck, Gavel, CodeSquare, Search, Filter } from 'lucide-react';
+import ActiveGroups from '@/components/groups/ActiveGroups';
+import ServiceRequests from '@/components/services/ServiceRequests';
 
 const portals = [
   {
@@ -97,7 +99,7 @@ const Index = () => {
 
   return (
     <MainLayout>
-      <div className="space-y-6">
+      <div className="space-y-8">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold mb-2">منصة GPO MCP الذكية</h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -210,6 +212,16 @@ const Index = () => {
               </div>
             )}
           </div>
+        </div>
+
+        {/* إضافة مكون المجموعات النشطة */}
+        <div className="bg-muted/30 p-6 rounded-lg">
+          <ActiveGroups />
+        </div>
+
+        {/* إضافة مكون طلبات الخدمات */}
+        <div className="bg-muted/30 p-6 rounded-lg">
+          <ServiceRequests />
         </div>
 
         <div className="flex flex-col md:flex-row gap-6 mt-8">
