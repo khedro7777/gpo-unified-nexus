@@ -10,9 +10,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { ArrowLeft, Users, Check, Clock, FileText, Info, UserPlus, Vote } from 'lucide-react';
+import { 
+  ArrowLeft, Users, Check, Clock, FileText, Info, UserPlus, 
+  Vote, Shield, MessageCircle, FileUp, Settings, StarIcon
+} from 'lucide-react';
+import GroupRounds from '@/components/groups/GroupRounds';
+import { useToast } from '@/hooks/use-toast';
 
-// نموذج بيانات للمجموعات النشطة - نفس البيانات من المكون السابق مع بيانات إضافية
+// Model data for groups
 const groupsData = [
   {
     id: 'group-purchase-electronics',
@@ -25,6 +30,7 @@ const groupsData = [
     votesReceived: 12,
     daysLeft: 5,
     description: 'مجموعة تعاونية لشراء أجهزة إلكترونية بكميات كبيرة للحصول على أسعار تفضيلية',
+    groupType: 'dao',
     createdAt: '2025-05-01',
     endDate: '2025-06-15',
     status: 'active',
@@ -61,6 +67,13 @@ const groupsData = [
         title: 'اقتراح جديد',
         description: 'تم تقديم اقتراح لإضافة أجهزة جديدة إلى قائمة المشتريات',
         date: '2025-05-10'
+      },
+      {
+        id: 4,
+        type: 'contract',
+        title: 'توقيع عقد',
+        description: 'تم توقيع العقد وحفظه على IPFS',
+        date: '2025-05-08'
       }
     ],
     activeMembers: [
@@ -86,13 +99,15 @@ const groupsData = [
         votesReceived: 8,
         votesRequired: 15
       }
-    ]
+    ],
+    ipfsHash: 'Qm1234567890abcdef1234567890abcdef1234567890abcdef'
   },
   {
     id: 'group-marketing-campaign',
     title: 'حملة تسويقية مشتركة',
     type: 'marketing',
     category: 'collective',
+    groupType: 'dao',
     members: 12,
     country: 'مصر',
     votesRequired: 8,
@@ -127,16 +142,58 @@ const groupsData = [
       { id: 2, name: 'متاجر القاهرة', avatar: '', role: 'عضو' },
       { id: 3, name: 'شركة الإسكندرية للتجزئة', avatar: '', role: 'عضو' }
     ],
-    currentProposals: []
+    currentProposals: [],
+    ipfsHash: 'Qm9876543210fedcba9876543210fedcba9876543210fedcba'
   },
-  // نضيف باقي البيانات من المجموعات السابقة
+  {
+    id: 'solo-freelancer-web',
+    title: 'خدمات تطوير الويب',
+    type: 'freelancers',
+    category: 'individual',
+    groupType: 'solo',
+    members: 1,
+    country: 'الإمارات',
+    votesRequired: 0,
+    votesReceived: 0,
+    daysLeft: 0,
+    description: 'خدمات تطوير مواقع الويب والتطبيقات للشركات الصغيرة والمتوسطة',
+    createdAt: '2025-05-05',
+    endDate: '',
+    status: 'active',
+    admin: 'محمد علي',
+    requirements: [],
+    goals: [
+      'تقديم خدمات تطوير الويب عالية الجودة',
+      'بناء محفظة مشاريع متنوعة',
+      'تكوين علاقات عمل طويلة الأمد مع العملاء'
+    ],
+    recentActivities: [
+      {
+        id: 1,
+        type: 'contract',
+        title: 'عقد جديد',
+        description: 'تم الحصول على مشروع جديد لتطوير موقع إلكتروني',
+        date: '2025-05-18'
+      }
+    ],
+    activeMembers: [
+      { id: 1, name: 'محمد علي', avatar: '', role: 'مستقل' }
+    ],
+    currentProposals: [],
+    skills: [
+      'React', 'Node.js', 'TypeScript', 'UI/UX Design'
+    ],
+    completedProjects: 12,
+    rating: 4.8
+  }
 ];
 
 const GroupDetails: React.FC = () => {
   const { groupId } = useParams<{ groupId: string }>();
-  const [activeTab, setActiveTab] = useState<'info' | 'members' | 'proposals' | 'activities'>('info');
+  const [activeTab, setActiveTab] = useState<'info' | 'members' | 'proposals' | 'activities' | 'rounds'>('info');
+  const { toast } = useToast();
   
-  // البحث عن المجموعة المطلوبة باستخدام المعرف
+  // Find the group by ID
   const group = groupsData.find(g => g.id === groupId);
   
   if (!group) {
@@ -153,7 +210,21 @@ const GroupDetails: React.FC = () => {
     );
   }
   
-  const votingProgress = (group.votesReceived / group.votesRequired) * 100;
+  const votingProgress = group.votesRequired > 0 ? (group.votesReceived / group.votesRequired) * 100 : 100;
+  
+  const handleJoinRequest = () => {
+    toast({
+      title: "تم إرسال طلب الانضمام",
+      description: "سيتم إشعارك عند قبول طلبك",
+    });
+  };
+
+  const handleContactAdmin = () => {
+    toast({
+      title: "تم إرسال رسالة",
+      description: "تم إرسال رسالتك إلى مسؤول المجموعة",
+    });
+  };
   
   return (
     <MainLayout>
@@ -164,19 +235,35 @@ const GroupDetails: React.FC = () => {
               <Button variant="outline" size="sm" asChild>
                 <Link to="/"><ArrowLeft className="h-4 w-4" /> رجوع</Link>
               </Button>
-              <Badge variant={group.category === 'collective' ? 'default' : 'secondary'}>
+              <Badge variant={group.category === 'collective' ? 'default' : 'secondary'} className="mr-2">
                 {group.category === 'collective' ? 'جماعي' : 'فردي'}
               </Badge>
+              {group.groupType === 'dao' && (
+                <Badge variant="outline" className="bg-blue-50 text-blue-600 hover:bg-blue-50">DAO</Badge>
+              )}
+              {group.groupType === 'solo' && (
+                <Badge variant="outline">فردي</Badge>
+              )}
             </div>
             <h1 className="text-3xl font-bold mt-2">{group.title}</h1>
             <p className="text-muted-foreground mt-1">{group.description}</p>
+            
+            {group.groupType === 'solo' && group.skills && (
+              <div className="flex flex-wrap gap-2 mt-2">
+                {group.skills.map((skill, index) => (
+                  <Badge key={index} variant="outline" className="bg-muted/50">{skill}</Badge>
+                ))}
+              </div>
+            )}
           </div>
           <div className="flex gap-2">
-            <Button variant="outline">
-              <UserPlus className="h-4 w-4 ml-2" /> طلب انضمام
-            </Button>
-            <Button>
-              <Info className="h-4 w-4 ml-2" /> تواصل مع المسؤول
+            {group.groupType === 'dao' && group.daysLeft > 0 && (
+              <Button variant="outline" onClick={handleJoinRequest}>
+                <UserPlus className="h-4 w-4 ml-2" /> طلب انضمام
+              </Button>
+            )}
+            <Button onClick={handleContactAdmin}>
+              <MessageCircle className="h-4 w-4 ml-2" /> تواصل مع المسؤول
             </Button>
           </div>
         </div>
@@ -202,47 +289,83 @@ const GroupDetails: React.FC = () => {
               <div className="flex flex-col">
                 <span className="text-sm text-muted-foreground mb-1">المسؤول</span>
                 <span className="text-2xl font-semibold flex items-center">
-                  {group.admin}
+                  <Shield className="h-5 w-5 ml-2 text-primary" /> {group.admin}
                 </span>
               </div>
-              <div className="flex flex-col">
-                <span className="text-sm text-muted-foreground mb-1">حالة التصويت</span>
+              
+              {group.groupType === 'dao' ? (
                 <div className="flex flex-col">
-                  <div className="flex justify-between text-sm mb-1">
-                    <span>{group.votesReceived}/{group.votesRequired}</span>
-                    <span>{group.daysLeft > 0 ? `${group.daysLeft} أيام متبقية` : 'مكتمل'}</span>
+                  <span className="text-sm text-muted-foreground mb-1">حالة التصويت</span>
+                  <div className="flex flex-col">
+                    <div className="flex justify-between text-sm mb-1">
+                      <span>{group.votesReceived}/{group.votesRequired}</span>
+                      <span>{group.daysLeft > 0 ? `${group.daysLeft} أيام متبقية` : 'مكتمل'}</span>
+                    </div>
+                    <Progress value={votingProgress} className="h-2" />
                   </div>
-                  <Progress value={votingProgress} className="h-2" />
+                </div>
+              ) : (
+                <div className="flex flex-col">
+                  <span className="text-sm text-muted-foreground mb-1">التقييم</span>
+                  <div className="flex items-center">
+                    <span className="text-2xl font-semibold mr-2">{group.rating}</span>
+                    <div className="flex">
+                      {[...Array(5)].map((_, i) => (
+                        <StarIcon key={i} className={`h-5 w-5 ${i < Math.floor(group.rating || 0) ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`} />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {group.ipfsHash && (
+              <div className="mt-6 p-2 bg-muted/30 rounded-md">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <FileUp className="h-4 w-4 mr-2 text-primary" />
+                    <span className="text-sm">تم توثيق العقد على IPFS</span>
+                  </div>
+                  <div className="text-xs font-mono text-muted-foreground">{group.ipfsHash.substring(0, 20)}...</div>
                 </div>
               </div>
-            </div>
+            )}
           </CardContent>
         </Card>
         
         <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as any)}>
-          <TabsList className="grid grid-cols-4 mb-6">
+          <TabsList className="grid grid-cols-5 mb-6">
             <TabsTrigger value="info">معلومات المجموعة</TabsTrigger>
             <TabsTrigger value="members">الأعضاء</TabsTrigger>
             <TabsTrigger value="proposals">المقترحات والتصويت</TabsTrigger>
+            <TabsTrigger value="rounds">جولات المجموعة</TabsTrigger>
             <TabsTrigger value="activities">الأنشطة</TabsTrigger>
           </TabsList>
           
           <TabsContent value="info" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>متطلبات الانضمام</CardTitle>
-                <CardDescription>الشروط الواجب توافرها للانضمام إلى المجموعة</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2">
-                  {group.requirements.map((req, index) => (
-                    <li key={index} className="flex items-center">
-                      <Check className="h-5 w-5 text-primary ml-2" /> {req}
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
+            {group.groupType === 'dao' && (
+              <>
+                <Card>
+                  <CardHeader>
+                    <CardTitle>متطلبات الانضمام</CardTitle>
+                    <CardDescription>الشروط الواجب توافرها للانضمام إلى المجموعة</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    {group.requirements && group.requirements.length > 0 ? (
+                      <ul className="space-y-2">
+                        {group.requirements.map((req, index) => (
+                          <li key={index} className="flex items-center">
+                            <Check className="h-5 w-5 text-primary ml-2" /> {req}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-muted-foreground">لا توجد متطلبات خاصة للانضمام</p>
+                    )}
+                  </CardContent>
+                </Card>
+              </>
+            )}
             
             <Card>
               <CardHeader>
@@ -260,35 +383,51 @@ const GroupDetails: React.FC = () => {
               </CardContent>
             </Card>
             
-            {group.daysLeft > 0 ? (
-              <Alert>
-                <Info className="h-4 w-4" />
-                <AlertTitle>معلومات هامة</AlertTitle>
-                <AlertDescription>
-                  هذه المجموعة لا تزال في مرحلة جمع الأعضاء والتصويت. يمكنك الانضمام والمشاركة في التصويت قبل {group.daysLeft} أيام.
-                </AlertDescription>
-              </Alert>
+            {group.groupType === 'dao' ? (
+              group.daysLeft > 0 ? (
+                <Alert>
+                  <Info className="h-4 w-4" />
+                  <AlertTitle>معلومات هامة</AlertTitle>
+                  <AlertDescription>
+                    هذه المجموعة لا تزال في مرحلة جمع الأعضاء والتصويت. يمكنك الانضمام والمشاركة في التصويت قبل {group.daysLeft} أيام.
+                  </AlertDescription>
+                </Alert>
+              ) : (
+                <Alert>
+                  <Check className="h-4 w-4" />
+                  <AlertTitle>تم اكتمال التصويت</AlertTitle>
+                  <AlertDescription>
+                    اكتمل التصويت المطلوب لهذه المجموعة وهي الآن في مرحلة التنفيذ.
+                  </AlertDescription>
+                </Alert>
+              )
             ) : (
-              <Alert>
-                <Check className="h-4 w-4" />
-                <AlertTitle>تم اكتمال التصويت</AlertTitle>
-                <AlertDescription>
-                  اكتمل التصويت المطلوب لهذه المجموعة وهي الآن في مرحلة التنفيذ.
-                </AlertDescription>
-              </Alert>
+              group.completedProjects && (
+                <Alert className="bg-green-50 border-green-200">
+                  <Check className="h-4 w-4 text-green-500" />
+                  <AlertTitle>مزود خدمة موثوق</AlertTitle>
+                  <AlertDescription>
+                    أكمل هذا المستقل {group.completedProjects} مشروعًا بنجاح، بمعدل تقييم {group.rating} من 5.
+                  </AlertDescription>
+                </Alert>
+              )
             )}
             
             <div className="flex justify-between gap-4">
               <Button variant="outline" className="flex-1" asChild>
                 <Link to="/">رجوع</Link>
               </Button>
-              {group.daysLeft > 0 ? (
-                <Button className="flex-1">
+              {group.groupType === 'dao' && group.daysLeft > 0 ? (
+                <Button className="flex-1" onClick={handleJoinRequest}>
                   انضم للمجموعة
                 </Button>
-              ) : (
+              ) : group.groupType === 'dao' ? (
                 <Button className="flex-1" disabled>
                   اكتمل التصويت
+                </Button>
+              ) : (
+                <Button className="flex-1">
+                  طلب خدمة
                 </Button>
               )}
             </div>
@@ -321,8 +460,8 @@ const GroupDetails: React.FC = () => {
                 </div>
               </CardContent>
               <CardFooter className="flex justify-center">
-                {group.daysLeft > 0 && (
-                  <Button>
+                {group.groupType === 'dao' && group.daysLeft > 0 && (
+                  <Button onClick={handleJoinRequest}>
                     <UserPlus className="h-4 w-4 ml-2" /> طلب انضمام
                   </Button>
                 )}
@@ -332,7 +471,7 @@ const GroupDetails: React.FC = () => {
           
           <TabsContent value="proposals">
             <div className="space-y-6">
-              {group.currentProposals.length > 0 ? (
+              {group.groupType === 'dao' && group.currentProposals && group.currentProposals.length > 0 ? (
                 group.currentProposals.map(proposal => (
                   <Card key={proposal.id}>
                     <CardHeader>
@@ -362,8 +501,12 @@ const GroupDetails: React.FC = () => {
                 <div className="text-center py-10">
                   <FileText className="h-10 w-10 text-muted-foreground mx-auto mb-4" />
                   <h3 className="text-lg font-medium mb-2">لا توجد مقترحات حالية</h3>
-                  <p className="text-sm text-muted-foreground mb-6">لا توجد مقترحات قيد التصويت حالياً لهذه المجموعة</p>
-                  {group.daysLeft > 0 && (
+                  <p className="text-sm text-muted-foreground mb-6">
+                    {group.groupType === 'dao' ? 
+                      "لا توجد مقترحات قيد التصويت حالياً لهذه المجموعة" : 
+                      "المجموعات الفردية لا تتطلب مقترحات للتصويت"}
+                  </p>
+                  {group.groupType === 'dao' && group.daysLeft > 0 && (
                     <Button>
                       إنشاء مقترح جديد
                     </Button>
@@ -371,6 +514,10 @@ const GroupDetails: React.FC = () => {
                 </div>
               )}
             </div>
+          </TabsContent>
+
+          <TabsContent value="rounds">
+            {group.id && <GroupRounds groupId={group.id} />}
           </TabsContent>
           
           <TabsContent value="activities">
@@ -381,17 +528,21 @@ const GroupDetails: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {group.recentActivities.map(activity => (
+                  {group.recentActivities && group.recentActivities.map(activity => (
                     <div key={activity.id} className="flex items-start gap-4 border-b pb-4 last:border-0">
                       <div className={`rounded-full p-2 ${
                         activity.type === 'vote' ? 'bg-blue-100' : 
-                        activity.type === 'member' ? 'bg-green-100' : 'bg-purple-100'
+                        activity.type === 'member' ? 'bg-green-100' : 
+                        activity.type === 'contract' ? 'bg-yellow-100' :
+                        'bg-purple-100'
                       }`}>
                         {activity.type === 'vote' ? 
                           <Vote className="h-5 w-5 text-blue-600" /> : 
                           activity.type === 'member' ? 
                             <UserPlus className="h-5 w-5 text-green-600" /> : 
-                            <FileText className="h-5 w-5 text-purple-600" />
+                            activity.type === 'contract' ? 
+                              <FileUp className="h-5 w-5 text-yellow-600" /> :
+                              <FileText className="h-5 w-5 text-purple-600" />
                         }
                       </div>
                       <div className="flex-1">

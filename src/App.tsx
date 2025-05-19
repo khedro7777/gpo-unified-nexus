@@ -26,6 +26,7 @@ import About from "./pages/About";
 import Mission from "./pages/Mission";
 import HowItWorks from "./pages/HowItWorks";
 import GroupDetails from "./pages/groups/GroupDetails";
+import Groups from "./pages/Groups";
 
 const queryClient = new QueryClient();
 
@@ -57,6 +58,7 @@ const App = () => (
           <Route path="/about" element={<About />} />
           <Route path="/mission" element={<Mission />} />
           <Route path="/how-it-works" element={<HowItWorks />} />
+          <Route path="/groups" element={<Groups />} />
           <Route path="/groups/:groupId" element={<GroupDetails />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

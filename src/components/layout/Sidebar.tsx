@@ -1,105 +1,148 @@
+import React from "react";
+import {
+  Home,
+  LayoutDashboard,
+  Settings,
+  Users,
+  Wallet,
+  ScrollText,
+  Scale,
+  Brain,
+  LucideIcon,
+  ChevronsLeft,
+  ChevronsRight,
+  Building,
+  Network,
+} from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { useSidebar } from "@/hooks/use-sidebar";
+import { cn } from "@/lib/utils";
 
-import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import { 
-  Home, 
-  Settings, 
-  FileText, 
-  Users, 
-  Wallet, 
-  Gavel, 
-  Building2, 
-  Wrench,
-  ChevronRight,
-  ChevronDown 
-} from 'lucide-react';
+interface SidebarProps {
+  isCollapsed: boolean;
+  setIsCollapsed: (isCollapsed: boolean) => void;
+}
 
-interface SidebarItemProps {
-  icon: React.ReactNode;
+interface NavItemProps {
+  icon: LucideIcon;
   label: string;
-  to: string;
+  href: string;
+  isCollapsed: boolean;
 }
 
-const SidebarItem: React.FC<SidebarItemProps> = ({ icon, label, to }) => {
+const NavItem: React.FC<NavItemProps> = ({ icon: Icon, label, href, isCollapsed }) => {
+  const location = useLocation();
+  const isActive = location.pathname === href;
+
   return (
-    <NavLink 
-      to={to}
-      className={({ isActive }) => 
-        `gpo-sidebar-item ${isActive ? 'active' : ''}`
-      }
-    >
-      {icon}
-      <span>{label}</span>
-    </NavLink>
+    <li>
+      <TooltipProvider>
+        <Tooltip delayDuration={50}>
+          <TooltipTrigger asChild>
+            <Link to={href}>
+              <Button
+                variant="ghost"
+                className={cn(
+                  "justify-start gap-x-3 rounded-md p-2 text-sm font-semibold hover:bg-accent hover:text-accent-foreground",
+                  isActive && "bg-accent text-accent-foreground",
+                  isCollapsed && "w-9 h-9 p-0 justify-center"
+                )}
+              >
+                <Icon className="h-4 w-4" />
+                {!isCollapsed && <span>{label}</span>}
+              </Button>
+            </Link>
+          </TooltipTrigger>
+          {isCollapsed && (
+            <TooltipContent side="right" align="center">
+              <p className="font-semibold size-2">{label}</p>
+            </TooltipContent>
+          )}
+        </Tooltip>
+      </TooltipProvider>
+    </li>
   );
 };
 
-interface SidebarGroupProps {
-  title: string;
-  children: React.ReactNode;
-}
+const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
+  const navigate = useNavigate();
+  const { onExpand, onCollapse } = useSidebar();
 
-const SidebarGroup: React.FC<SidebarGroupProps> = ({ title, children }) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const handleToggleSidebar = () => {
+    if (isCollapsed) {
+      onExpand();
+      setIsCollapsed(false);
+    } else {
+      onCollapse();
+      setIsCollapsed(true);
+    }
+  };
+
+  const navigation = [
+    { icon: Home, label: "الرئيسية", href: "/" },
+    { icon: LayoutDashboard, label: "نظرة عامة", href: "/dashboard" },
+    { icon: Users, label: "المجموعات", href: "/groups" },
+    { icon: Wallet, label: "المحفظة", href: "/wallet" },
+    { icon: ScrollText, label: "الخدمات", href: "/services" },
+    { icon: Scale, label: "القانون", href: "/legal" },
+    { icon: Brain, label: "الأدوات", href: "/tools" },
+    { icon: Building, label: "منظمة DAO", href: "/dao" },
+    { icon: Network, label: "الحوكمة", href: "/governance" },
+    { icon: Settings, label: "الإعدادات", href: "/settings" },
+  ];
 
   return (
-    <div className="mb-2">
-      <button 
-        className="flex items-center justify-between w-full px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        <span>{title}</span>
-        {isOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
-      </button>
-      {isOpen && (
-        <div className="mt-1 pl-2 space-y-1">
-          {children}
-        </div>
-      )}
+    <div className="flex h-full border-r flex-col fixed z-[999]">
+      <div className="px-4 py-6">
+        <Link to="/">
+          <div className="flex items-center font-semibold">
+            {!isCollapsed && <img src="/logo.png" alt="Logo" className="h-8 mr-2" />}
+            <span className="text-2xl">GPO</span>
+          </div>
+        </Link>
+      </div>
+      <ul className="mt-2">
+        {navigation.map((item) => (
+          <NavItem
+            key={item.label}
+            icon={item.icon}
+            label={item.label}
+            href={item.href}
+            isCollapsed={isCollapsed}
+          />
+        ))}
+      </ul>
+      <div className="mt-auto mb-2 px-4">
+        <TooltipProvider>
+          <Tooltip delayDuration={50}>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                className="flex justify-start gap-x-3 rounded-md p-2 text-sm font-semibold hover:bg-accent hover:text-accent-foreground w-full"
+                onClick={handleToggleSidebar}
+              >
+                {isCollapsed ? <ChevronsRight className="h-4 w-4" /> : <ChevronsLeft className="h-4 w-4" />}
+                {!isCollapsed && <span>{isCollapsed ? "Expand" : "Collapse"}</span>}
+              </Button>
+            </TooltipTrigger>
+            {isCollapsed && (
+              <TooltipContent side="right" align="center">
+                <p className="font-semibold size-2">
+                  {isCollapsed ? "Expand" : "Collapse"}
+                </p>
+              </TooltipContent>
+            )}
+          </Tooltip>
+        </TooltipProvider>
+      </div>
     </div>
-  );
-};
-
-const Sidebar = () => {
-  return (
-    <aside className="w-64 border-r border-border h-[calc(100vh-4rem)] overflow-y-auto pt-4 pb-10 hidden md:block">
-      <nav className="px-2 space-y-1">
-        <SidebarItem icon={<Home size={18} />} label="Dashboard" to="/" />
-        
-        <SidebarGroup title="DAO Services">
-          <SidebarItem icon={<FileText size={18} />} label="Services Catalog" to="/services" />
-          <SidebarItem icon={<Settings size={18} />} label="Integration Hub" to="/services/integrations" />
-        </SidebarGroup>
-        
-        <SidebarGroup title="Governance">
-          <SidebarItem icon={<Users size={18} />} label="Proposals" to="/governance/proposals" />
-          <SidebarItem icon={<Users size={18} />} label="Voting" to="/governance/voting" />
-          <SidebarItem icon={<Users size={18} />} label="Deliberation" to="/governance/deliberation" />
-        </SidebarGroup>
-
-        <SidebarGroup title="Financial">
-          <SidebarItem icon={<Wallet size={18} />} label="Wallet" to="/wallet" />
-          <SidebarItem icon={<Wallet size={18} />} label="Payments" to="/wallet/payments" />
-          <SidebarItem icon={<Wallet size={18} />} label="Subscriptions" to="/wallet/subscriptions" />
-        </SidebarGroup>
-
-        <SidebarGroup title="Legal">
-          <SidebarItem icon={<Gavel size={18} />} label="Arbitration" to="/legal" />
-          <SidebarItem icon={<Gavel size={18} />} label="Contracts" to="/legal/contracts" />
-        </SidebarGroup>
-
-        <SidebarGroup title="Organization">
-          <SidebarItem icon={<Building2 size={18} />} label="DAO Operations" to="/dao" />
-          <SidebarItem icon={<Building2 size={18} />} label="Members" to="/dao/members" />
-          <SidebarItem icon={<Building2 size={18} />} label="Projects" to="/dao/projects" />
-        </SidebarGroup>
-
-        <SidebarGroup title="Tools">
-          <SidebarItem icon={<Wrench size={18} />} label="Manual Tools" to="/tools" />
-          <SidebarItem icon={<Wrench size={18} />} label="AI Agent" to="/tools/ai-agent" />
-        </SidebarGroup>
-      </nav>
-    </aside>
   );
 };
 

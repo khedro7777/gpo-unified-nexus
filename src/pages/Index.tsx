@@ -1,278 +1,211 @@
 
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import MainLayout from '@/components/layout/MainLayout';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ShoppingCart, BarChart3, Users, Store, Building, FileCheck, Gavel, CodeSquare, Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ShoppingCart, Users, BarChart3, Store, Building, FileCheck, Gavel, CodeSquare, Search, Filter } from 'lucide-react';
-import ActiveGroups from '@/components/groups/ActiveGroups';
+import { Badge } from '@/components/ui/badge';
+import { ActiveGroups } from '@/components/groups/ActiveGroups';
 import ServiceRequests from '@/components/services/ServiceRequests';
 
 const portals = [
   {
-    id: 'cooperative-purchasing',
+    id: 'purchasing',
     title: 'الشراء التعاوني',
-    description: 'تجميع المشتريات للحصول على أفضل الأسعار والشروط',
-    icon: <ShoppingCart className="h-10 w-10 text-primary" />,
-    link: '/services',
-    hasCollective: true,
-    type: 'web2'
+    description: 'نظام شراء جماعي للحصول على أفضل الأسعار والشروط',
+    icon: <ShoppingCart className="h-8 w-8" />,
+    type: 'web2',
+    collectiveOption: true,
+    link: '/services/details/cooperative-purchasing'
   },
   {
-    id: 'group-marketing',
+    id: 'marketing',
     title: 'التسويق الجماعي',
-    description: 'حملات تسويقية موحدة مع مشاركة التكلفة والفوائد',
-    icon: <BarChart3 className="h-10 w-10 text-primary" />,
-    link: '/services',
-    hasCollective: false,
-    type: 'web2'
+    description: 'حملات تسويقية مشتركة لتقليل التكاليف وزيادة الوصول',
+    icon: <BarChart3 className="h-8 w-8" />,
+    type: 'web2',
+    collectiveOption: true,
+    link: '/services/details/group-marketing'
   },
   {
     id: 'freelancers',
     title: 'بوابة المستقلين',
-    description: 'فرص عمل للمستقلين مع إدارة العقود والمدفوعات',
-    icon: <Users className="h-10 w-10 text-primary" />,
-    link: '/dao',
-    hasCollective: true,
-    type: 'web3'
+    description: 'منصة للمستقلين للعمل فرديًا أو ضمن مجموعات DAO',
+    icon: <Users className="h-8 w-8" />,
+    type: 'web3',
+    collectiveOption: true,
+    link: '/services/details/freelancers-portal'
   },
   {
     id: 'suppliers',
     title: 'بوابة الموردين',
-    description: 'تقديم المنتجات والخدمات للشركات والتعاونيات',
-    icon: <Store className="h-10 w-10 text-primary" />,
-    link: '/services',
-    hasCollective: false,
-    type: 'web2'
+    description: 'نظام متكامل للموردين لتقديم العروض والخدمات',
+    icon: <Store className="h-8 w-8" />,
+    type: 'web2',
+    collectiveOption: false,
+    link: '/services/details/suppliers-portal'
   },
   {
-    id: 'company-formation',
+    id: 'company-establishment',
     title: 'تأسيس الشركات والجمعيات',
-    description: 'إنشاء الكيانات القانونية والتعاونية بسهولة',
-    icon: <Building className="h-10 w-10 text-primary" />,
-    link: '/legal',
-    hasCollective: false,
-    type: 'web3'
+    description: 'خدمات تأسيس الشركات والجمعيات بشكل سريع وفعال',
+    icon: <Building className="h-8 w-8" />,
+    type: 'web2',
+    collectiveOption: false,
+    link: '/services/details/company-establishment'
   },
   {
     id: 'verification',
     title: 'الاستعلام والتوثيق',
     description: 'خدمات التحقق من المعلومات وتوثيق المستندات',
-    icon: <FileCheck className="h-10 w-10 text-primary" />,
-    link: '/services',
-    hasCollective: false,
-    type: 'web2'
+    icon: <FileCheck className="h-8 w-8" />,
+    type: 'web3',
+    collectiveOption: false,
+    link: '/services/details/verification'
   },
   {
-    id: 'arbitration',
+    id: 'dispute-resolution',
     title: 'التحكيم وفض المنازعات',
-    description: 'حل النزاعات بطرق عادلة وفعالة',
-    icon: <Gavel className="h-10 w-10 text-primary" />,
-    link: '/legal',
-    hasCollective: false,
-    type: 'web3'
+    description: 'نظام ORDA لفض المنازعات والتحكيم الإلكتروني',
+    icon: <Gavel className="h-8 w-8" />,
+    type: 'web3',
+    collectiveOption: false,
+    link: '/services/details/dispute-resolution'
   },
   {
     id: 'smart-contracts',
     title: 'مكتبة العقود الذكية',
-    description: 'نماذج عقود ذكية جاهزة للاستخدام',
-    icon: <CodeSquare className="h-10 w-10 text-primary" />,
-    link: '/legal',
-    hasCollective: false,
-    type: 'web3'
+    description: 'مجموعة من العقود الذكية القابلة للتخصيص',
+    icon: <CodeSquare className="h-8 w-8" />,
+    type: 'web3',
+    collectiveOption: false,
+    link: '/services/details/smart-contracts'
   }
 ];
 
 const Index = () => {
-  const [filterType, setFilterType] = useState<'all' | 'web2' | 'web3'>('all');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [serviceType, setServiceType] = useState('all');
-
+  const [portalType, setPortalType] = useState<'all' | 'web2' | 'web3'>('all');
+  const [searchText, setSearchText] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('all');
+  const [activeTab, setActiveTab] = useState('portals');
+  
+  // Filter portals based on search and filters
   const filteredPortals = portals.filter(portal => {
-    const matchesType = filterType === 'all' || portal.type === filterType;
-    const matchesSearch = portal.title.includes(searchTerm) || portal.description.includes(searchTerm);
-    return matchesType && matchesSearch;
+    const matchesType = portalType === 'all' || portal.type === portalType;
+    const matchesSearch = portal.title.toLowerCase().includes(searchText.toLowerCase()) ||
+                          portal.description.toLowerCase().includes(searchText.toLowerCase());
+    const matchesCategory = categoryFilter === 'all' || portal.id === categoryFilter;
+    
+    return matchesType && matchesSearch && matchesCategory;
   });
-
+  
   return (
     <MainLayout>
       <div className="space-y-8">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold mb-2">منصة GPO MCP الذكية</h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            البوابة الموحدة للخدمات التعاونية والإدارة الجماعية
+        <div className="text-center py-12 bg-gradient-to-r from-primary/5 to-secondary/5 rounded-lg">
+          <h1 className="text-4xl font-bold">منصة GPO للعقود التعاونية الذكية</h1>
+          <p className="text-lg text-muted-foreground mt-4 max-w-2xl mx-auto">
+            نظام متكامل للتعاون والتنظيم بين مختلف الأطراف، بدعم من تقنيات الذكاء الاصطناعي والعقود الذكية.
           </p>
+          <div className="mt-6 flex justify-center gap-4">
+            <Button asChild size="lg">
+              <Link to="/services">استكشاف الخدمات</Link>
+            </Button>
+            <Button asChild variant="outline" size="lg">
+              <Link to="/how-it-works">كيف تعمل المنصة</Link>
+            </Button>
+          </div>
         </div>
-
-        <div className="bg-muted/30 p-6 rounded-lg">
-          <div className="flex flex-col md:flex-row gap-4 items-start justify-between mb-6">
-            <div className="w-full md:w-1/2 relative">
-              <Search className="absolute right-3 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="ابحث عن الخدمات..."
-                className="pr-10"
-                dir="rtl"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+        
+        <div className="bg-muted/30 p-4 rounded-lg">
+          <div className="flex flex-col sm:flex-row justify-between gap-4">
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+              <Input 
+                placeholder="ابحث عن البوابات والخدمات..." 
+                className="pl-10" 
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
               />
             </div>
-            
-            <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-              <div>
-                <h3 className="text-sm font-medium mb-1">نوع الخدمة</h3>
-                <Select value={serviceType} onValueChange={setServiceType}>
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="جميع الخدمات" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">جميع الخدمات</SelectItem>
-                    <SelectItem value="purchasing">خدمات الشراء</SelectItem>
-                    <SelectItem value="marketing">خدمات التسويق</SelectItem>
-                    <SelectItem value="legal">خدمات قانونية</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <h3 className="text-sm font-medium mb-1">فلترة الخدمات</h3>
-                <div className="flex gap-2">
-                  <Button 
-                    size="sm" 
-                    variant={filterType === 'web2' ? "default" : "outline"} 
-                    className="h-10 px-3" 
-                    onClick={() => setFilterType('web2')}
-                  >
-                    WEB2
-                  </Button>
-                  <Button 
-                    size="sm" 
-                    variant={filterType === 'web3' ? "default" : "outline"} 
-                    className="h-10 px-3" 
-                    onClick={() => setFilterType('web3')}
-                  >
-                    WEB3
-                  </Button>
-                  <Button 
-                    size="sm" 
-                    variant={filterType === 'all' ? "default" : "outline"} 
-                    className="h-10 px-3" 
-                    onClick={() => setFilterType('all')}
-                  >
-                    جميع الخدمات
-                  </Button>
-                </div>
-              </div>
+            <div className="flex gap-2">
+              <Select value={portalType} onValueChange={(value) => setPortalType(value as any)}>
+                <SelectTrigger className="w-[150px]">
+                  <SelectValue placeholder="نوع البوابة" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">الكل</SelectItem>
+                  <SelectItem value="web2">WEB2</SelectItem>
+                  <SelectItem value="web3">WEB3</SelectItem>
+                </SelectContent>
+              </Select>
+              
+              <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="التصنيف" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">جميع التصنيفات</SelectItem>
+                  <SelectItem value="purchasing">الشراء التعاوني</SelectItem>
+                  <SelectItem value="marketing">التسويق الجماعي</SelectItem>
+                  <SelectItem value="freelancers">المستقلين</SelectItem>
+                  <SelectItem value="suppliers">الموردين</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
+        </div>
+        
+        <Tabs defaultValue="portals" value={activeTab} onValueChange={setActiveTab}>
+          <TabsList className="grid grid-cols-3 mb-8">
+            <TabsTrigger value="portals">البوابات الرئيسية</TabsTrigger>
+            <TabsTrigger value="groups">المجموعات النشطة</TabsTrigger>
+            <TabsTrigger value="requests">طلبات الخدمات</TabsTrigger>
+          </TabsList>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-4">
-            {filteredPortals.length > 0 ? (
-              filteredPortals.map((portal) => (
-                <Card key={portal.id} className="overflow-hidden hover:shadow-md transition-shadow">
-                  <CardHeader className="pb-2">
-                    <div className="flex justify-between items-start">
-                      {portal.icon}
-                      {portal.hasCollective && (
-                        <Tabs defaultValue="individual" className="w-auto">
-                          <TabsList className="h-7">
-                            <TabsTrigger className="text-xs h-6 px-2" value="individual">فردي</TabsTrigger>
-                            <TabsTrigger className="text-xs h-6 px-2" value="collective">جماعي</TabsTrigger>
-                          </TabsList>
-                        </Tabs>
+          <TabsContent value="portals">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {filteredPortals.map(portal => (
+                <Link to={portal.link} key={portal.id} className="block">
+                  <Card className="h-full hover:shadow-md transition-shadow">
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <div className="bg-primary/10 p-3 rounded-lg">
+                          {portal.icon}
+                        </div>
+                        <Badge variant={portal.type === 'web2' ? 'outline' : 'default'}>
+                          {portal.type.toUpperCase()}
+                        </Badge>
+                      </div>
+                      <CardTitle className="mt-4">{portal.title}</CardTitle>
+                      <CardDescription>{portal.description}</CardDescription>
+                    </CardHeader>
+                    <CardContent className="pt-0">
+                      {portal.collectiveOption && (
+                        <div className="mt-2">
+                          <Badge variant="outline" className="bg-blue-50 text-blue-600 hover:bg-blue-50 ml-2">فردي</Badge>
+                          <Badge variant="outline" className="bg-blue-50 text-blue-600 hover:bg-blue-50">جماعي</Badge>
+                        </div>
                       )}
-                    </div>
-                    <CardTitle className="mt-4 text-right">{portal.title}</CardTitle>
-                    <CardDescription className="text-right">{portal.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent></CardContent>
-                  <CardFooter className="flex justify-center pt-0 pb-4">
-                    <Button asChild>
-                      <Link to={`${portal.link}/details/${portal.id}`}>عرض التفاصيل</Link>
-                    </Button>
-                  </CardFooter>
-                </Card>
-              ))
-            ) : (
-              <div className="col-span-full text-center py-10">
-                <p className="text-muted-foreground">لا توجد خدمات تطابق معايير البحث</p>
-                <Button 
-                  variant="outline" 
-                  className="mt-4"
-                  onClick={() => {
-                    setSearchTerm('');
-                    setFilterType('all');
-                    setServiceType('all');
-                  }}
-                >
-                  إعادة ضبط البحث
-                </Button>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* إضافة مكون المجموعات النشطة */}
-        <div className="bg-muted/30 p-6 rounded-lg">
-          <ActiveGroups />
-        </div>
-
-        {/* إضافة مكون طلبات الخدمات */}
-        <div className="bg-muted/30 p-6 rounded-lg">
-          <ServiceRequests />
-        </div>
-
-        <div className="flex flex-col md:flex-row gap-6 mt-8">
-          <Card className="flex-1">
-            <CardHeader>
-              <CardTitle className="text-lg">من نحن</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground text-sm">
-                منصة GPO MCP هي منصة متكاملة للعقود التعاونية الذكية، تجمع بين تقنيات WEB2 و WEB3 لتوفير حلول متكاملة للمشتريات الجماعية والتعاون المؤسسي.
-              </p>
-            </CardContent>
-            <CardFooter>
-              <Link to="/about">
-                <Button variant="outline">المزيد عنا</Button>
-              </Link>
-            </CardFooter>
-          </Card>
-
-          <Card className="flex-1">
-            <CardHeader>
-              <CardTitle className="text-lg">كيف تعمل المنصة</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground text-sm">
-                اكتشف كيفية استخدام المنصة والاستفادة من الخدمات المتاحة. يمكنك البدء بإنشاء حساب والانضمام إلى مجموعات الشراء التعاوني أو استكشاف الخدمات الأخرى.
-              </p>
-            </CardContent>
-            <CardFooter>
-              <Link to="/how-it-works">
-                <Button variant="outline">عرض الدليل التفاعلي</Button>
-              </Link>
-            </CardFooter>
-          </Card>
-
-          <Card className="flex-1">
-            <CardHeader>
-              <CardTitle className="text-lg">رسالتنا</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground text-sm">
-                نهدف إلى تمكين المؤسسات والشركات من العمل معًا بطريقة أكثر كفاءة وشفافية، وتعزيز التعاون الاقتصادي من خلال تقنيات ذكية وعقود شفافة.
-              </p>
-            </CardContent>
-            <CardFooter>
-              <Link to="/mission">
-                <Button variant="outline">رسالتنا الكاملة</Button>
-              </Link>
-            </CardFooter>
-          </Card>
-        </div>
+                    </CardContent>
+                  </Card>
+                </Link>
+              ))}
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="groups">
+            <ActiveGroups />
+          </TabsContent>
+          
+          <TabsContent value="requests">
+            <ServiceRequests />
+          </TabsContent>
+        </Tabs>
       </div>
     </MainLayout>
   );

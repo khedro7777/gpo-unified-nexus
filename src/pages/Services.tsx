@@ -1,85 +1,110 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import MainLayout from '@/components/layout/MainLayout';
 import TabSystem from '@/components/tabs/TabSystem';
 import { Card } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import GroupSystem from '@/components/groups/GroupSystem';
+import { ActiveGroups } from '@/components/groups/ActiveGroups';
+import ServiceRequests from '@/components/services/ServiceRequests';
 
-const ServicesContent = () => (
-  <div className="space-y-6">
-    <h1 className="text-3xl font-bold">Services Catalog</h1>
-    <p className="text-muted-foreground">
-      Browse and manage integrated services for your GPO platform.
-    </p>
-    
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <Card className="p-6">
-        <h3 className="text-lg font-medium mb-2">SnapDAO Integration</h3>
-        <p className="text-sm text-muted-foreground mb-4">
-          Connect to SnapDAO for governance and voting functionality.
-        </p>
-        <div className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full inline-block">
-          Active
-        </div>
-      </Card>
+const ServicesContent = () => {
+  const [serviceType, setServiceType] = useState<'all' | 'web2' | 'web3'>('all');
+  
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <h1 className="text-3xl font-bold">خدمات المنصة</h1>
+        <Tabs value={serviceType} onValueChange={(value) => setServiceType(value as any)} className="w-full sm:w-auto">
+          <TabsList className="grid grid-cols-3 w-full sm:w-auto">
+            <TabsTrigger value="all">الكل</TabsTrigger>
+            <TabsTrigger value="web2">WEB2</TabsTrigger>
+            <TabsTrigger value="web3">WEB3</TabsTrigger>
+          </TabsList>
+        </Tabs>
+      </div>
+      <p className="text-muted-foreground">
+        استعرض وأدر الخدمات المتكاملة لمنصة GPO.
+      </p>
       
-      <Card className="p-6">
-        <h3 className="text-lg font-medium mb-2">Paddle Billing</h3>
-        <p className="text-sm text-muted-foreground mb-4">
-          Subscription and payment processing service.
-        </p>
-        <div className="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full inline-block">
-          Configuration Required
-        </div>
-      </Card>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <Card className="p-6">
+          <h3 className="text-lg font-medium mb-2">تكامل SnapDAO</h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            الاتصال بـ SnapDAO للحوكمة ووظائف التصويت.
+          </p>
+          <div className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full inline-block">
+            نشط
+          </div>
+        </Card>
+        
+        <Card className="p-6">
+          <h3 className="text-lg font-medium mb-2">فوترة Paddle</h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            خدمة معالجة الاشتراك والدفع.
+          </p>
+          <div className="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full inline-block">
+            يتطلب تكوين
+          </div>
+        </Card>
+        
+        <Card className="p-6">
+          <h3 className="text-lg font-medium mb-2">ERPNext</h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            تخطيط موارد المؤسسات للإدارة المالية.
+          </p>
+          <div className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full inline-block">
+            متصل
+          </div>
+        </Card>
+        
+        <Card className="p-6">
+          <h3 className="text-lg font-medium mb-2">Loomio</h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            منصة المداولات وبناء التوافق.
+          </p>
+          <div className="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full inline-block">
+            متاح
+          </div>
+        </Card>
+        
+        <Card className="p-6">
+          <h3 className="text-lg font-medium mb-2">نظام ODR</h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            حل النزاعات عبر الإنترنت للتحكيم.
+          </p>
+          <div className="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full inline-block">
+            متاح
+          </div>
+        </Card>
+        
+        <Card className="p-6">
+          <h3 className="text-lg font-medium mb-2">مركز العقود الذكية</h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            إدارة ونشر عقود DAO الذكية.
+          </p>
+          <div className="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full inline-block">
+            متاح
+          </div>
+        </Card>
+      </div>
       
-      <Card className="p-6">
-        <h3 className="text-lg font-medium mb-2">ERPNext</h3>
-        <p className="text-sm text-muted-foreground mb-4">
-          Enterprise resource planning for financial management.
-        </p>
-        <div className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full inline-block">
-          Connected
-        </div>
-      </Card>
+      <div className="mt-10">
+        <ServiceRequests />
+      </div>
       
-      <Card className="p-6">
-        <h3 className="text-lg font-medium mb-2">Loomio</h3>
-        <p className="text-sm text-muted-foreground mb-4">
-          Deliberation and consensus-building platform.
-        </p>
-        <div className="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full inline-block">
-          Available
-        </div>
-      </Card>
-      
-      <Card className="p-6">
-        <h3 className="text-lg font-medium mb-2">ODR System</h3>
-        <p className="text-sm text-muted-foreground mb-4">
-          Online Dispute Resolution for arbitration.
-        </p>
-        <div className="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full inline-block">
-          Available
-        </div>
-      </Card>
-      
-      <Card className="p-6">
-        <h3 className="text-lg font-medium mb-2">Smart Contracts Hub</h3>
-        <p className="text-sm text-muted-foreground mb-4">
-          Manage and deploy DAO smart contracts.
-        </p>
-        <div className="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full inline-block">
-          Available
-        </div>
-      </Card>
+      <div className="mt-10">
+        <GroupSystem />
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 const Services = () => {
   const tabs = [
     {
       id: 'services',
-      title: 'Services Catalog',
+      title: 'خدمات المنصة',
       content: <ServicesContent />
     }
   ];
