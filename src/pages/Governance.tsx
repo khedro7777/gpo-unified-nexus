@@ -1,112 +1,95 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import MainLayout from '@/components/layout/MainLayout';
 import TabSystem from '@/components/tabs/TabSystem';
 import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-
-const GovernanceContent = () => (
-  <div className="space-y-6">
-    <div className="flex justify-between items-center">
-      <h1 className="text-3xl font-bold">Governance</h1>
-      <Button>Create Proposal</Button>
-    </div>
-    
-    <p className="text-muted-foreground">
-      Manage proposals, voting, and deliberation for your organization.
-    </p>
-    
-    <div className="space-y-4">
-      <h2 className="text-xl font-semibold">Active Proposals</h2>
-      
-      <div className="space-y-4">
-        <Card className="p-6">
-          <div className="flex justify-between">
-            <h3 className="text-lg font-medium">Treasury Allocation Q2</h3>
-            <div className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">
-              Voting Active
-            </div>
-          </div>
-          <p className="text-sm text-muted-foreground my-2">
-            Proposal to allocate treasury funds for Q2 projects and initiatives.
-          </p>
-          <div className="flex justify-between text-sm mt-4">
-            <span>Votes: 24/50</span>
-            <span>Ends in 3 days</span>
-          </div>
-          <div className="mt-2 h-2 bg-muted rounded-full overflow-hidden">
-            <div className="h-full bg-primary w-[48%]"></div>
-          </div>
-        </Card>
-        
-        <Card className="p-6">
-          <div className="flex justify-between">
-            <h3 className="text-lg font-medium">New Member Onboarding Process</h3>
-            <div className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
-              Deliberation
-            </div>
-          </div>
-          <p className="text-sm text-muted-foreground my-2">
-            Discussion on improving the member onboarding process and requirements.
-          </p>
-          <div className="flex justify-between text-sm mt-4">
-            <span>12 comments</span>
-            <span>Updated 2 hours ago</span>
-          </div>
-        </Card>
-      </div>
-      
-      <h2 className="text-xl font-semibold mt-8">Past Proposals</h2>
-      
-      <div className="space-y-4">
-        <Card className="p-6">
-          <div className="flex justify-between">
-            <h3 className="text-lg font-medium">Community Guidelines Update</h3>
-            <div className="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full">
-              Passed
-            </div>
-          </div>
-          <p className="text-sm text-muted-foreground my-2">
-            Updates to community guidelines and code of conduct.
-          </p>
-          <div className="flex justify-between text-sm mt-4">
-            <span>Votes: 42/50 in favor</span>
-            <span>Ended 3 days ago</span>
-          </div>
-        </Card>
-        
-        <Card className="p-6">
-          <div className="flex justify-between">
-            <h3 className="text-lg font-medium">Partnership with XYZ Protocol</h3>
-            <div className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">
-              Rejected
-            </div>
-          </div>
-          <p className="text-sm text-muted-foreground my-2">
-            Proposal for strategic partnership with XYZ Protocol.
-          </p>
-          <div className="flex justify-between text-sm mt-4">
-            <span>Votes: 18/50 in favor</span>
-            <span>Ended 1 week ago</span>
-          </div>
-        </Card>
-      </div>
-    </div>
-  </div>
-);
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import GovernanceProposals from '@/components/governance/GovernanceProposals';
+import GovernanceVoting from '@/components/governance/GovernanceVoting';
+import GovernanceDeliberation from '@/components/governance/GovernanceDeliberation';
 
 const Governance = () => {
-  const tabs = [
+  const [activeTab, setActiveTab] = useState('proposals');
+  const [openTabs, setOpenTabs] = useState([
     {
-      id: 'governance',
-      title: 'Governance',
-      content: <GovernanceContent />
+      id: 'proposals-tab',
+      title: 'Proposals',
+      content: <GovernanceProposals />
     }
-  ];
+  ]);
+
+  const handleAddTab = (type: string) => {
+    let newTab;
+    
+    switch (type) {
+      case 'proposals':
+        newTab = {
+          id: `proposals-tab-${Date.now()}`,
+          title: 'New Proposal',
+          content: <GovernanceProposals />
+        };
+        break;
+      case 'voting':
+        newTab = {
+          id: `voting-tab-${Date.now()}`,
+          title: 'Voting',
+          content: <GovernanceVoting />
+        };
+        break;
+      case 'deliberation':
+        newTab = {
+          id: `deliberation-tab-${Date.now()}`,
+          title: 'Deliberation',
+          content: <GovernanceDeliberation />
+        };
+        break;
+      default:
+        return;
+    }
+    
+    setOpenTabs([...openTabs, newTab]);
+  };
+
+  const handleCloseTab = (tabId: string) => {
+    setOpenTabs(openTabs.filter(tab => tab.id !== tabId));
+  };
 
   return (
     <MainLayout>
-      <TabSystem tabs={tabs} />
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
+          <h1 className="text-3xl font-bold">Governance Portal</h1>
+          <div className="space-x-2">
+            <span className="text-sm text-muted-foreground">View Mode:</span>
+            <Tabs defaultValue="individual" className="inline-flex">
+              <TabsList className="h-8">
+                <TabsTrigger className="text-xs h-7 px-2" value="individual">Individual</TabsTrigger>
+                <TabsTrigger className="text-xs h-7 px-2" value="collective">Collective DAO</TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </div>
+        </div>
+        
+        <div className="grid grid-cols-1 gap-4">
+          <Card className="p-4 bg-muted/30">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <TabsList className="mb-4">
+                <TabsTrigger value="proposals" onClick={() => handleAddTab('proposals')}>Proposals</TabsTrigger>
+                <TabsTrigger value="voting" onClick={() => handleAddTab('voting')}>Voting</TabsTrigger>
+                <TabsTrigger value="deliberation" onClick={() => handleAddTab('deliberation')}>Deliberation</TabsTrigger>
+              </TabsList>
+            </Tabs>
+            
+            <div className="h-[calc(100vh-16rem)]">
+              <TabSystem 
+                tabs={openTabs} 
+                onCloseTab={handleCloseTab} 
+                onAddTab={() => handleAddTab(activeTab)} 
+              />
+            </div>
+          </Card>
+        </div>
+      </div>
     </MainLayout>
   );
 };

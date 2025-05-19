@@ -4,8 +4,9 @@ import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 import Footer from './Footer';
 import MCPChat from '../chat/MCPChat';
+import ObserverPanel from '../observer/ObserverPanel';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Eye } from 'lucide-react';
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -13,6 +14,7 @@ interface MainLayoutProps {
 
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   const [isChatOpen, setIsChatOpen] = useState(true);
+  const [isObserverMode, setIsObserverMode] = useState(false);
   
   return (
     <div className="min-h-screen flex flex-col">
@@ -23,6 +25,11 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         
         <main className="flex-1 flex">
           <div className="flex-1 p-6 overflow-y-auto">
+            {isObserverMode && (
+              <div className="mb-6">
+                <ObserverPanel />
+              </div>
+            )}
             {children}
           </div>
           
@@ -42,6 +49,18 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
             </Button>
           </div>
         </main>
+      </div>
+      
+      <div className="fixed bottom-4 left-4">
+        <Button
+          variant="outline"
+          size="sm"
+          className="bg-background border-muted-foreground/20"
+          onClick={() => setIsObserverMode(!isObserverMode)}
+        >
+          <Eye className="h-4 w-4 mr-2" /> 
+          {isObserverMode ? "إيقاف وضع المراقب" : "تفعيل وضع المراقب"}
+        </Button>
       </div>
       
       <Footer />
