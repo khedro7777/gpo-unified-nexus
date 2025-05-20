@@ -5,7 +5,7 @@ import TabSystem from '@/components/tabs/TabSystem';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import GroupSystem from '@/components/groups/GroupSystem';
-import { ActiveGroups } from '@/components/groups/ActiveGroups';
+import ActiveGroups from '@/components/groups/ActiveGroups';
 import ServiceRequests from '@/components/services/ServiceRequests';
 
 const ServicesContent = () => {

@@ -15,13 +15,14 @@ interface MainLayoutProps {
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   const [isChatOpen, setIsChatOpen] = useState(true);
   const [isObserverMode, setIsObserverMode] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
   
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
       
       <div className="flex flex-1">
-        <Sidebar />
+        <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
         
         <main className="flex-1 flex">
           <div className="flex-1 p-6 overflow-y-auto">

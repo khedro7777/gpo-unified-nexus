@@ -9,7 +9,7 @@ import { ShoppingCart, BarChart3, Users, Store, Building, FileCheck, Gavel, Code
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { ActiveGroups } from '@/components/groups/ActiveGroups';
+import ActiveGroups from '@/components/groups/ActiveGroups';
 import ServiceRequests from '@/components/services/ServiceRequests';
 
 const portals = [
