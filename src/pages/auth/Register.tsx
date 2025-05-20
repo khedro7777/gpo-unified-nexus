@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Mail, User } from 'lucide-react';
+import { Mail, User, Lock } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const Register = () => {
@@ -47,67 +47,87 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-muted/30 p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl">إنشاء حساب</CardTitle>
-          <CardDescription>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-background to-muted/30 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="mb-8 text-center">
+        <h2 className="text-4xl font-bold text-primary mb-2">GPO</h2>
+        <p className="text-lg text-muted-foreground">Smart Cooperation Platform</p>
+      </div>
+      
+      <Card className="w-full max-w-md shadow-lg">
+        <CardHeader className="space-y-1 text-center pb-4">
+          <CardTitle className="text-2xl font-bold">إنشاء حساب</CardTitle>
+          <CardDescription className="text-muted-foreground">
             أدخل معلوماتك للتسجيل في منصة GPO
           </CardDescription>
         </CardHeader>
+        
         <CardContent>
           {!otpSent ? (
-            <form onSubmit={handleSendOTP} className="space-y-4">
-              <div className="space-y-2">
+            <form onSubmit={handleSendOTP} className="space-y-5">
+              <div className="space-y-3">
                 <div className="relative">
-                  <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <User className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
                   <Input
                     type="text"
                     placeholder="الاسم الكامل"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="pl-10"
+                    className="pl-10 h-12 text-base"
                     required
                     dir="rtl"
                   />
                 </div>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Mail className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
                   <Input
                     type="email"
                     placeholder="البريد الإلكتروني"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10"
+                    className="pl-10 h-12 text-base"
                     required
                     dir="rtl"
                   />
                 </div>
               </div>
-              <Button type="submit" className="w-full" disabled={isLoading}>
+              <Button 
+                type="submit" 
+                className="w-full h-12 text-base font-medium" 
+                disabled={isLoading}
+              >
                 {isLoading ? "جاري الإرسال..." : "إرسال رمز التحقق"}
               </Button>
             </form>
           ) : (
-            <form onSubmit={handleVerifyOTP} className="space-y-4">
+            <form onSubmit={handleVerifyOTP} className="space-y-5">
               <div className="space-y-2">
-                <Input
-                  type="text"
-                  placeholder="رمز التحقق"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
-                  required
-                  className="text-center text-lg tracking-widest"
-                  maxLength={6}
-                />
+                <div className="relative">
+                  <Lock className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
+                  <Input
+                    type="text"
+                    placeholder="رمز التحقق"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value)}
+                    required
+                    className="text-center text-lg tracking-widest h-12"
+                    maxLength={6}
+                  />
+                </div>
+                <p className="text-sm text-muted-foreground text-center">
+                  تم إرسال رمز التحقق إلى بريدك الإلكتروني
+                </p>
               </div>
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "جاري التحقق..." : "تحقق"}
+              <Button 
+                type="submit" 
+                className="w-full h-12 text-base font-medium" 
+                disabled={isLoading}
+              >
+                {isLoading ? "جاري التحقق..." : "تحقق من الرمز"}
               </Button>
               <Button
                 type="button"
-                variant="link"
-                className="w-full"
+                variant="outline"
+                className="w-full h-12 text-base"
                 onClick={() => setOtpSent(false)}
                 disabled={isLoading}
               >
@@ -116,10 +136,20 @@ const Register = () => {
             </form>
           )}
         </CardContent>
-        <CardFooter className="flex flex-col space-y-2">
+        
+        <CardFooter className="flex flex-col space-y-3 pt-0">
+          <div className="relative w-full my-2">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t border-muted" />
+            </div>
+            <div className="relative flex justify-center text-xs">
+              <span className="bg-card px-2 text-muted-foreground">أو</span>
+            </div>
+          </div>
+          
           <div className="text-sm text-center text-muted-foreground">
             لديك حساب بالفعل؟{" "}
-            <Link to="/login" className="text-primary hover:underline">
+            <Link to="/login" className="text-primary font-medium hover:underline">
               تسجيل الدخول
             </Link>
           </div>

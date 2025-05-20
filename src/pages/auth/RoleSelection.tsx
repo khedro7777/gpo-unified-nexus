@@ -13,6 +13,7 @@ interface RoleOption {
   title: string;
   description: string;
   icon: React.ReactNode;
+  color: string;
 }
 
 const RoleSelection = () => {
@@ -27,25 +28,29 @@ const RoleSelection = () => {
       id: 'freelancer',
       title: 'مستقل',
       description: 'تقديم خدماتك للمشاريع والمجموعات المختلفة',
-      icon: <Users className="h-10 w-10 text-primary" />,
+      icon: <Users className="h-12 w-12" />,
+      color: 'bg-gradient-to-br from-blue-500 to-indigo-600'
     },
     {
       id: 'buyer',
       title: 'مشتري',
       description: 'إنشاء وإدارة مجموعات الشراء والتسويق',
-      icon: <ShoppingCart className="h-10 w-10 text-primary" />,
+      icon: <ShoppingCart className="h-12 w-12" />,
+      color: 'bg-gradient-to-br from-green-500 to-emerald-600'
     },
     {
       id: 'supplier',
       title: 'مورد',
       description: 'تقديم العروض والخدمات للمجموعات المختلفة',
-      icon: <Store className="h-10 w-10 text-primary" />,
+      icon: <Store className="h-12 w-12" />,
+      color: 'bg-gradient-to-br from-orange-500 to-amber-600'
     },
     {
       id: 'founder',
       title: 'مؤسس شركات',
       description: 'تأسيس الشركات والكيانات القانونية',
-      icon: <Building className="h-10 w-10 text-primary" />,
+      icon: <Building className="h-12 w-12" />,
+      color: 'bg-gradient-to-br from-purple-500 to-violet-600'
     },
   ];
 
@@ -63,12 +68,17 @@ const RoleSelection = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-muted/30 p-4">
-      <div className="w-full max-w-4xl">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-background to-muted/30 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="mb-8 text-center">
+        <h2 className="text-4xl font-bold text-primary mb-2">GPO</h2>
+        <p className="text-lg text-muted-foreground">Smart Cooperation Platform</p>
+      </div>
+      
+      <div className="w-full max-w-5xl">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold">مرحبًا بك في منصة GPO</h1>
-          <p className="text-muted-foreground mt-2">
-            يرجى اختيار دورك في النظام للمتابعة
+          <p className="text-lg text-muted-foreground mt-2 max-w-xl mx-auto">
+            اختر دورك في النظام للاستفادة من الخدمات المناسبة لك
           </p>
         </div>
         
@@ -76,18 +86,21 @@ const RoleSelection = () => {
           {roleOptions.map((role) => (
             <Card 
               key={role.id} 
-              className="hover:shadow-md transition-shadow cursor-pointer"
+              className="transition-all duration-200 hover:shadow-lg border-2 hover:border-primary/50 overflow-hidden"
               onClick={() => handleRoleSelection(role.id)}
             >
-              <CardHeader className="pb-2">
-                <div className="flex justify-between items-start">
-                  {role.icon}
+              <div className={`h-2 ${role.color}`}></div>
+              <CardHeader className="pb-2 pt-6">
+                <div className="flex justify-between items-center">
+                  <div className={`p-3 rounded-lg ${role.color} bg-opacity-10 text-white`}>
+                    {role.icon}
+                  </div>
                 </div>
-                <CardTitle className="mt-4 text-xl">{role.title}</CardTitle>
-                <CardDescription>{role.description}</CardDescription>
+                <CardTitle className="mt-4 text-2xl">{role.title}</CardTitle>
+                <CardDescription className="text-base">{role.description}</CardDescription>
               </CardHeader>
-              <CardContent>
-                <Button className="w-full">
+              <CardContent className="pb-6">
+                <Button className={`w-full mt-4`}>
                   اختيار هذا الدور
                 </Button>
               </CardContent>
