@@ -18,7 +18,7 @@ import { cn } from '@/lib/utils';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { isAuthenticated, logout, userName } = useAuth();
+  const { isAuthenticated, logout, name } = useAuth();
   
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
@@ -73,7 +73,7 @@ const Navbar = () => {
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" size="sm" className="gap-2">
                     <User className="h-4 w-4" />
-                    <span className="max-w-[100px] truncate">{userName || 'المستخدم'}</span>
+                    <span className="max-w-[100px] truncate">{name || 'المستخدم'}</span>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">

@@ -12,13 +12,13 @@ import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 
 const Settings = () => {
-  const { userName, email } = useAuth();
+  const { name, email } = useAuth();
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('profile');
   
   // Profile form state
   const [profileForm, setProfileForm] = useState({
-    name: userName || '',
+    name: name || '',
     bio: '',
     location: 'الرياض، المملكة العربية السعودية',
     phone: '+966 123456789'
