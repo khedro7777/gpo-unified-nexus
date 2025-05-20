@@ -1,6 +1,6 @@
 
-import React, { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useSidebar } from '@/hooks/use-sidebar';
@@ -58,7 +58,6 @@ interface NewSidebarProps {
 }
 
 const NewSidebar: React.FC<NewSidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
-  const navigate = useNavigate();
   const { onExpand, onCollapse } = useSidebar();
   const { role } = useAuth();
 
@@ -114,25 +113,6 @@ const NewSidebar: React.FC<NewSidebarProps> = ({ isCollapsed, setIsCollapsed }) 
 
   return (
     <div className={`flex h-full border-r flex-col fixed z-[999] ${isCollapsed ? 'w-16' : 'w-64'} transition-all duration-300 bg-background`}>
-      <div className="px-4 py-6">
-        <Link to="/">
-          <div className="flex items-center font-semibold">
-            {!isCollapsed && <img src="/logo.png" alt="Logo" className="h-8 mr-2" />}
-            <span className="text-2xl">GPO</span>
-          </div>
-        </Link>
-      </div>
-      <ul className="mt-2 space-y-2 px-2">
-        {navigation.map((item) => (
-          <NavItem
-            key={item.label}
-            icon={item.icon}
-            label={item.label}
-            href={item.href}
-            isCollapsed={isCollapsed}
-          />
-        ))}
-      </ul>
       <div className="mt-auto mb-4 px-4">
         <TooltipProvider>
           <Tooltip>
@@ -154,6 +134,18 @@ const NewSidebar: React.FC<NewSidebarProps> = ({ isCollapsed, setIsCollapsed }) 
           </Tooltip>
         </TooltipProvider>
       </div>
+      
+      <ul className="mt-2 space-y-2 px-2 flex-1">
+        {navigation.map((item) => (
+          <NavItem
+            key={item.label}
+            icon={item.icon}
+            label={item.label}
+            href={item.href}
+            isCollapsed={isCollapsed}
+          />
+        ))}
+      </ul>
     </div>
   );
 };
