@@ -1,0 +1,102 @@
+
+import React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { useAuth } from '@/hooks/use-auth';
+import { useToast } from '@/hooks/use-toast';
+import { UserRole } from '@/types';
+import { Users, ShoppingCart, Store, Building } from 'lucide-react';
+
+interface RoleOption {
+  id: UserRole;
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+}
+
+const RoleSelection = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { login } = useAuth();
+  const { toast } = useToast();
+  const { name = '', email = '' } = (location.state || {}) as { name: string; email: string };
+
+  const roleOptions: RoleOption[] = [
+    {
+      id: 'freelancer',
+      title: 'مستقل',
+      description: 'تقديم خدماتك للمشاريع والمجموعات المختلفة',
+      icon: <Users className="h-10 w-10 text-primary" />,
+    },
+    {
+      id: 'buyer',
+      title: 'مشتري',
+      description: 'إنشاء وإدارة مجموعات الشراء والتسويق',
+      icon: <ShoppingCart className="h-10 w-10 text-primary" />,
+    },
+    {
+      id: 'supplier',
+      title: 'مورد',
+      description: 'تقديم العروض والخدمات للمجموعات المختلفة',
+      icon: <Store className="h-10 w-10 text-primary" />,
+    },
+    {
+      id: 'founder',
+      title: 'مؤسس شركات',
+      description: 'تأسيس الشركات والكيانات القانونية',
+      icon: <Building className="h-10 w-10 text-primary" />,
+    },
+  ];
+
+  const handleRoleSelection = (role: UserRole) => {
+    // In a real app, this would be an API call
+    const userId = Math.random().toString(36).substr(2, 9);
+    login(email, name, role, userId);
+    
+    toast({
+      title: "تم إكمال التسجيل بنجاح",
+      description: `مرحبًا بك في منصة GPO كـ ${roleOptions.find(r => r.id === role)?.title}`,
+    });
+    
+    navigate('/');
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-muted/30 p-4">
+      <div className="w-full max-w-4xl">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold">مرحبًا بك في منصة GPO</h1>
+          <p className="text-muted-foreground mt-2">
+            يرجى اختيار دورك في النظام للمتابعة
+          </p>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {roleOptions.map((role) => (
+            <Card 
+              key={role.id} 
+              className="hover:shadow-md transition-shadow cursor-pointer"
+              onClick={() => handleRoleSelection(role.id)}
+            >
+              <CardHeader className="pb-2">
+                <div className="flex justify-between items-start">
+                  {role.icon}
+                </div>
+                <CardTitle className="mt-4 text-xl">{role.title}</CardTitle>
+                <CardDescription>{role.description}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button className="w-full">
+                  اختيار هذا الدور
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default RoleSelection;
