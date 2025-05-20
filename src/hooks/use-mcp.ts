@@ -16,6 +16,6 @@ export const useMCP = create<MCPState>((set) => ({
   serverStatus: 'online',
   isOpen: false,
   setMode: (mode) => set({ mode }),
-  setServerStatus: (status) => set({ serverStatus }),
+  setServerStatus: (status) => set({ serverStatus: status }),
   toggleMCP: () => set((state) => ({ isOpen: !state.isOpen }))
 }));
