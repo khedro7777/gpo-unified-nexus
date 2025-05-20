@@ -1,43 +1,20 @@
-import React from "react";
-import {
-  Home,
-  LayoutDashboard,
-  Settings,
-  Users,
-  Wallet,
-  ScrollText,
-  Scale,
-  Brain,
-  LucideIcon,
-  ChevronsLeft,
-  ChevronsRight,
-  Building,
-  Network,
-} from "lucide-react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { useSidebar } from "@/hooks/use-sidebar";
-import { cn } from "@/lib/utils";
 
-interface SidebarProps {
-  isCollapsed: boolean;
-  setIsCollapsed: (isCollapsed: boolean) => void;
-}
+import React from 'react';
+import { Home, LayoutDashboard, Settings, Users, Wallet, ScrollText, Scale, Brain, ChevronsLeft, ChevronsRight, Building, Network } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { useSidebar } from '@/hooks/use-sidebar';
+import { cn } from '@/lib/utils';
 
 interface NavItemProps {
-  icon: LucideIcon;
+  icon: React.ElementType;
   label: string;
   href: string;
   isCollapsed: boolean;
 }
 
-const NavItem: React.FC<NavItemProps> = ({ icon: Icon, label, href, isCollapsed }) => {
+const NavItem = ({ icon: Icon, label, href, isCollapsed }: NavItemProps) => {
   const location = useLocation();
   const isActive = location.pathname === href;
 
@@ -47,8 +24,8 @@ const NavItem: React.FC<NavItemProps> = ({ icon: Icon, label, href, isCollapsed 
         <Tooltip delayDuration={50}>
           <TooltipTrigger asChild>
             <Link to={href}>
-              <Button
-                variant="ghost"
+              <Button 
+                variant="ghost" 
                 className={cn(
                   "justify-start gap-x-3 rounded-md p-2 text-sm font-semibold hover:bg-accent hover:text-accent-foreground",
                   isActive && "bg-accent text-accent-foreground",
@@ -70,6 +47,11 @@ const NavItem: React.FC<NavItemProps> = ({ icon: Icon, label, href, isCollapsed 
     </li>
   );
 };
+
+interface SidebarProps {
+  isCollapsed: boolean;
+  setIsCollapsed: (value: boolean) => void;
+}
 
 const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
   const navigate = useNavigate();
@@ -95,11 +77,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
     { icon: Brain, label: "الأدوات", href: "/tools" },
     { icon: Building, label: "منظمة DAO", href: "/dao" },
     { icon: Network, label: "الحوكمة", href: "/governance" },
-    { icon: Settings, label: "الإعدادات", href: "/settings" },
+    { icon: Settings, label: "الإعدادات", href: "/settings" }
   ];
 
   return (
-    <div className="flex h-full border-r flex-col fixed z-[999]">
+    <div className={`flex h-full border-r flex-col fixed z-[999] ${isCollapsed ? 'w-16' : 'w-64'} transition-all duration-300`}>
       <div className="px-4 py-6">
         <Link to="/">
           <div className="flex items-center font-semibold">
@@ -121,22 +103,20 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
       </ul>
       <div className="mt-auto mb-2 px-4">
         <TooltipProvider>
-          <Tooltip delayDuration={50}>
+          <Tooltip>
             <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                className="flex justify-start gap-x-3 rounded-md p-2 text-sm font-semibold hover:bg-accent hover:text-accent-foreground w-full"
-                onClick={handleToggleSidebar}
+              <Button 
+                onClick={handleToggleSidebar} 
+                variant="ghost" 
+                size="sm" 
+                className="w-full justify-center"
               >
                 {isCollapsed ? <ChevronsRight className="h-4 w-4" /> : <ChevronsLeft className="h-4 w-4" />}
-                {!isCollapsed && <span>{isCollapsed ? "Expand" : "Collapse"}</span>}
               </Button>
             </TooltipTrigger>
             {isCollapsed && (
-              <TooltipContent side="right" align="center">
-                <p className="font-semibold size-2">
-                  {isCollapsed ? "Expand" : "Collapse"}
-                </p>
+              <TooltipContent side="right">
+                <span>Expand</span>
               </TooltipContent>
             )}
           </Tooltip>
