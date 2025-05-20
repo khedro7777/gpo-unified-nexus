@@ -7,14 +7,14 @@ const Notifications = () => {
   return (
     <MainLayout>
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold">Notifications</h1>
+        <h1 className="text-3xl font-bold">الإشعارات</h1>
         <Card>
           <CardHeader>
-            <CardTitle>Your Notifications</CardTitle>
-            <CardDescription>Stay updated with your latest activities</CardDescription>
+            <CardTitle>إشعاراتك</CardTitle>
+            <CardDescription>تصفح أحدث التحديثات والإشعارات</CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-muted-foreground">Notification center will be implemented here</p>
+            <p className="text-muted-foreground">قائمة الإشعارات سيتم تنفيذها هنا</p>
           </CardContent>
         </Card>
       </div>

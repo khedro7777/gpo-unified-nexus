@@ -7,14 +7,14 @@ const Support = () => {
   return (
     <MainLayout>
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold">Support</h1>
+        <h1 className="text-3xl font-bold">الدعم</h1>
         <Card>
           <CardHeader>
-            <CardTitle>Help Center</CardTitle>
-            <CardDescription>Get assistance with the GPO platform</CardDescription>
+            <CardTitle>مركز المساعدة</CardTitle>
+            <CardDescription>الحصول على المساعدة من منصة GPO</CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-muted-foreground">Support options will be implemented here</p>
+            <p className="text-muted-foreground">خيارات الدعم سيتم تنفيذها هنا</p>
           </CardContent>
         </Card>
       </div>

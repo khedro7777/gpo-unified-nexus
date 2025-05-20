@@ -1,8 +1,8 @@
 
 import React from 'react';
-import { useParams } from 'react-router-dom';
 import MainLayout from '@/components/layout/MainLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useParams } from 'react-router-dom';
 
 const DisputeDetails = () => {
   const { disputeId } = useParams();
@@ -10,14 +10,14 @@ const DisputeDetails = () => {
   return (
     <MainLayout>
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold">Dispute Details</h1>
+        <h1 className="text-3xl font-bold">تفاصيل النزاع #{disputeId}</h1>
         <Card>
           <CardHeader>
-            <CardTitle>Dispute #{disputeId}</CardTitle>
-            <CardDescription>View the details and status of this dispute</CardDescription>
+            <CardTitle>حالة النزاع</CardTitle>
+            <CardDescription>تفاصيل ومستندات النزاع</CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-muted-foreground">Dispute details will be implemented here</p>
+            <p className="text-muted-foreground">تفاصيل النزاع ستظهر هنا</p>
           </CardContent>
         </Card>
       </div>

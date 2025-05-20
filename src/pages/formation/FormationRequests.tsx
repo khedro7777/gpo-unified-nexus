@@ -7,14 +7,14 @@ const FormationRequests = () => {
   return (
     <MainLayout>
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold">Formation Requests</h1>
+        <h1 className="text-3xl font-bold">طلبات التأسيس</h1>
         <Card>
           <CardHeader>
-            <CardTitle>Company Formation</CardTitle>
-            <CardDescription>Track and manage legal entity formation requests</CardDescription>
+            <CardTitle>طلبات تأسيس الشركات</CardTitle>
+            <CardDescription>إدارة ومتابعة طلبات تأسيس الشركات</CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-muted-foreground">Formation request list will be implemented here</p>
+            <p className="text-muted-foreground">قائمة طلبات التأسيس سيتم تنفيذها هنا</p>
           </CardContent>
         </Card>
       </div>

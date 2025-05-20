@@ -7,14 +7,14 @@ const MyJobs = () => {
   return (
     <MainLayout>
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold">My Jobs</h1>
+        <h1 className="text-3xl font-bold">وظائفي</h1>
         <Card>
           <CardHeader>
-            <CardTitle>Your Freelance Jobs</CardTitle>
-            <CardDescription>Track and manage your freelance tasks</CardDescription>
+            <CardTitle>وظائفك المستقلة</CardTitle>
+            <CardDescription>تتبع وإدارة مهامك المستقلة</CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-muted-foreground">Job list will be implemented here</p>
+            <p className="text-muted-foreground">قائمة الوظائف سيتم تنفيذها هنا</p>
           </CardContent>
         </Card>
       </div>

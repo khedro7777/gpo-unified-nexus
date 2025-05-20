@@ -7,14 +7,14 @@ const CreateDispute = () => {
   return (
     <MainLayout>
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold">Create Dispute</h1>
+        <h1 className="text-3xl font-bold">إنشاء نزاع جديد</h1>
         <Card>
           <CardHeader>
-            <CardTitle>New Dispute</CardTitle>
-            <CardDescription>Fill in the details to create a new dispute case</CardDescription>
+            <CardTitle>نموذج النزاع</CardTitle>
+            <CardDescription>قم بملء النموذج أدناه لرفع نزاع</CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-muted-foreground">Dispute creation form will be implemented here</p>
+            <p className="text-muted-foreground">نموذج إنشاء النزاع سيتم تنفيذه هنا</p>
           </CardContent>
         </Card>
       </div>

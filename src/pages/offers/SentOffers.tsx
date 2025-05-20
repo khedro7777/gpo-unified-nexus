@@ -7,14 +7,14 @@ const SentOffers = () => {
   return (
     <MainLayout>
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold">Sent Offers</h1>
+        <h1 className="text-3xl font-bold">العروض المرسلة</h1>
         <Card>
           <CardHeader>
-            <CardTitle>Your Proposals</CardTitle>
-            <CardDescription>Track the status of offers you've sent</CardDescription>
+            <CardTitle>العروض التي قدمتها</CardTitle>
+            <CardDescription>تتبع وإدارة العروض المرسلة</CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-muted-foreground">Offer list will be implemented here</p>
+            <p className="text-muted-foreground">قائمة العروض المرسلة سيتم تنفيذها هنا</p>
           </CardContent>
         </Card>
       </div>

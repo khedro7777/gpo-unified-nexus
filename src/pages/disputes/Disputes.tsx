@@ -3,25 +3,25 @@ import React from 'react';
 import MainLayout from '@/components/layout/MainLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Disputes = () => {
-  const navigate = useNavigate();
-  
   return (
     <MainLayout>
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold">ORDA Disputes</h1>
-          <Button onClick={() => navigate('/disputes/create')}>Create Dispute</Button>
+          <h1 className="text-3xl font-bold">نزاعات ORDA</h1>
+          <Button asChild>
+            <Link to="/disputes/create">إنشاء نزاع جديد</Link>
+          </Button>
         </div>
         <Card>
           <CardHeader>
-            <CardTitle>Your Disputes</CardTitle>
-            <CardDescription>Manage and track your dispute cases</CardDescription>
+            <CardTitle>النزاعات الحالية</CardTitle>
+            <CardDescription>إدارة النزاعات والمطالبات</CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-muted-foreground">Dispute list will be implemented here</p>
+            <p className="text-muted-foreground">قائمة النزاعات سيتم تنفيذها هنا</p>
           </CardContent>
         </Card>
       </div>

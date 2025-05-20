@@ -7,14 +7,14 @@ const Settings = () => {
   return (
     <MainLayout>
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold">Settings</h1>
+        <h1 className="text-3xl font-bold">الإعدادات</h1>
         <Card>
           <CardHeader>
-            <CardTitle>Your Preferences</CardTitle>
-            <CardDescription>Customize your experience on the GPO platform</CardDescription>
+            <CardTitle>إعدادات الحساب</CardTitle>
+            <CardDescription>إدارة تفضيلات حسابك</CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-muted-foreground">Settings options will be implemented here</p>
+            <p className="text-muted-foreground">إعدادات الحساب سيتم تنفيذها هنا</p>
           </CardContent>
         </Card>
       </div>

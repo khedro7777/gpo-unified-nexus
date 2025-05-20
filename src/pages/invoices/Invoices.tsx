@@ -7,14 +7,14 @@ const Invoices = () => {
   return (
     <MainLayout>
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold">Invoices</h1>
+        <h1 className="text-3xl font-bold">الفواتير</h1>
         <Card>
           <CardHeader>
-            <CardTitle>Your Invoices</CardTitle>
-            <CardDescription>View and download your invoice history</CardDescription>
+            <CardTitle>فواتيرك</CardTitle>
+            <CardDescription>عرض وتنزيل سجل الفواتير الخاص بك</CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-muted-foreground">Invoice list will be implemented here</p>
+            <p className="text-muted-foreground">قائمة الفواتير سيتم تنفيذها هنا</p>
           </CardContent>
         </Card>
       </div>

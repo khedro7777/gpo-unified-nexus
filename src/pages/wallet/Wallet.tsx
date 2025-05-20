@@ -7,14 +7,14 @@ const Wallet = () => {
   return (
     <MainLayout>
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold">Wallet</h1>
+        <h1 className="text-3xl font-bold">المحفظة</h1>
         <Card>
           <CardHeader>
-            <CardTitle>Your Balance</CardTitle>
-            <CardDescription>Manage your funds and transactions</CardDescription>
+            <CardTitle>رصيدك</CardTitle>
+            <CardDescription>إدارة أموالك والمعاملات</CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-muted-foreground">Wallet functionality will be implemented here</p>
+            <p className="text-muted-foreground">وظائف المحفظة سيتم تنفيذها هنا</p>
           </CardContent>
         </Card>
       </div>
