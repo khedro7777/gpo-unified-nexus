@@ -28,7 +28,8 @@ import ReceivedOffers from "./pages/offers/ReceivedOffers";
 import SentOffers from "./pages/offers/SentOffers";
 import FormationRequests from "./pages/formation/FormationRequests";
 import AdminMonitor from "./pages/admin/AdminMonitor";
-import AdminAccess from "./pages/admin/AdminAccess"; // New admin access page
+import AdminAccess from "./pages/admin/AdminAccess";
+import StrapiContent from "./pages/admin/StrapiContent"; // New Strapi content page
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -80,7 +81,8 @@ const App = () => (
           
           {/* Admin routes */}
           <Route path="/admin-monitor-access" element={<AdminRoute><AdminMonitor /></AdminRoute>} />
-          <Route path="/admin-access" element={<AdminAccess />} /> {/* New admin access route */}
+          <Route path="/admin-access" element={<AdminAccess />} />
+          <Route path="/admin/strapi-content" element={<AdminRoute><StrapiContent /></AdminRoute>} /> {/* New Strapi content route */}
           
           {/* 404 route */}
           <Route path="*" element={<NotFound />} />
