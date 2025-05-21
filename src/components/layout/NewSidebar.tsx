@@ -1,54 +1,46 @@
 
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { useSidebar } from '@/hooks/use-sidebar';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/use-auth';
 import { 
   User, Home, Wallet, FileText, Settings, Users, MessageSquare, 
-  Bell, ChevronsLeft, ChevronsRight, File, CheckCircle, Mail
+  Bell, ChevronsLeft, ChevronsRight, File, CheckCircle, Mail,
+  LayoutDashboard, Scale, Brain, Building, Network
 } from 'lucide-react';
+
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarTrigger,
+  useSidebar,
+} from "@/components/ui/sidebar";
 
 interface NavItemProps {
   icon: React.ElementType;
   label: string;
   href: string;
-  isCollapsed: boolean;
+  isActive?: boolean;
 }
 
-const NavItem = ({ icon: Icon, label, href, isCollapsed }: NavItemProps) => {
-  const location = useLocation();
-  const isActive = location.pathname === href;
-
+const NavItem = ({ icon: Icon, label, href, isActive }: NavItemProps) => {
   return (
-    <li>
-      <TooltipProvider>
-        <Tooltip delayDuration={50}>
-          <TooltipTrigger asChild>
-            <Link to={href}>
-              <Button 
-                variant="ghost" 
-                className={cn(
-                  "w-full justify-start gap-x-3 rounded-md p-2 text-sm font-semibold hover:bg-accent hover:text-accent-foreground",
-                  isActive && "bg-accent text-accent-foreground",
-                  isCollapsed && "w-9 h-9 p-0 justify-center"
-                )}
-              >
-                <Icon className="h-4 w-4" />
-                {!isCollapsed && <span>{label}</span>}
-              </Button>
-            </Link>
-          </TooltipTrigger>
-          {isCollapsed && (
-            <TooltipContent side="right" align="center">
-              <p className="font-semibold size-2">{label}</p>
-            </TooltipContent>
-          )}
-        </Tooltip>
-      </TooltipProvider>
-    </li>
+    <SidebarMenuItem>
+      <SidebarMenuButton asChild isActive={isActive} tooltip={label}>
+        <Link to={href} className="flex items-center gap-2">
+          <Icon className="h-4 w-4" />
+          <span>{label}</span>
+        </Link>
+      </SidebarMenuButton>
+    </SidebarMenuItem>
   );
 };
 
@@ -58,17 +50,13 @@ interface NewSidebarProps {
 }
 
 const NewSidebar: React.FC<NewSidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
-  const { onExpand, onCollapse } = useSidebar();
+  const location = useLocation();
   const { role } = useAuth();
+  const { toggleSidebar } = useSidebar();
 
   const handleToggleSidebar = () => {
-    if (isCollapsed) {
-      onExpand();
-      setIsCollapsed(false);
-    } else {
-      onCollapse();
-      setIsCollapsed(true);
-    }
+    toggleSidebar();
+    setIsCollapsed(!isCollapsed);
   };
 
   // Base navigation items for all users
@@ -76,6 +64,7 @@ const NewSidebar: React.FC<NewSidebarProps> = ({ isCollapsed, setIsCollapsed }) 
     { icon: Home, label: "الرئيسية", href: "/" },
     { icon: User, label: "ملفي الشخصي", href: "/profile" },
     { icon: Users, label: "مجموعاتي", href: "/my-groups" },
+    { icon: LayoutDashboard, label: "نظرة عامة", href: "/dashboard" },
   ];
 
   // Role specific navigation items
@@ -100,62 +89,58 @@ const NewSidebar: React.FC<NewSidebarProps> = ({ isCollapsed, setIsCollapsed }) 
     { icon: FileText, label: "الفواتير", href: "/invoices" },
     { icon: Bell, label: "الإشعارات", href: "/notifications" },
     { icon: MessageSquare, label: "نزاعات ORDA", href: "/disputes" },
+    { icon: Scale, label: "القانون", href: "/legal" },
+    { icon: Brain, label: "الأدوات", href: "/tools" },
+    { icon: Building, label: "منظمة DAO", href: "/dao" },
+    { icon: Network, label: "الحوكمة", href: "/governance" },
     { icon: Mail, label: "الدعم", href: "/support" },
     { icon: Settings, label: "الإعدادات", href: "/settings" },
   ];
 
   // Combine navigation items based on user role
-  let navigation = [...baseNavigation];
+  let navigationItems = [...baseNavigation];
   if (role && roleSpecificNavigation[role]) {
-    navigation = [...navigation, ...roleSpecificNavigation[role]];
+    navigationItems = [...navigationItems, ...roleSpecificNavigation[role]];
   }
-  navigation = [...navigation, ...commonNavigation];
+  navigationItems = [...navigationItems, ...commonNavigation];
 
   return (
-    <div className={`flex h-full border-r flex-col fixed z-[999] ${isCollapsed ? 'w-16' : 'w-64'} transition-all duration-300 bg-background`}>
-      <div className="px-4 py-6">
-        <Link to="/">
-          <div className="flex items-center font-semibold">
-            {!isCollapsed && <img src="/logo.png" alt="Logo" className="h-8 mr-2" />}
-            <span className="text-2xl">GPO</span>
-          </div>
+    <Sidebar
+      className={cn("transition-all duration-300", isCollapsed ? "w-16" : "w-64")}
+      collapsible={isCollapsed ? "icon" : "none"}
+    >
+      <SidebarHeader className="py-4">
+        <Link to="/" className="flex items-center justify-center gap-2">
+          {!isCollapsed && <img src="/logo.png" alt="Logo" className="h-8" />}
+          <span className={cn("text-2xl font-bold", isCollapsed && "hidden")}>GPO</span>
         </Link>
-      </div>
+      </SidebarHeader>
       
-      <ul className="mt-2 space-y-2 px-2 flex-1">
-        {navigation.map((item) => (
-          <NavItem
-            key={item.label}
-            icon={item.icon}
-            label={item.label}
-            href={item.href}
-            isCollapsed={isCollapsed}
-          />
-        ))}
-      </ul>
+      <SidebarContent className="px-2">
+        <SidebarMenu>
+          {navigationItems.map((item) => (
+            <NavItem
+              key={item.label}
+              icon={item.icon}
+              label={item.label}
+              href={item.href}
+              isActive={location.pathname === item.href}
+            />
+          ))}
+        </SidebarMenu>
+      </SidebarContent>
       
-      <div className="mt-auto mb-4 px-4">
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button 
-                onClick={handleToggleSidebar} 
-                variant="ghost" 
-                size="sm" 
-                className="w-full justify-center"
-              >
-                {isCollapsed ? <ChevronsRight className="h-4 w-4" /> : <ChevronsLeft className="h-4 w-4" />}
-              </Button>
-            </TooltipTrigger>
-            {isCollapsed && (
-              <TooltipContent side="right">
-                <span>{isCollapsed ? "توسيع" : "طي"}</span>
-              </TooltipContent>
-            )}
-          </Tooltip>
-        </TooltipProvider>
-      </div>
-    </div>
+      <SidebarFooter>
+        <Button 
+          onClick={handleToggleSidebar} 
+          variant="ghost" 
+          size="sm" 
+          className="w-full justify-center"
+        >
+          {isCollapsed ? <ChevronsRight className="h-4 w-4" /> : <ChevronsLeft className="h-4 w-4" />}
+        </Button>
+      </SidebarFooter>
+    </Sidebar>
   );
 };
 
