@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -6,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
-import { FileUpload, AlertTriangle, Upload } from 'lucide-react';
+import { File, AlertTriangle, Upload } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface DisputeFormProps {
@@ -182,7 +181,7 @@ const DisputeForm: React.FC<DisputeFormProps> = ({ onSubmit, groupId, contractId
                 htmlFor="fileUpload" 
                 className="flex flex-col items-center cursor-pointer gap-2"
               >
-                <FileUpload className="h-8 w-8 text-muted-foreground" />
+                <File className="h-8 w-8 text-muted-foreground" />
                 <span className="font-medium">انقر لإرفاق ملف</span>
                 <span className="text-xs text-muted-foreground">أو اسحب الملف وأفلته هنا</span>
               </Label>
