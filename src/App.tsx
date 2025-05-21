@@ -28,6 +28,7 @@ import ReceivedOffers from "./pages/offers/ReceivedOffers";
 import SentOffers from "./pages/offers/SentOffers";
 import FormationRequests from "./pages/formation/FormationRequests";
 import AdminMonitor from "./pages/admin/AdminMonitor";
+import AdminAccess from "./pages/admin/AdminAccess"; // New admin access page
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -79,6 +80,7 @@ const App = () => (
           
           {/* Admin routes */}
           <Route path="/admin-monitor-access" element={<AdminRoute><AdminMonitor /></AdminRoute>} />
+          <Route path="/admin-access" element={<AdminAccess />} /> {/* New admin access route */}
           
           {/* 404 route */}
           <Route path="*" element={<NotFound />} />

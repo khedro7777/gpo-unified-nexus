@@ -193,7 +193,7 @@ const MCPChat: React.FC = () => {
   const handleResetConversation = () => {
     setMessages([{
       id: '1',
-      content: 'مرحباً، أنا مساعد MCP. كيف يمكنني مساعدتك اليوم؟',
+      content: 'مرحبًا، أنا مساعد MCP. كيف يمكنني مساعدتك اليوم؟',
       sender: 'ai',
       timestamp: new Date(),
     }]);

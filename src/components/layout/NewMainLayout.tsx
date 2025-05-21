@@ -27,7 +27,7 @@ const NewMainLayout: React.FC<NewMainLayoutProps> = ({ children }) => {
       <div className="flex flex-1">
         <NewSidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
         
-        <div className="flex flex-1 mr-16 md:mr-64">
+        <div className={`flex flex-1 ${isCollapsed ? 'mr-16' : 'mr-64'} transition-all duration-300`}>
           {/* Left Panel: Manual Flow Explorer */}
           <div className={`${leftPanelOpen ? 'w-64' : 'w-0'} transition-all duration-300 border-r border-border bg-muted/30 relative overflow-hidden`}>
             {leftPanelOpen && (
