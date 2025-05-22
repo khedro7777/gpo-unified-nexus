@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight, Layout, MessageSquare } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ManualFlowExplorer from '../manual/ManualFlowExplorer';
-import { SidebarProvider } from '@/components/ui/sidebar';
+import { SidebarProvider, SidebarWrapper } from '@/components/ui/sidebar';
 
 interface NewMainLayoutProps {
   children: React.ReactNode;
@@ -22,7 +22,7 @@ const NewMainLayout: React.FC<NewMainLayoutProps> = ({ children }) => {
   const { mode, setMode } = useMCP();
   
   return (
-    <SidebarProvider>
+    <SidebarWrapper defaultOpen={!isCollapsed}>
       <div className="min-h-screen flex flex-col w-full">
         <Navbar />
         
@@ -101,7 +101,7 @@ const NewMainLayout: React.FC<NewMainLayoutProps> = ({ children }) => {
         
         <Footer />
       </div>
-    </SidebarProvider>
+    </SidebarWrapper>
   );
 };
 
