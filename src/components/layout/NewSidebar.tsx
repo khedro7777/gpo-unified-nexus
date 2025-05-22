@@ -3,139 +3,171 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/use-auth';
-import { 
-  User, Home, Wallet, FileText, Settings, Users, MessageSquare, 
-  Bell, ChevronsLeft, ChevronsRight, File, CheckCircle, Mail,
-  LayoutDashboard, Scale, Brain, Building, Network
-} from 'lucide-react';
-
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
-  SidebarHeader,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  useSidebar,
-} from "@/components/ui/sidebar";
-
-interface NavItemProps {
-  icon: React.ElementType;
-  label: string;
-  href: string;
-  isActive?: boolean;
-}
-
-const NavItem = ({ icon: Icon, label, href, isActive }: NavItemProps) => {
-  return (
-    <SidebarMenuItem>
-      <SidebarMenuButton asChild isActive={isActive} tooltip={label}>
-        <Link to={href} className="flex items-center gap-2">
-          <Icon className="h-4 w-4" />
-          <span>{label}</span>
-        </Link>
-      </SidebarMenuButton>
-    </SidebarMenuItem>
-  );
-};
+} from '@/components/ui/sidebar';
+import {
+  Home,
+  Users,
+  ShoppingCart,
+  FileText,
+  Building,
+  Award,
+  Gavel,
+  Wrench,
+  Wallet,
+  Settings,
+  LogOut,
+} from 'lucide-react';
 
 interface NewSidebarProps {
   isCollapsed: boolean;
-  setIsCollapsed: (value: boolean) => void;
+  setIsCollapsed: (collapsed: boolean) => void;
 }
 
-const NewSidebar: React.FC<NewSidebarProps> = ({ isCollapsed, setIsCollapsed }) => {
+const NewSidebar = ({ isCollapsed, setIsCollapsed }: NewSidebarProps) => {
   const location = useLocation();
-  const { role } = useAuth();
-  const { toggleSidebar } = useSidebar();
+  const { logout, role } = useAuth();
 
-  const handleToggleSidebar = () => {
-    toggleSidebar();
-    setIsCollapsed(!isCollapsed);
+  const isActive = (path: string) => location.pathname === path;
+
+  const getNavLinkClass = (path: string) => {
+    return cn(
+      "flex items-center w-full py-2 px-3 rounded-md transition-colors",
+      isActive(path) 
+        ? "bg-primary/10 text-primary font-medium" 
+        : "hover:bg-muted text-muted-foreground hover:text-foreground"
+    );
   };
-
-  // Base navigation items for all users
-  const baseNavigation = [
-    { icon: Home, label: "الرئيسية", href: "/" },
-    { icon: User, label: "ملفي الشخصي", href: "/profile" },
-    { icon: Users, label: "مجموعاتي", href: "/my-groups" },
-    { icon: LayoutDashboard, label: "نظرة عامة", href: "/dashboard" },
-  ];
-
-  // Role specific navigation items
-  const roleSpecificNavigation = {
-    freelancer: [
-      { icon: FileText, label: "وظائفي", href: "/my-jobs" },
-    ],
-    buyer: [
-      { icon: CheckCircle, label: "العروض المستلمة", href: "/received-offers" },
-    ],
-    supplier: [
-      { icon: File, label: "العروض المرسلة", href: "/sent-offers" },
-    ],
-    founder: [
-      { icon: CheckCircle, label: "طلبات التأسيس", href: "/formation-requests" },
-    ],
-  };
-
-  // Common navigation items for all authenticated users
-  const commonNavigation = [
-    { icon: Wallet, label: "المحفظة", href: "/wallet" },
-    { icon: FileText, label: "الفواتير", href: "/invoices" },
-    { icon: Bell, label: "الإشعارات", href: "/notifications" },
-    { icon: MessageSquare, label: "نزاعات ORDA", href: "/disputes" },
-    { icon: Scale, label: "القانون", href: "/legal" },
-    { icon: Brain, label: "الأدوات", href: "/tools" },
-    { icon: Building, label: "منظمة DAO", href: "/dao" },
-    { icon: Network, label: "الحوكمة", href: "/governance" },
-    { icon: Mail, label: "الدعم", href: "/support" },
-    { icon: Settings, label: "الإعدادات", href: "/settings" },
-  ];
-
-  // Combine navigation items based on user role
-  let navigationItems = [...baseNavigation];
-  if (role && roleSpecificNavigation[role]) {
-    navigationItems = [...navigationItems, ...roleSpecificNavigation[role]];
-  }
-  navigationItems = [...navigationItems, ...commonNavigation];
 
   return (
-    <Sidebar
-      className={cn("transition-all duration-300", isCollapsed ? "w-16" : "w-64")}
-      collapsible={isCollapsed ? "icon" : "none"}
+    <Sidebar 
+      className={cn(
+        "fixed top-16 bottom-0 z-10 hidden md:flex flex-col border-l transition-all duration-300 bg-white",
+        isCollapsed ? "w-16" : "w-64"
+      )}
     >
-      <SidebarHeader className="py-4">
-        <Link to="/" className="flex items-center justify-center gap-2">
-          {!isCollapsed && <span className="text-2xl font-bold">GPO</span>}
-        </Link>
-      </SidebarHeader>
-      
-      <SidebarContent className="px-2">
-        <SidebarMenu>
-          {navigationItems.map((item) => (
-            <NavItem
-              key={item.label}
-              icon={item.icon}
-              label={item.label}
-              href={item.href}
-              isActive={location.pathname === item.href}
-            />
-          ))}
-        </SidebarMenu>
+      <SidebarContent className="py-2 px-3">
+        <SidebarGroup>
+          <SidebarGroupLabel className={isCollapsed ? "sr-only" : ""}>
+            الرئيسية
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/" className={getNavLinkClass("/")}>
+                    <Home className="h-5 w-5 ml-2" />
+                    {!isCollapsed && <span>الصفحة الرئيسية</span>}
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/groups" className={getNavLinkClass("/groups")}>
+                    <Users className="h-5 w-5 ml-2" />
+                    {!isCollapsed && <span>المجموعات</span>}
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/offers" className={getNavLinkClass("/offers")}>
+                    <ShoppingCart className="h-5 w-5 ml-2" />
+                    {!isCollapsed && <span>العروض</span>}
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel className={isCollapsed ? "sr-only" : ""}>
+            الإدارة
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/governance" className={getNavLinkClass("/governance")}>
+                    <FileText className="h-5 w-5 ml-2" />
+                    {!isCollapsed && <span>الحوكمة</span>}
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/dao" className={getNavLinkClass("/dao")}>
+                    <Building className="h-5 w-5 ml-2" />
+                    {!isCollapsed && <span>DAO</span>}
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/legal" className={getNavLinkClass("/legal")}>
+                    <Gavel className="h-5 w-5 ml-2" />
+                    {!isCollapsed && <span>القانونية</span>}
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/tools" className={getNavLinkClass("/tools")}>
+                    <Wrench className="h-5 w-5 ml-2" />
+                    {!isCollapsed && <span>الأدوات</span>}
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel className={isCollapsed ? "sr-only" : ""}>
+            المستخدم
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/wallet" className={getNavLinkClass("/wallet")}>
+                    <Wallet className="h-5 w-5 ml-2" />
+                    {!isCollapsed && <span>المحفظة</span>}
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/profile" className={getNavLinkClass("/profile")}>
+                    <Settings className="h-5 w-5 ml-2" />
+                    {!isCollapsed && <span>الإعدادات</span>}
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <button 
+                    onClick={logout} 
+                    className="flex items-center w-full py-2 px-3 rounded-md transition-colors text-red-500 hover:bg-red-50"
+                  >
+                    <LogOut className="h-5 w-5 ml-2" />
+                    {!isCollapsed && <span>تسجيل الخروج</span>}
+                  </button>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
-      
-      <SidebarFooter>
-        <button 
-          onClick={handleToggleSidebar} 
-          className={cn(
-            "w-full flex items-center justify-center p-2 hover:bg-muted/50 rounded-md transition-colors",
-            isCollapsed ? "px-3" : "px-4"
-          )}
-        >
-          {isCollapsed ? <ChevronsRight className="h-4 w-4" /> : <ChevronsLeft className="h-4 w-4" />}
-        </button>
-      </SidebarFooter>
     </Sidebar>
   );
 };

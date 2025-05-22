@@ -11,12 +11,13 @@ import { ShoppingCart, BarChart3, Users, Building, Store, Search, Globe, Tag, Me
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { NavigationLinks } from '@/components/layout/navigation/NavigationLinks';
+import { useAuth } from '@/hooks/use-auth';
 
 const portals = [
   {
     id: 'purchasing',
     title: 'الشراء التعاوني',
-    description: 'نظام شراء جماعي للحصول على أفضل الأسعار والشروط',
+    description: 'نظام شراء جماعي للحصول على أفضل الأسعار والشروط من الموردين',
     icon: <ShoppingCart className="h-6 w-6 text-white" />,
     type: 'web2',
     collectiveOption: true,
@@ -24,7 +25,7 @@ const portals = [
   {
     id: 'marketing',
     title: 'التسويق الجماعي',
-    description: 'حملات تسويقية مشتركة لتقليل التكاليف وزيادة الوصول',
+    description: 'حملات تسويقية مشتركة لتقليل التكاليف وزيادة الوصول للجمهور المستهدف',
     icon: <BarChart3 className="h-6 w-6 text-white" />,
     type: 'web2',
     collectiveOption: true,
@@ -32,7 +33,7 @@ const portals = [
   {
     id: 'freelancers',
     title: 'المستقلون',
-    description: 'منصة للمستقلين للعمل فرديًا أو ضمن مجموعات',
+    description: 'منصة للمستقلين للعمل فرديًا أو ضمن مجموعات على مشاريع متنوعة',
     icon: <Users className="h-6 w-6 text-white" />,
     type: 'web3',
     collectiveOption: true,
@@ -40,7 +41,7 @@ const portals = [
   {
     id: 'suppliers',
     title: 'الموردون',
-    description: 'نظام متكامل للموردين لتقديم العروض والخدمات',
+    description: 'نظام متكامل للموردين لتقديم العروض والخدمات لمجموعات الشراء',
     icon: <Store className="h-6 w-6 text-white" />,
     type: 'web2',
     collectiveOption: false,
@@ -51,9 +52,9 @@ const portals = [
 const activeGroups = [
   {
     id: 'group-1',
-    title: 'مجموعة شراء إلكترونيات',
+    title: 'مجموعة شراء أجهزة إلكترونية',
     type: 'buying',
-    members: 12,
+    members: 24,
     country: 'السعودية',
     status: 'active',
     needsFreelancer: false,
@@ -61,9 +62,9 @@ const activeGroups = [
   },
   {
     id: 'group-2',
-    title: 'حملة تسويقية مشتركة',
+    title: 'حملة تسويقية لمنتجات صحية',
     type: 'marketing',
-    members: 8,
+    members: 18,
     country: 'الإمارات',
     status: 'active',
     needsFreelancer: true,
@@ -71,15 +72,30 @@ const activeGroups = [
   },
   {
     id: 'group-3',
-    title: 'تطوير تطبيق موبايل',
+    title: 'تطوير منصة تعليمية',
     type: 'freelancers',
-    members: 5,
+    members: 15,
     country: 'مصر',
     status: 'active',
     needsFreelancer: false,
     rqfOpen: false,
   }
 ];
+
+const YouTubeEmbed: React.FC<{videoId: string}> = ({ videoId }) => {
+  return (
+    <div className="relative w-full max-w-md aspect-video rounded-lg overflow-hidden">
+      <iframe 
+        src={`https://www.youtube.com/embed/${videoId}`}
+        title="YouTube video player"
+        className="absolute top-0 left-0 w-full h-full"
+        frameBorder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen>
+      </iframe>
+    </div>
+  );
+};
 
 const Index = () => {
   const [searchText, setSearchText] = useState('');
@@ -89,6 +105,7 @@ const Index = () => {
   const [language, setLanguage] = useState<string>('ar');
   const [country, setCountry] = useState<string>('all');
   const [activeTab, setActiveTab] = useState('portals');
+  const { isAuthenticated } = useAuth();
   
   // Filter groups
   const filteredGroups = activeGroups.filter(group => {
@@ -112,18 +129,14 @@ const Index = () => {
                 منصة عقود ذكية للمشترين والموردين والمستقلين
               </h1>
               <p className="text-lg text-muted-foreground mb-6">
-                استفد من قوة التعاون الجماعي، العقود الذكية، وتكنولوجيا Web3 لبناء مستقبل أفضل للتعاون والأعمال
+                استفد من قوة التعاون الجماعي، العقود الذكية، وتكنولوجيا GPO لبناء مستقبل أفضل للتعاون والأعمال
               </p>
               <Button size="lg" className="px-8 py-6 text-lg">
                 ابدأ الآن
               </Button>
             </div>
             <div className="w-full md:w-auto">
-              <img 
-                src="/lovable-uploads/c5b3c853-dc10-4ed1-a430-7bec964d3030.png" 
-                alt="GPO Platform" 
-                className="w-full max-w-md mx-auto"
-              />
+              <YouTubeEmbed videoId="dQw4w9WgXcQ" />
             </div>
           </div>
         </div>
@@ -188,7 +201,7 @@ const Index = () => {
         </div>
         
         {/* Smart Cards */}
-        <h2 className="text-2xl font-bold mb-6 text-center md:text-left">البوابات الرئيسية</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center md:text-right">البوابات الرئيسية</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-12">
           {portals.map((portal) => (
             <Link to={`/create-group/${portal.id}`} key={portal.id} className="block">
@@ -209,7 +222,7 @@ const Index = () => {
                 <CardContent className="pt-0">
                   <Button variant="secondary" className="w-full mt-3 justify-between">
                     ابدأ
-                    <span className="ml-2">→</span>
+                    <span className="mr-2">←</span>
                   </Button>
                 </CardContent>
               </Card>
@@ -219,7 +232,7 @@ const Index = () => {
         
         {/* Group Sections */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold mb-6 text-center md:text-left">المجموعات النشطة</h2>
+          <h2 className="text-2xl font-bold mb-6 text-center md:text-right">المجموعات النشطة</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {activeGroups.slice(0, 3).map(group => (
               <Card key={group.id} className="hover:shadow-md transition-shadow border-0 shadow-sm overflow-hidden">
@@ -252,7 +265,7 @@ const Index = () => {
                     <Button asChild className="w-full justify-between">
                       <Link to={`/groups/${group.id}`}>
                         الانضمام للمجموعة
-                        <span className="ml-2">→</span>
+                        <span className="mr-2">←</span>
                       </Link>
                     </Button>
                   </div>
@@ -272,7 +285,7 @@ const Index = () => {
         
         {/* Suppliers Section */}
         <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-6 text-center md:text-left">المجموعات التي تبحث عن موردين</h2>
+          <h2 className="text-2xl font-bold mb-6 text-center md:text-right">المجموعات التي تبحث عن موردين</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {activeGroups.slice(0, 2).map(group => (
               <Card key={group.id} className="hover:shadow-md transition-shadow border-0 shadow-sm overflow-hidden">
@@ -294,7 +307,7 @@ const Index = () => {
                     <Button asChild variant="secondary" className="w-full justify-between">
                       <Link to={`/groups/${group.id}`}>
                         تقديم عرض
-                        <span className="ml-2">→</span>
+                        <span className="mr-2">←</span>
                       </Link>
                     </Button>
                   </div>
