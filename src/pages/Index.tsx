@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ShoppingCart, BarChart3, Users, Building, Store, Search, Globe, Tag } from 'lucide-react';
+import { ShoppingCart, BarChart3, Users, Building, Store, Search, Globe, Tag, MessageSquare } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { NavigationLinks } from '@/components/layout/navigation/NavigationLinks';

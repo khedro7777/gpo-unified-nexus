@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import NewMainLayout from '@/components/layout/NewMainLayout';
@@ -14,8 +13,8 @@ import {
   Users, FileText, Settings, Calendar, MessageSquare, Briefcase, 
   CheckCircle, ArrowUpRight, FileCheck, Clock, ThumbsUp, ArrowRight
 } from 'lucide-react';
-import { LoomioVoting } from '@/components/voting/LoomioVoting';
-import { SnapshotVoting } from '@/components/voting/SnapshotVoting';
+import LoomioVoting from '@/components/voting/LoomioVoting';
+import SnapshotVoting from '@/components/voting/SnapshotVoting';
 
 // Sample data for the group details page
 const groupData = {
