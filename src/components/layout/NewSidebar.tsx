@@ -1,6 +1,6 @@
+
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/use-auth';
 import { 
@@ -15,8 +15,8 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuButton,
   useSidebar,
 } from "@/components/ui/sidebar";
 
@@ -107,8 +107,7 @@ const NewSidebar: React.FC<NewSidebarProps> = ({ isCollapsed, setIsCollapsed }) 
     >
       <SidebarHeader className="py-4">
         <Link to="/" className="flex items-center justify-center gap-2">
-          {!isCollapsed && <img src="/logo.png" alt="Logo" className="h-8" />}
-          <span className={cn("text-2xl font-bold", isCollapsed && "hidden")}>GPO</span>
+          {!isCollapsed && <span className="text-2xl font-bold">GPO</span>}
         </Link>
       </SidebarHeader>
       
@@ -127,14 +126,15 @@ const NewSidebar: React.FC<NewSidebarProps> = ({ isCollapsed, setIsCollapsed }) 
       </SidebarContent>
       
       <SidebarFooter>
-        <Button 
+        <button 
           onClick={handleToggleSidebar} 
-          variant="ghost" 
-          size="sm" 
-          className="w-full justify-center"
+          className={cn(
+            "w-full flex items-center justify-center p-2 hover:bg-muted/50 rounded-md transition-colors",
+            isCollapsed ? "px-3" : "px-4"
+          )}
         >
           {isCollapsed ? <ChevronsRight className="h-4 w-4" /> : <ChevronsLeft className="h-4 w-4" />}
-        </Button>
+        </button>
       </SidebarFooter>
     </Sidebar>
   );
