@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import NewMainLayout from '@/components/layout/NewMainLayout';
@@ -52,6 +53,41 @@ const groupData = {
   votingSystem: 'loomio'
 };
 
+// بيانات تصويت Loomio
+const loomioVotingData = {
+  proposalId: "loomio-1",
+  title: "اختيار المورد للمشروع",
+  description: "التصويت على اختيار المورد الأفضل لتوريد أجهزة الكمبيوتر المحمولة",
+  options: [
+    { id: "supplier-1", title: "شركة العالمية للإلكترونيات", description: "العرض: 115,000 ريال", votes: 8 },
+    { id: "supplier-2", title: "مؤسسة التقنية الذكية", description: "العرض: 118,000 ريال", votes: 3 }
+  ],
+  deadline: "2025-05-25",
+  totalVotes: 11,
+  voters: [
+    { id: "user-1", name: "أحمد محمد", avatar: "https://api.dicebear.com/7.x/personas/svg?seed=Ahmed", vote: "agree" },
+    { id: "user-2", name: "سارة خالد", avatar: "https://api.dicebear.com/7.x/personas/svg?seed=Sarah", vote: "disagree" },
+    { id: "user-3", name: "محمد علي", avatar: "https://api.dicebear.com/7.x/personas/svg?seed=Mohammed", vote: "agree" }
+  ]
+};
+
+// بيانات تصويت Snapshot
+const snapshotVotingData = {
+  proposalId: "snapshot-1",
+  title: "اختيار شروط التعاقد",
+  description: "التصويت على شروط التعاقد مع المورد المختار",
+  options: [
+    { id: "option-1", title: "نموذج العقد الأساسي", votes: 6 },
+    { id: "option-2", title: "نموذج العقد المتقدم مع ضمانات إضافية", votes: 4 },
+    { id: "option-3", title: "نموذج العقد المخصص", votes: 2 }
+  ],
+  deadline: "2025-05-30",
+  spaceId: "gpo-electronics",
+  ipfsHash: "QmZ4tDuvesekSs4qM5ZBKpXiZGun7S2CYtEZRB3DYXkjGx",
+  totalVotes: 12,
+  verifiable: true
+};
+
 const GroupDetails = () => {
   const { groupId } = useParams<{ groupId: string }>();
   const [activeTab, setActiveTab] = useState('overview');
@@ -65,6 +101,18 @@ const GroupDetails = () => {
       setIsJoining(false);
       setIsJoined(true);
     }, 1000);
+  };
+  
+  // معالجة التصويت
+  const handleVote = (optionId: string) => {
+    console.log(`تم التصويت على: ${optionId}`);
+    // يمكن إضافة منطق معالجة التصويت هنا
+  };
+  
+  // معالجة إضافة تعليق
+  const handleComment = (comment: string) => {
+    console.log(`تعليق جديد: ${comment}`);
+    // يمكن إضافة منطق معالجة التعليقات هنا
   };
   
   return (
@@ -271,13 +319,75 @@ const GroupDetails = () => {
                 <CardDescription>صوت على القرارات المتاحة في هذه المجموعة</CardDescription>
               </CardHeader>
               <CardContent>
-                {groupData.supportsVoting && (
-                  groupData.votingSystem === 'loomio' ? (
-                    <LoomioVoting />
-                  ) : (
-                    <SnapshotVoting />
-                  )
-                )}
+                <Tabs defaultValue="current" className="mb-6">
+                  <TabsList className="mb-4">
+                    <TabsTrigger value="current">التصويت الحالي</TabsTrigger>
+                    <TabsTrigger value="upcoming">تصويتات قادمة</TabsTrigger>
+                    <TabsTrigger value="past">تصويتات سابقة</TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="current">
+                    {groupData.supportsVoting && (
+                      groupData.votingSystem === 'loomio' ? (
+                        <LoomioVoting 
+                          proposalId={loomioVotingData.proposalId}
+                          title={loomioVotingData.title}
+                          description={loomioVotingData.description}
+                          options={loomioVotingData.options}
+                          deadline={loomioVotingData.deadline}
+                          totalVotes={loomioVotingData.totalVotes}
+                          voters={loomioVotingData.voters}
+                          onVote={handleVote}
+                          onComment={handleComment}
+                        />
+                      ) : (
+                        <SnapshotVoting 
+                          proposalId={snapshotVotingData.proposalId}
+                          title={snapshotVotingData.title}
+                          description={snapshotVotingData.description}
+                          options={snapshotVotingData.options}
+                          deadline={snapshotVotingData.deadline}
+                          spaceId={snapshotVotingData.spaceId}
+                          ipfsHash={snapshotVotingData.ipfsHash}
+                          totalVotes={snapshotVotingData.totalVotes}
+                          onVote={handleVote}
+                          verifiable={snapshotVotingData.verifiable}
+                        />
+                      )
+                    )}
+                  </TabsContent>
+                  
+                  <TabsContent value="upcoming">
+                    <div className="text-center py-6">
+                      <p className="text-muted-foreground">لا توجد تصويتات قادمة حالياً</p>
+                    </div>
+                  </TabsContent>
+                  
+                  <TabsContent value="past">
+                    <div className="space-y-4">
+                      <Card className="border-l-4 border-l-green-500">
+                        <CardHeader className="pb-2">
+                          <div className="flex justify-between items-start">
+                            <CardTitle className="text-lg">اختيار طريقة الشحن</CardTitle>
+                            <Badge variant="outline">تمت الموافقة</Badge>
+                          </div>
+                          <CardDescription className="flex items-center gap-2 text-sm">
+                            <FileText size={14} /> تم التصويت بتاريخ 2025-03-15
+                          </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-sm text-muted-foreground mb-2">اقتراح لاختيار شركة الشحن وطريقة التوصيل</p>
+                          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                            <Users size={14} />
+                            <span>10 مشاركين</span>
+                            <span className="flex items-center gap-1"><ThumbsUp size={14} /> 8</span>
+                            <span className="flex items-center gap-1"><ThumbsDown size={14} /> 2</span>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </TabsContent>
+                </Tabs>
               </CardContent>
             </Card>
           </TabsContent>
