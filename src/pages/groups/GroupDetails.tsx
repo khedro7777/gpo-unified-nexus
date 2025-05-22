@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import NewMainLayout from '@/components/layout/NewMainLayout';
@@ -54,11 +55,23 @@ const GroupDetails = () => {
     proposalId: "prop-123",
     title: "شراء أجهزة كمبيوتر من شركة أمازون",
     description: "التصويت على قبول عرض الأسعار المقدم من شركة أمازون لشراء 100 جهاز لابتوب بسعر إجمالي قدره 120,000 ريال سعودي",
-    options: ["موافق", "غير موافق", "امتناع"],
+    options: [
+      { id: "opt1", title: "موافق", votes: 8 },
+      { id: "opt2", title: "غير موافق", votes: 2 },
+      { id: "opt3", title: "امتناع", votes: 1 }
+    ],
     createdBy: "أحمد محمد",
     createdAt: "2025-05-10T10:00:00Z",
     endDate: "2025-05-17T10:00:00Z",
-    minTokens: 100
+    minTokens: 100,
+    deadline: "2025-05-17T10:00:00Z",
+    totalVotes: 11,
+    spaceId: "gpo-buying-123",
+    voters: [
+      { id: "user1", name: "أحمد محمد", avatar: "https://api.dicebear.com/7.x/personas/svg?seed=Ahmed", vote: "agree" },
+      { id: "user2", name: "سارة خالد", avatar: "https://api.dicebear.com/7.x/personas/svg?seed=Sarah", vote: "disagree" },
+      { id: "user3", name: "محمد علي", avatar: "https://api.dicebear.com/7.x/personas/svg?seed=Mohammed", vote: "abstain" }
+    ]
   };
 
   // Event handlers for voting components
@@ -81,7 +94,7 @@ const GroupDetails = () => {
             <h1 className="text-3xl font-bold">{groupData.title}</h1>
             <div className="flex items-center gap-2 mt-2">
               <Badge variant="outline">{groupData.type === 'buying' ? 'مجموعة شراء' : 'مجموعة تسويق'}</Badge>
-              <Badge variant={groupData.status === 'active' ? 'success' : 'secondary'}>
+              <Badge variant={groupData.status === 'active' ? 'secondary' : 'outline'}>
                 {groupData.status === 'active' ? 'نشطة' : 'مغلقة'}
               </Badge>
             </div>
@@ -334,10 +347,9 @@ const GroupDetails = () => {
                       title={proposalData.title}
                       description={proposalData.description}
                       options={proposalData.options}
-                      createdBy={proposalData.createdBy}
-                      createdAt={proposalData.createdAt}
-                      endDate={proposalData.endDate}
-                      minTokens={proposalData.minTokens}
+                      deadline={proposalData.deadline}
+                      totalVotes={proposalData.totalVotes}
+                      voters={proposalData.voters}
                       onVote={handleVote}
                       onComment={handleComment}
                     />
@@ -349,12 +361,11 @@ const GroupDetails = () => {
                       title={proposalData.title}
                       description={proposalData.description}
                       options={proposalData.options}
-                      createdBy={proposalData.createdBy}
-                      createdAt={proposalData.createdAt}
-                      endDate={proposalData.endDate}
-                      minTokens={proposalData.minTokens}
+                      deadline={proposalData.deadline}
+                      spaceId={proposalData.spaceId}
+                      totalVotes={proposalData.totalVotes}
                       onVote={handleVote}
-                      onComment={handleComment}
+                      verifiable={true}
                     />
                   </TabsContent>
                 </Tabs>
