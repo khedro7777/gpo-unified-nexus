@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import NewSidebar from './NewSidebar';
 import Navbar from './Navbar';
@@ -11,35 +10,44 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ManualFlowExplorer from '../manual/ManualFlowExplorer';
 import { SidebarProvider, SidebarWrapper } from '@/components/ui/sidebar';
 import { NavigationLinks } from './navigation/NavigationLinks';
+import { cn } from '@/lib/utils';
 
 interface NewMainLayoutProps {
   children: React.ReactNode;
 }
 
 const NewMainLayout: React.FC<NewMainLayoutProps> = ({ children }) => {
-  const [isCollapsed, setIsCollapsed] = useState(true); // Default to collapsed for mobile-first
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const [leftPanelOpen, setLeftPanelOpen] = useState(false);
   const [rightPanelOpen, setRightPanelOpen] = useState(false);
   const { mode, setMode } = useMCP();
   
   return (
     <SidebarWrapper defaultOpen={!isCollapsed}>
-      <div className="min-h-screen flex flex-col w-full">
+      <div className="min-h-screen flex flex-col w-full bg-gray-50">
         <Navbar />
         
         <div className="flex flex-1">
           <NewSidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
           
-          <div className={`flex flex-1 ${isCollapsed ? 'ml-16' : 'ml-64'} transition-all duration-300`}>
+          <div className={cn(
+            "flex flex-1 transition-all duration-300",
+            isCollapsed ? "ml-16" : "ml-64"
+          )}>
             {/* Left Panel: Manual Flow Explorer */}
-            <div className={`${leftPanelOpen ? 'w-64' : 'w-0'} transition-all duration-300 border-r border-border bg-muted/30 relative overflow-hidden`}>
+            <div className={cn(
+              "transition-all duration-300 border-r border-gray-200 bg-white relative overflow-hidden",
+              leftPanelOpen ? "w-64" : "w-0"
+            )}>
               {leftPanelOpen && (
-                <ManualFlowExplorer />
+                <div className="h-full p-4">
+                  <ManualFlowExplorer />
+                </div>
               )}
               <Button
                 variant="outline"
                 size="icon"
-                className="absolute top-2 right-0 transform translate-x-full border-l-0 rounded-l-none h-10"
+                className="absolute top-4 right-0 transform translate-x-full border-l-0 rounded-l-none h-10 bg-white shadow-sm"
                 onClick={() => setLeftPanelOpen(!leftPanelOpen)}
               >
                 {leftPanelOpen ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
@@ -47,21 +55,29 @@ const NewMainLayout: React.FC<NewMainLayoutProps> = ({ children }) => {
             </div>
             
             {/* Main Content Area */}
-            <main className="flex-1 p-4 md:p-6 pb-20 md:pb-6 overflow-y-auto">
+            <main className="flex-1 p-4 md:p-6 pb-20 md:pb-6 overflow-y-auto bg-white">
               <div className="mb-6">
                 <Tabs value={mode} onValueChange={(value) => setMode(value as any)} className="w-full">
-                  <TabsList className="grid grid-cols-3 w-full">
-                    <TabsTrigger value="manual">وضع التنفيذ اليدوي</TabsTrigger>
-                    <TabsTrigger value="auto">وضع التنفيذ التلقائي (MCP)</TabsTrigger>
-                    <TabsTrigger value="ask">وضع الاستشارة (MCP)</TabsTrigger>
+                  <TabsList className="grid grid-cols-3 w-full bg-gray-100">
+                    <TabsTrigger value="manual" className="text-sm">وضع التنفيذ اليدوي</TabsTrigger>
+                    <TabsTrigger value="auto" className="text-sm">وضع التنفيذ التلقائي (MCP)</TabsTrigger>
+                    <TabsTrigger value="ask" className="text-sm">وضع الاستشارة (MCP)</TabsTrigger>
                   </TabsList>
                 </Tabs>
               </div>
-              {children}
+              
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 min-h-[600px]">
+                <div className="p-6">
+                  {children}
+                </div>
+              </div>
             </main>
             
             {/* Right Panel: Chat Assistant */}
-            <div className={`${rightPanelOpen ? 'w-80' : 'w-0'} transition-all duration-300 relative`}>
+            <div className={cn(
+              "transition-all duration-300 relative bg-white border-l border-gray-200",
+              rightPanelOpen ? "w-80" : "w-0"
+            )}>
               {rightPanelOpen && (
                 <div className="h-full">
                   <MCPChat />
@@ -70,7 +86,7 @@ const NewMainLayout: React.FC<NewMainLayoutProps> = ({ children }) => {
               <Button
                 variant="outline"
                 size="icon"
-                className="absolute top-2 left-0 transform -translate-x-full border-r-0 rounded-r-none h-10"
+                className="absolute top-4 left-0 transform -translate-x-full border-r-0 rounded-r-none h-10 bg-white shadow-sm"
                 onClick={() => setRightPanelOpen(!rightPanelOpen)}
               >
                 {rightPanelOpen ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
@@ -79,12 +95,12 @@ const NewMainLayout: React.FC<NewMainLayoutProps> = ({ children }) => {
           </div>
         </div>
         
-        {/* Mobile Bottom Navigation (LinkedIn-style) */}
+        {/* Mobile Bottom Navigation */}
         <div className="md:hidden">
           <NavigationLinks />
         </div>
         
-        {/* MCP Chat Assistant Button (Fixed) */}
+        {/* Floating Action Buttons */}
         <div className="fixed bottom-20 md:bottom-4 right-4 z-40">
           <Button
             variant="default"
@@ -100,7 +116,10 @@ const NewMainLayout: React.FC<NewMainLayoutProps> = ({ children }) => {
           <Button
             variant="outline"
             size="sm"
-            className={`bg-background ${leftPanelOpen ? 'border-primary' : 'border-muted-foreground/20'}`}
+            className={cn(
+              "bg-white shadow-sm",
+              leftPanelOpen ? "border-primary" : "border-gray-200"
+            )}
             onClick={() => setLeftPanelOpen(!leftPanelOpen)}
           >
             <Layout className="h-4 w-4 mr-2" /> 
