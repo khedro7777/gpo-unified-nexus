@@ -1,6 +1,6 @@
 
 import React from 'react';
-import NewMainLayout from '@/components/layout/NewMainLayout';
+import SimplifiedLayout from '@/components/layout/SimplifiedLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -13,7 +13,7 @@ const Profile = () => {
   const { name, email, role } = useAuth();
   
   return (
-    <NewMainLayout>
+    <SimplifiedLayout>
       <div className="space-y-6">
         <h1 className="text-3xl font-bold">الملف الشخصي</h1>
         <p className="text-muted-foreground">
@@ -156,7 +156,7 @@ const Profile = () => {
           </div>
         </div>
       </div>
-    </NewMainLayout>
+    </SimplifiedLayout>
   );
 };
 

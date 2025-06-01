@@ -1,6 +1,6 @@
 
 import React from 'react';
-import MainLayout from '@/components/layout/MainLayout';
+import SimplifiedLayout from '@/components/layout/SimplifiedLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -93,7 +93,7 @@ const Invoices = () => {
   };
 
   return (
-    <MainLayout>
+    <SimplifiedLayout>
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-bold">الفواتير</h1>
@@ -188,7 +188,7 @@ const Invoices = () => {
           </CardContent>
         </Card>
       </div>
-    </MainLayout>
+    </SimplifiedLayout>
   );
 };
 

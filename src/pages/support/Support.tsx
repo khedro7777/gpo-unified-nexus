@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import MainLayout from '@/components/layout/MainLayout';
+import SimplifiedLayout from '@/components/layout/SimplifiedLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -83,7 +83,7 @@ const Support = () => {
   };
 
   return (
-    <MainLayout>
+    <SimplifiedLayout>
       <div className="space-y-6">
         <h1 className="text-3xl font-bold">الدعم</h1>
         
@@ -301,7 +301,7 @@ const Support = () => {
           </TabsContent>
         </Tabs>
       </div>
-    </MainLayout>
+    </SimplifiedLayout>
   );
 };
 
