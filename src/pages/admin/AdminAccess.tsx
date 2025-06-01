@@ -2,29 +2,29 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ShieldCheck, Database, Server, Settings, Info } from 'lucide-react';
+import { ShieldCheck, Database, Server, Settings, Info, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import StrapiContent from '@/components/cms/StrapiContent';
 import { Input } from '@/components/ui/input';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 const AdminAccess = () => {
   const { isAuthenticated, role } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const [ipAuthorized, setIpAuthorized] = useState(true); // Simulated IP check
+  const [ipAuthorized, setIpAuthorized] = useState(true);
   const [adminPassword, setAdminPassword] = useState('');
   const [showAccessForm, setShowAccessForm] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   
   // Simulate IP check on component mount
   useEffect(() => {
     const checkIP = async () => {
-      // In a real application, this would be a call to a backend service
-      // that checks if the current IP is in the allowlist
       await new Promise(resolve => setTimeout(resolve, 800));
-      const authorized = Math.random() > 0.3; // 70% chance of being authorized for demo
+      const authorized = Math.random() > 0.3;
       setIpAuthorized(authorized);
       
       if (!authorized) {
@@ -47,7 +47,6 @@ const AdminAccess = () => {
   const handleEnterDashboard = () => {
     setIsLoading(true);
     
-    // Simulate API call to validate access
     setTimeout(() => {
       window.open('https://cms.gpo.example.com/admin', '_blank');
       setIsLoading(false);
@@ -62,14 +61,13 @@ const AdminAccess = () => {
   const handlePasswordSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Simple validation - in a real application this would call an API
     if (adminPassword === 'admin123') {
       setShowAccessForm(false);
       handleEnterDashboard();
     } else {
       toast({
         title: "كلمة المرور غير صحيحة",
-        description: "الرجاء التحقق من كلمة المرور وإعادة المحاولة",
+        description: "كلمة المرور المؤقتة هي: admin123",
         variant: "destructive"
       });
     }
@@ -87,14 +85,14 @@ const AdminAccess = () => {
               <StrapiContent 
                 contentType="admin" 
                 field="title" 
-                fallback="Welcome to GPO Admin Access Portal" 
+                fallback="مرحبًا بك في بوابة إدارة GPO" 
               />
             </CardTitle>
             <CardDescription className="text-center">
               <StrapiContent 
                 contentType="admin" 
                 field="description" 
-                fallback="This area is reserved for internal governance, observation, and content control." 
+                fallback="هذه المنطقة مخصصة للحوكمة الداخلية والمراقبة وإدارة المحتوى" 
               />
             </CardDescription>
           </CardHeader>
@@ -105,33 +103,59 @@ const AdminAccess = () => {
                 <p className="text-sm mt-1">يرجى الاتصال بمسؤول النظام للحصول على مساعدة</p>
               </div>
             ) : showAccessForm ? (
-              <form onSubmit={handlePasswordSubmit} className="w-full space-y-4">
-                <div className="space-y-2">
-                  <Input 
-                    type="password" 
-                    placeholder="كلمة مرور المسؤول" 
-                    value={adminPassword}
-                    onChange={(e) => setAdminPassword(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="flex gap-2">
-                  <Button 
-                    type="submit" 
-                    className="flex-1"
-                  >
-                    تأكيد
-                  </Button>
-                  <Button 
-                    type="button" 
-                    variant="outline"
-                    className="flex-1"
-                    onClick={() => setShowAccessForm(false)}
-                  >
-                    إلغاء
-                  </Button>
-                </div>
-              </form>
+              <div className="w-full space-y-4">
+                <Alert>
+                  <Info className="h-4 w-4" />
+                  <AlertDescription>
+                    كلمة المرور المؤقتة: <strong>admin123</strong>
+                  </AlertDescription>
+                </Alert>
+                
+                <form onSubmit={handlePasswordSubmit} className="space-y-4">
+                  <div className="space-y-2">
+                    <div className="relative">
+                      <Input 
+                        type={showPassword ? "text" : "password"}
+                        placeholder="أدخل كلمة مرور المسؤول" 
+                        value={adminPassword}
+                        onChange={(e) => setAdminPassword(e.target.value)}
+                        required
+                        className="pr-10"
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="absolute left-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button 
+                      type="submit" 
+                      className="flex-1"
+                      disabled={isLoading}
+                    >
+                      {isLoading ? 'جاري التحقق...' : 'تأكيد الدخول'}
+                    </Button>
+                    <Button 
+                      type="button" 
+                      variant="outline"
+                      className="flex-1"
+                      onClick={() => setShowAccessForm(false)}
+                    >
+                      إلغاء
+                    </Button>
+                  </div>
+                </form>
+              </div>
             ) : (
               <>
                 <div className="grid grid-cols-2 gap-3 w-full mb-4">
@@ -146,6 +170,13 @@ const AdminAccess = () => {
                     <p className="text-xs text-muted-foreground">متاح</p>
                   </div>
                 </div>
+                
+                <Alert className="mb-4 w-full">
+                  <Info className="h-4 w-4" />
+                  <AlertDescription>
+                    للوصول إلى Strapi CMS، ستحتاج إلى كلمة المرور المؤقتة: <strong>admin123</strong>
+                  </AlertDescription>
+                </Alert>
                 
                 <Button 
                   size="lg" 
