@@ -28,6 +28,7 @@ import {
   User,
   Bell,
   MessageSquare,
+  Briefcase,
 } from 'lucide-react';
 
 interface NewSidebarProps {
