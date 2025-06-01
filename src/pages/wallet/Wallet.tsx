@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import NewMainLayout from '@/components/layout/NewMainLayout';
+import SimplifiedLayout from '@/components/layout/SimplifiedLayout';
 import { Wallet as WalletIcon, CreditCard, ArrowUp, Plus } from 'lucide-react';
 import TabSystem from '@/components/tabs/TabSystem';
 import WalletOverview from '@/components/wallet/WalletOverview';
@@ -45,9 +45,9 @@ const Wallet = () => {
   ];
 
   return (
-    <NewMainLayout>
+    <SimplifiedLayout>
       <TabSystem tabs={tabs} />
-    </NewMainLayout>
+    </SimplifiedLayout>
   );
 };
 

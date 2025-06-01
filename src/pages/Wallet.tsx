@@ -1,6 +1,6 @@
 
 import React from 'react';
-import MainLayout from '@/components/layout/MainLayout';
+import SimplifiedLayout from '@/components/layout/SimplifiedLayout';
 import TabSystem from '@/components/tabs/TabSystem';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -105,9 +105,9 @@ const Wallet = () => {
   ];
 
   return (
-    <MainLayout>
+    <SimplifiedLayout>
       <TabSystem tabs={tabs} />
-    </MainLayout>
+    </SimplifiedLayout>
   );
 };
 
