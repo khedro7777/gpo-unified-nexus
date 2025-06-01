@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
@@ -5,10 +6,10 @@ import Index from '@/pages/Index';
 import Login from '@/pages/auth/Login';
 import Register from '@/pages/auth/Register';
 import RoleSelection from '@/pages/auth/RoleSelection';
-import Profile from '@/pages/Profile';
+import Profile from '@/pages/profile/Profile';
 import Groups from '@/pages/Groups';
-import GroupDetails from '@/pages/GroupDetails';
-import CreateGroup from '@/pages/CreateGroup';
+import GroupDetails from '@/pages/groups/GroupDetails';
+import CreateGroup from '@/pages/groups/CreateGroup';
 import Wallet from '@/pages/Wallet';
 import Governance from '@/pages/Governance';
 import DAO from '@/pages/DAO';
