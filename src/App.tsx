@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
@@ -10,6 +9,7 @@ import Profile from '@/pages/profile/Profile';
 import Groups from '@/pages/Groups';
 import GroupDetails from '@/pages/groups/GroupDetails';
 import CreateGroup from '@/pages/groups/CreateGroup';
+import CreateFormationGroup from '@/pages/groups/CreateFormationGroup';
 import Wallet from '@/pages/Wallet';
 import Governance from '@/pages/Governance';
 import DAO from '@/pages/DAO';
@@ -34,6 +34,9 @@ import Settings from '@/pages/settings/Settings';
 // Import new company formation and management pages
 import CompanyFormation from '@/pages/formation/CompanyFormation';
 import CompanyManagement from '@/pages/companies/CompanyManagement';
+
+// Add import for SystemTestingPage
+import SystemTestingPage from '@/pages/testing/SystemTesting';
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -66,6 +69,11 @@ function App() {
           <Route path="/create-group/:type" element={
             <ProtectedRoute>
               <CreateGroup />
+            </ProtectedRoute>
+          } />
+          <Route path="/create-group/formation" element={
+            <ProtectedRoute>
+              <CreateFormationGroup />
             </ProtectedRoute>
           } />
           <Route path="/wallet" element={
@@ -143,6 +151,13 @@ function App() {
           <Route path="/company-management" element={
             <ProtectedRoute>
               <CompanyManagement />
+            </ProtectedRoute>
+          } />
+          
+          {/* Add testing route before admin routes */}
+          <Route path="/system-testing" element={
+            <ProtectedRoute>
+              <SystemTestingPage />
             </ProtectedRoute>
           } />
           

@@ -31,6 +31,7 @@ import {
   Briefcase,
   Factory,
   Building2,
+  CheckCircle,
 } from 'lucide-react';
 
 interface NewSidebarProps {
