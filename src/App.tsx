@@ -43,7 +43,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/role-selection" element={<RoleSelection />} />
           
-          {/* Protected routes */}
+          {/* Protected routes - using NewMainLayout for all */}
           <Route path="/profile" element={
             <ProtectedRoute>
               <Profile />

@@ -1,162 +1,105 @@
 
 import React from 'react';
-import SimplifiedLayout from '@/components/layout/SimplifiedLayout';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
+import NewMainLayout from '@/components/layout/NewMainLayout';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Label } from '@/components/ui/label';
-import { useAuth } from '@/hooks/use-auth';
-import { User, Mail, Phone, Globe } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { User, Mail, Phone, MapPin, Calendar, Star } from 'lucide-react';
 
 const Profile = () => {
-  const { name, email, role } = useAuth();
-  
   return (
-    <SimplifiedLayout>
+    <NewMainLayout>
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold">الملف الشخصي</h1>
+        <h1 className="text-3xl font-bold">ملفي الشخصي</h1>
         <p className="text-muted-foreground">
-          إدارة معلوماتك الشخصية وإعدادات الحساب
+          إدارة معلوماتك الشخصية وإعدادات حسابك
         </p>
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>المعلومات الشخصية</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <div className="relative">
-                    <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                    <Input 
-                      placeholder="الاسم الكامل" 
-                      className="pl-10" 
-                      defaultValue={name || ''}
-                      dir="rtl"
-                    />
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                    <Input 
-                      placeholder="البريد الإلكتروني" 
-                      className="pl-10" 
-                      defaultValue={email || ''}
-                      readOnly
-                      dir="rtl"
-                    />
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <div className="relative">
-                    <Phone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                    <Input 
-                      placeholder="رقم الهاتف" 
-                      className="pl-10"
-                      dir="rtl"
-                    />
-                  </div>
-                </div>
-                
-                <div className="flex flex-col md:flex-row gap-4">
-                  <div className="w-full">
-                    <Label htmlFor="country">الدولة</Label>
-                    <div className="relative">
-                      <Globe className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                      <Select>
-                        <SelectTrigger className="pl-10">
-                          <SelectValue placeholder="اختر الدولة" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="sa">السعودية</SelectItem>
-                          <SelectItem value="ae">الإمارات</SelectItem>
-                          <SelectItem value="kw">الكويت</SelectItem>
-                          <SelectItem value="qa">قطر</SelectItem>
-                          <SelectItem value="bh">البحرين</SelectItem>
-                          <SelectItem value="om">عُمان</SelectItem>
-                          <SelectItem value="eg">مصر</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                  
-                  <div className="w-full">
-                    <Label htmlFor="language">اللغة المفضلة</Label>
-                    <Select defaultValue="ar">
-                      <SelectTrigger>
-                        <SelectValue placeholder="اختر اللغة" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="ar">العربية</SelectItem>
-                        <SelectItem value="en">الإنجليزية</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-                
-                <Button className="w-full mt-4">حفظ التغييرات</Button>
-              </CardContent>
-            </Card>
-          </div>
-          
-          <div className="lg:col-span-1">
-            <Card>
-              <CardHeader>
-                <CardTitle>معلومات الحساب</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <p className="text-sm font-medium">دورك الحالي</p>
-                  <p className="text-lg">
-                    {role === 'freelancer' && 'مستقل'}
-                    {role === 'buyer' && 'مشتري'}
-                    {role === 'supplier' && 'مورد'}
-                    {role === 'founder' && 'مؤسس شركات'}
-                    {role === 'admin' && 'مسؤول النظام'}
-                  </p>
-                </div>
-                
-                <div>
-                  <p className="text-sm font-medium">حالة الحساب</p>
-                  <div className="flex items-center">
-                    <div className="h-3 w-3 rounded-full bg-green-500 mr-2" />
-                    <p>نشط</p>
-                  </div>
-                </div>
-                
-                <div>
-                  <p className="text-sm font-medium">تاريخ الانضمام</p>
-                  <p>20 مايو 2025</p>
-                </div>
-                
-                <div className="pt-4 mt-4 border-t">
-                  <Label className="text-sm font-medium">تغيير الدور</Label>
-                  <Select>
-                    <SelectTrigger className="mt-1">
-                      <SelectValue placeholder="اختر دورًا جديدًا" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="freelancer">مستقل</SelectItem>
-                      <SelectItem value="buyer">مشتري</SelectItem>
-                      <SelectItem value="supplier">مورد</SelectItem>
-                      <SelectItem value="founder">مؤسس شركات</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Button variant="outline" className="w-full mt-2">
-                    تحديث الدور
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <User className="h-5 w-5" />
+                المعلومات الشخصية
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center gap-3">
+                <Mail className="h-4 w-4 text-muted-foreground" />
+                <span>user@example.com</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <Phone className="h-4 w-4 text-muted-foreground" />
+                <span>+966 50 123 4567</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <MapPin className="h-4 w-4 text-muted-foreground" />
+                <span>الرياض، المملكة العربية السعودية</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <Calendar className="h-4 w-4 text-muted-foreground" />
+                <span>انضم في مايو 2025</span>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Star className="h-5 w-5" />
+                الإحصائيات
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex justify-between items-center">
+                <span>المجموعات النشطة</span>
+                <Badge variant="default">5</Badge>
+              </div>
+              <div className="flex justify-between items-center">
+                <span>العروض المرسلة</span>
+                <Badge variant="secondary">12</Badge>
+              </div>
+              <div className="flex justify-between items-center">
+                <span>التقييم</span>
+                <Badge variant="outline">4.8/5</Badge>
+              </div>
+              <div className="flex justify-between items-center">
+                <span>المشاريع المكتملة</span>
+                <Badge variant="outline">23</Badge>
+              </div>
+            </CardContent>
+          </Card>
         </div>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>إعدادات سريعة</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <Button variant="outline" className="justify-start">
+                تحديث المعلومات الشخصية
+              </Button>
+              <Button variant="outline" className="justify-start">
+                إدارة كلمة المرور
+              </Button>
+              <Button variant="outline" className="justify-start">
+                إعدادات الإشعارات
+              </Button>
+              <Button variant="outline" className="justify-start">
+                إعدادات الخصوصية
+              </Button>
+              <Button variant="outline" className="justify-start">
+                ربط المحفظة
+              </Button>
+              <Button variant="outline" className="justify-start">
+                سجل النشاطات
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
-    </SimplifiedLayout>
+    </NewMainLayout>
   );
 };
 

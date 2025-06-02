@@ -1,194 +1,149 @@
 
 import React from 'react';
-import SimplifiedLayout from '@/components/layout/SimplifiedLayout';
+import NewMainLayout from '@/components/layout/NewMainLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { 
-  ArrowDown, 
-  Search, 
-  Calendar, 
-  FileText, 
-  Download, 
-  CheckCircle, 
-  AlertCircle,
-  Clock
-} from 'lucide-react';
-
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Badge } from '@/components/ui/badge';
+import { FileText, Download, Eye, Plus } from 'lucide-react';
 
 const Invoices = () => {
-  // Mock invoice data
   const invoices = [
-    { 
-      id: 'INV-001', 
-      date: '2025-05-15', 
-      amount: 150.00, 
-      status: 'paid', 
-      description: 'رسوم مجموعة الشراء التعاوني #123' 
+    {
+      id: 'INV-001',
+      client: 'شركة التقنية المتقدمة',
+      amount: '$2,500.00',
+      status: 'paid',
+      date: '2025-05-20',
+      dueDate: '2025-06-20'
     },
-    { 
-      id: 'INV-002', 
-      date: '2025-05-10', 
-      amount: 320.00, 
-      status: 'paid', 
-      description: 'أرباح المشروع #A-456' 
+    {
+      id: 'INV-002',
+      client: 'مجموعة التسويق الرقمي',
+      amount: '$1,800.00',
+      status: 'pending',
+      date: '2025-05-18',
+      dueDate: '2025-06-18'
     },
-    { 
-      id: 'INV-003', 
-      date: '2025-05-08', 
-      amount: 75.50, 
-      status: 'pending', 
-      description: 'رسوم عضوية شهر مايو' 
-    },
-    { 
-      id: 'INV-004', 
-      date: '2025-05-01', 
-      amount: 200.00, 
-      status: 'overdue', 
-      description: 'رسوم مجموعة المشتريات #456' 
-    },
-    { 
-      id: 'INV-005', 
-      date: '2025-04-28', 
-      amount: 550.00, 
-      status: 'paid', 
-      description: 'مدفوعات مشروع التسويق #M-789' 
-    },
+    {
+      id: 'INV-003',
+      client: 'منصة التجارة الإلكترونية',
+      amount: '$3,200.00',
+      status: 'overdue',
+      date: '2025-04-15',
+      dueDate: '2025-05-15'
+    }
   ];
 
-  const getStatusBadge = (status: string) => {
+  const getStatusColor = (status: string) => {
     switch (status) {
-      case 'paid':
-        return (
-          <div className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
-            <CheckCircle className="h-3 w-3 mr-1" />
-            مدفوع
-          </div>
-        );
-      case 'pending':
-        return (
-          <div className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-yellow-100 text-yellow-800">
-            <Clock className="h-3 w-3 mr-1" />
-            قيد الانتظار
-          </div>
-        );
-      case 'overdue':
-        return (
-          <div className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-red-100 text-red-800">
-            <AlertCircle className="h-3 w-3 mr-1" />
-            متأخر
-          </div>
-        );
-      default:
-        return null;
+      case 'paid': return 'default';
+      case 'pending': return 'secondary';
+      case 'overdue': return 'destructive';
+      default: return 'outline';
+    }
+  };
+
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case 'paid': return 'مدفوعة';
+      case 'pending': return 'قيد الانتظار';
+      case 'overdue': return 'متأخرة';
+      default: return 'غير معروف';
     }
   };
 
   return (
-    <SimplifiedLayout>
+    <NewMainLayout>
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold">الفواتير</h1>
-          <Button size="sm">
-            <ArrowDown className="mr-2 h-4 w-4" />
-            تصدير الفواتير
+          <div>
+            <h1 className="text-3xl font-bold">الفواتير</h1>
+            <p className="text-muted-foreground">
+              إدارة الفواتير والمدفوعات
+            </p>
+          </div>
+          <Button>
+            <Plus className="h-4 w-4 mr-2" />
+            إنشاء فاتورة جديدة
           </Button>
         </div>
         
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <Card>
+            <CardContent className="p-4">
+              <div className="text-2xl font-bold">$7,500</div>
+              <p className="text-xs text-muted-foreground">إجمالي الفواتير</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-4">
+              <div className="text-2xl font-bold text-green-600">$2,500</div>
+              <p className="text-xs text-muted-foreground">مدفوعة</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-4">
+              <div className="text-2xl font-bold text-yellow-600">$1,800</div>
+              <p className="text-xs text-muted-foreground">قيد الانتظار</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-4">
+              <div className="text-2xl font-bold text-red-600">$3,200</div>
+              <p className="text-xs text-muted-foreground">متأخرة</p>
+            </CardContent>
+          </Card>
+        </div>
+
         <Card>
           <CardHeader>
-            <CardTitle>سجل الفواتير</CardTitle>
-            <CardDescription>عرض وتنزيل سجل الفواتير الخاص بك</CardDescription>
+            <CardTitle className="flex items-center gap-2">
+              <FileText className="h-5 w-5" />
+              قائمة الفواتير
+            </CardTitle>
+            <CardDescription>جميع الفواتير الخاصة بك</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="البحث في الفواتير..."
-                  className="pl-9 h-10"
-                />
-              </div>
-              <div className="relative w-full sm:w-48">
-                <Calendar className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                <select 
-                  className="w-full h-10 pl-9 pr-4 rounded-md border border-input bg-background text-sm"
-                >
-                  <option value="all">جميع الفترات</option>
-                  <option value="this-month">هذا الشهر</option>
-                  <option value="last-month">الشهر الماضي</option>
-                  <option value="last-quarter">آخر 3 أشهر</option>
-                  <option value="last-year">السنة الماضية</option>
-                </select>
-              </div>
-              <div className="w-full sm:w-48">
-                <select 
-                  className="w-full h-10 px-4 rounded-md border border-input bg-background text-sm"
-                >
-                  <option value="all">جميع الحالات</option>
-                  <option value="paid">مدفوع</option>
-                  <option value="pending">قيد الانتظار</option>
-                  <option value="overdue">متأخر</option>
-                </select>
-              </div>
-            </div>
-            
-            <div className="rounded-md border">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>رقم الفاتورة</TableHead>
-                    <TableHead>التاريخ</TableHead>
-                    <TableHead>الوصف</TableHead>
-                    <TableHead>المبلغ</TableHead>
-                    <TableHead>الحالة</TableHead>
-                    <TableHead>تحميل</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {invoices.map((invoice) => (
-                    <TableRow key={invoice.id}>
-                      <TableCell className="font-medium flex items-center gap-2">
-                        <FileText className="h-4 w-4 text-muted-foreground" />
-                        {invoice.id}
-                      </TableCell>
-                      <TableCell>{invoice.date}</TableCell>
-                      <TableCell>{invoice.description}</TableCell>
-                      <TableCell>${invoice.amount.toFixed(2)}</TableCell>
-                      <TableCell>{getStatusBadge(invoice.status)}</TableCell>
-                      <TableCell>
-                        <Button variant="ghost" size="icon">
-                          <Download className="h-4 w-4" />
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-            
-            <div className="flex justify-between items-center">
-              <p className="text-sm text-muted-foreground">عرض 5 من أصل 24 فاتورة</p>
-              <div className="flex gap-2">
-                <Button variant="outline" size="sm" disabled>السابق</Button>
-                <Button variant="outline" size="sm">1</Button>
-                <Button variant="outline" size="sm">2</Button>
-                <Button variant="outline" size="sm">3</Button>
-                <Button variant="outline" size="sm">التالي</Button>
-              </div>
+          <CardContent>
+            <div className="space-y-4">
+              {invoices.map((invoice) => (
+                <div key={invoice.id} className="flex items-center justify-between p-4 border rounded-lg">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                      <FileText className="h-5 w-5 text-blue-600" />
+                    </div>
+                    <div>
+                      <h3 className="font-medium">{invoice.id}</h3>
+                      <p className="text-sm text-muted-foreground">{invoice.client}</p>
+                      <p className="text-xs text-muted-foreground">
+                        تاريخ الإصدار: {invoice.date} | تاريخ الاستحقاق: {invoice.dueDate}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-4">
+                    <div className="text-right">
+                      <div className="font-semibold">{invoice.amount}</div>
+                      <Badge variant={getStatusColor(invoice.status)}>
+                        {getStatusText(invoice.status)}
+                      </Badge>
+                    </div>
+                    
+                    <div className="flex gap-2">
+                      <Button variant="outline" size="sm">
+                        <Eye className="h-4 w-4" />
+                      </Button>
+                      <Button variant="outline" size="sm">
+                        <Download className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </CardContent>
         </Card>
       </div>
-    </SimplifiedLayout>
+    </NewMainLayout>
   );
 };
 

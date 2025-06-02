@@ -1,6 +1,6 @@
 
 import React from 'react';
-import SimplifiedLayout from '@/components/layout/SimplifiedLayout';
+import NewMainLayout from '@/components/layout/NewMainLayout';
 import MCPChat from '@/components/chat/MCPChat';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -10,7 +10,7 @@ import { Bot, Settings, Zap, Clock, CheckCircle, AlertCircle } from 'lucide-reac
 
 const MCP = () => {
   return (
-    <SimplifiedLayout>
+    <NewMainLayout>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-200px)]">
         {/* Left Panel - MCP Status & Controls */}
         <div className="lg:col-span-1 space-y-6">
@@ -99,7 +99,7 @@ const MCP = () => {
           </Card>
         </div>
       </div>
-    </SimplifiedLayout>
+    </NewMainLayout>
   );
 };
 

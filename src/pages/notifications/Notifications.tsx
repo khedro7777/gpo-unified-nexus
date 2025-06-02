@@ -1,6 +1,6 @@
 
 import React from 'react';
-import SimplifiedLayout from '@/components/layout/SimplifiedLayout';
+import NewMainLayout from '@/components/layout/NewMainLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -47,7 +47,7 @@ const Notifications = () => {
   ];
 
   return (
-    <SimplifiedLayout>
+    <NewMainLayout>
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-bold">الإشعارات</h1>
@@ -115,7 +115,7 @@ const Notifications = () => {
           </CardContent>
         </Card>
       </div>
-    </SimplifiedLayout>
+    </NewMainLayout>
   );
 };
 

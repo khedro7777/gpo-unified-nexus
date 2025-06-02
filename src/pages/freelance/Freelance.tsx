@@ -1,6 +1,6 @@
 
 import React from 'react';
-import SimplifiedLayout from '@/components/layout/SimplifiedLayout';
+import NewMainLayout from '@/components/layout/NewMainLayout';
 import TabSystem from '@/components/tabs/TabSystem';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -96,7 +96,7 @@ const Freelance = () => {
   ];
 
   return (
-    <SimplifiedLayout>
+    <NewMainLayout>
       <div className="space-y-6">
         <h1 className="text-3xl font-bold">وظائف المستقلين</h1>
         <p className="text-muted-foreground">
@@ -104,7 +104,7 @@ const Freelance = () => {
         </p>
         <TabSystem tabs={tabs} />
       </div>
-    </SimplifiedLayout>
+    </NewMainLayout>
   );
 };
 

@@ -1,11 +1,11 @@
 
 import React from 'react';
-import SimplifiedLayout from '@/components/layout/SimplifiedLayout';
+import NewMainLayout from '@/components/layout/NewMainLayout';
 import GroupSystem from '@/components/groups/GroupSystem';
 
 const Groups = () => {
   return (
-    <SimplifiedLayout>
+    <NewMainLayout>
       <div className="space-y-6">
         <h1 className="text-3xl font-bold">المجموعات</h1>
         <p className="text-muted-foreground">
@@ -14,7 +14,7 @@ const Groups = () => {
         
         <GroupSystem />
       </div>
-    </SimplifiedLayout>
+    </NewMainLayout>
   );
 };
 
