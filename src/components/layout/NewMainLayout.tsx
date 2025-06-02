@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import NewSidebar from './NewSidebar';
 import Navbar from './Navbar';
@@ -55,21 +56,21 @@ const NewMainLayout: React.FC<NewMainLayoutProps> = ({ children }) => {
             </div>
             
             {/* Main Content Area */}
-            <main className="flex-1 p-4 md:p-6 pb-20 md:pb-6 overflow-y-auto bg-white">
-              <div className="mb-6">
+            <main className="flex-1 overflow-y-auto bg-white">
+              {/* MCP Mode Tabs - Only at the very top */}
+              <div className="sticky top-0 z-10 bg-white border-b border-gray-200 p-4">
                 <Tabs value={mode} onValueChange={(value) => setMode(value as any)} className="w-full">
-                  <TabsList className="grid grid-cols-3 w-full bg-gray-100">
-                    <TabsTrigger value="manual" className="text-sm">وضع التنفيذ اليدوي</TabsTrigger>
-                    <TabsTrigger value="auto" className="text-sm">وضع التنفيذ التلقائي (MCP)</TabsTrigger>
-                    <TabsTrigger value="ask" className="text-sm">وضع الاستشارة (MCP)</TabsTrigger>
+                  <TabsList className="grid grid-cols-3 w-full max-w-2xl mx-auto bg-gray-100">
+                    <TabsTrigger value="manual" className="text-xs md:text-sm">وضع التنفيذ اليدوي</TabsTrigger>
+                    <TabsTrigger value="auto" className="text-xs md:text-sm">وضع التنفيذ التلقائي (MCP)</TabsTrigger>
+                    <TabsTrigger value="ask" className="text-xs md:text-sm">وضع الاستشارة (MCP)</TabsTrigger>
                   </TabsList>
                 </Tabs>
               </div>
               
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 min-h-[600px]">
-                <div className="p-6">
-                  {children}
-                </div>
+              {/* Page Content */}
+              <div className="p-4 md:p-6 pb-20 md:pb-6">
+                {children}
               </div>
             </main>
             

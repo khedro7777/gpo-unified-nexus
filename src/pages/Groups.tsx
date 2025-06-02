@@ -7,8 +7,8 @@ const Groups = () => {
   return (
     <NewMainLayout>
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold">المجموعات</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-2xl md:text-3xl font-bold">المجموعات</h1>
+        <p className="text-muted-foreground text-sm md:text-base">
           استعراض المجموعات النشطة والانضمام إليها أو إنشاء مجموعة جديدة
         </p>
         
