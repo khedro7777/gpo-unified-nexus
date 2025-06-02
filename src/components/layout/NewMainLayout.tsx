@@ -3,11 +3,9 @@ import React, { useState } from 'react';
 import NewSidebar from './NewSidebar';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import MCPChat from '../chat/MCPChat';
-import { useMCP } from '@/hooks/use-mcp';
+import MCPPanel from '../mcp/MCPPanel';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight, Layout, MessageSquare } from 'lucide-react';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ChevronLeft, ChevronRight, Layout, Settings } from 'lucide-react';
 import ManualFlowExplorer from '../manual/ManualFlowExplorer';
 import { SidebarProvider, SidebarWrapper } from '@/components/ui/sidebar';
 import { NavigationLinks } from './navigation/NavigationLinks';
@@ -20,8 +18,7 @@ interface NewMainLayoutProps {
 const NewMainLayout: React.FC<NewMainLayoutProps> = ({ children }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [leftPanelOpen, setLeftPanelOpen] = useState(false);
-  const [rightPanelOpen, setRightPanelOpen] = useState(false);
-  const { mode, setMode } = useMCP();
+  const [rightPanelOpen, setRightPanelOpen] = useState(true); // MCP panel open by default
   
   return (
     <SidebarWrapper defaultOpen={!isCollapsed}>
@@ -57,31 +54,20 @@ const NewMainLayout: React.FC<NewMainLayoutProps> = ({ children }) => {
             
             {/* Main Content Area */}
             <main className="flex-1 overflow-y-auto bg-white">
-              {/* MCP Mode Tabs - Only at the very top */}
-              <div className="sticky top-0 z-10 bg-white border-b border-gray-200 p-4">
-                <Tabs value={mode} onValueChange={(value) => setMode(value as any)} className="w-full">
-                  <TabsList className="grid grid-cols-3 w-full max-w-2xl mx-auto bg-gray-100">
-                    <TabsTrigger value="manual" className="text-xs md:text-sm">وضع التنفيذ اليدوي</TabsTrigger>
-                    <TabsTrigger value="auto" className="text-xs md:text-sm">وضع التنفيذ التلقائي (MCP)</TabsTrigger>
-                    <TabsTrigger value="ask" className="text-xs md:text-sm">وضع الاستشارة (MCP)</TabsTrigger>
-                  </TabsList>
-                </Tabs>
-              </div>
-              
               {/* Page Content */}
               <div className="p-4 md:p-6 pb-20 md:pb-6">
                 {children}
               </div>
             </main>
             
-            {/* Right Panel: Chat Assistant */}
+            {/* Right Panel: MCP Panel */}
             <div className={cn(
               "transition-all duration-300 relative bg-white border-l border-gray-200",
               rightPanelOpen ? "w-80" : "w-0"
             )}>
               {rightPanelOpen && (
                 <div className="h-full">
-                  <MCPChat />
+                  <MCPPanel />
                 </div>
               )}
               <Button
@@ -109,7 +95,7 @@ const NewMainLayout: React.FC<NewMainLayoutProps> = ({ children }) => {
             className="h-12 w-12 rounded-full shadow-lg bg-primary hover:bg-primary/90"
             onClick={() => setRightPanelOpen(!rightPanelOpen)}
           >
-            <MessageSquare className="h-6 w-6" />
+            <Settings className="h-6 w-6" />
           </Button>
         </div>
         
