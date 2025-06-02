@@ -29,6 +29,8 @@ import {
   Bell,
   MessageSquare,
   Briefcase,
+  Factory,
+  Building2,
 } from 'lucide-react';
 
 interface NewSidebarProps {
@@ -62,11 +64,19 @@ const NewSidebar = ({ isCollapsed, setIsCollapsed }: NewSidebarProps) => {
     { name: 'الإشعارات', path: '/notifications', icon: Bell },
   ];
 
+  const companyMenuItems = [
+    { name: 'تأسيس الشركات', path: '/company-formation', icon: Factory },
+    { name: 'إدارة الشركة', path: '/company-management', icon: Building2 },
+    { name: 'الحوكمة والتصويت', path: '/governance', icon: Award },
+    { name: 'إدارة DAO', path: '/dao', icon: Building },
+  ];
+
   const systemMenuItems = [
     { name: 'نزاعات ORDA', path: '/disputes', icon: Gavel },
     { name: 'الدعم', path: '/support', icon: MessageSquare },
     { name: 'صندوق MCP', path: '/mcp', icon: Wrench },
-    { name: 'وضع التنفيذ اليدوي', path: '/manual', icon: Settings },
+    { name: 'الأدوات القانونية', path: '/legal', icon: FileText },
+    { name: 'أدوات التكامل', path: '/tools', icon: Settings },
   ];
 
   return (
@@ -87,6 +97,29 @@ const NewSidebar = ({ isCollapsed, setIsCollapsed }: NewSidebarProps) => {
           <SidebarGroupContent>
             <SidebarMenu className="space-y-1">
               {mainMenuItems.map((item) => (
+                <SidebarMenuItem key={item.name}>
+                  <SidebarMenuButton asChild>
+                    <Link to={item.path} className={getNavLinkClass(item.path)}>
+                      <item.icon className="h-5 w-5 flex-shrink-0" />
+                      {!isCollapsed && <span className="text-sm">{item.name}</span>}
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel className={cn(
+            "text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 px-3 mt-6",
+            isCollapsed ? "sr-only" : ""
+          )}>
+            إدارة الشركات
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu className="space-y-1">
+              {companyMenuItems.map((item) => (
                 <SidebarMenuItem key={item.name}>
                   <SidebarMenuButton asChild>
                     <Link to={item.path} className={getNavLinkClass(item.path)}>

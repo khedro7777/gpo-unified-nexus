@@ -31,6 +31,10 @@ import Support from '@/pages/support/Support';
 import MCP from '@/pages/mcp/MCP';
 import Settings from '@/pages/settings/Settings';
 
+// Import new company formation and management pages
+import CompanyFormation from '@/pages/formation/CompanyFormation';
+import CompanyManagement from '@/pages/companies/CompanyManagement';
+
 function App() {
   const { isAuthenticated } = useAuth();
   
@@ -127,6 +131,18 @@ function App() {
           <Route path="/tools" element={
             <ProtectedRoute>
               <Tools />
+            </ProtectedRoute>
+          } />
+          
+          {/* Company formation and management routes */}
+          <Route path="/company-formation" element={
+            <ProtectedRoute>
+              <CompanyFormation />
+            </ProtectedRoute>
+          } />
+          <Route path="/company-management" element={
+            <ProtectedRoute>
+              <CompanyManagement />
             </ProtectedRoute>
           } />
           
