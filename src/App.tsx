@@ -38,6 +38,11 @@ import CompanyManagement from '@/pages/companies/CompanyManagement';
 // Add import for SystemTestingPage
 import SystemTestingPage from '@/pages/testing/SystemTesting';
 
+// Add import for CompanyIncorporation and Arbitration
+import CompanyIncorporation from '@/pages/company/CompanyIncorporation';
+import Arbitration from '@/pages/arbitration/Arbitration';
+import DocumentManagement from '@/pages/documents/DocumentManagement';
+
 function App() {
   const { isAuthenticated } = useAuth();
   
@@ -151,6 +156,23 @@ function App() {
           <Route path="/company-management" element={
             <ProtectedRoute>
               <CompanyManagement />
+            </ProtectedRoute>
+          } />
+          
+          {/* New gateway routes */}
+          <Route path="/company-incorporation" element={
+            <ProtectedRoute>
+              <CompanyIncorporation />
+            </ProtectedRoute>
+          } />
+          <Route path="/arbitration" element={
+            <ProtectedRoute>
+              <Arbitration />
+            </ProtectedRoute>
+          } />
+          <Route path="/documents" element={
+            <ProtectedRoute>
+              <DocumentManagement />
             </ProtectedRoute>
           } />
           

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ShoppingCart, BarChart3, Users, Building, Store, Search, Globe, Tag, MessageSquare } from 'lucide-react';
+import { ShoppingCart, BarChart3, Users, Building, Store, Search, Globe, Tag, MessageSquare, FileText } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { NavigationLinks } from '@/components/layout/navigation/NavigationLinks';
@@ -46,6 +45,33 @@ const portals = [
     type: 'web2',
     collectiveOption: false,
   },
+  {
+    id: 'company-incorporation',
+    title: 'تأسيس الشركات',
+    description: 'خدمات تأسيس الشركات في أفضل الولايات القضائية العالمية',
+    icon: <Building className="h-6 w-6 text-white" />,
+    type: 'web2',
+    collectiveOption: false,
+    route: '/company-incorporation'
+  },
+  {
+    id: 'arbitration',
+    title: 'التحكيم التجاري',
+    description: 'نظام ORDA لحل النزاعات التجارية بطريقة عادلة وسريعة',
+    icon: <Tag className="h-6 w-6 text-white" />,
+    type: 'web2',
+    collectiveOption: false,
+    route: '/arbitration'
+  },
+  {
+    id: 'document-management',
+    title: 'إدارة الوثائق',
+    description: 'رفع وتوثيق وحفظ الملفات بتقنية IPFS اللامركزية',
+    icon: <FileText className="h-6 w-6 text-white" />,
+    type: 'web3',
+    collectiveOption: false,
+    route: '/documents'
+  }
 ];
 
 // Sample active groups data
@@ -200,11 +226,15 @@ const Index = () => {
           </div>
         </div>
         
-        {/* Smart Cards */}
+        {/* Smart Cards - Updated */}
         <h2 className="text-2xl font-bold mb-6 text-center md:text-right">البوابات الرئيسية</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mb-12">
           {portals.map((portal) => (
-            <Link to={`/create-group/${portal.id}`} key={portal.id} className="block">
+            <Link 
+              to={portal.route || `/create-group/${portal.id}`} 
+              key={portal.id} 
+              className="block"
+            >
               <Card className="h-full hover:shadow-md transition-shadow overflow-hidden border-0 shadow-sm">
                 <div className="h-1.5 bg-gradient-to-r from-primary to-primary/70"></div>
                 <CardHeader className="pb-2">
@@ -216,7 +246,7 @@ const Index = () => {
                       <Badge variant="outline" className="text-xs">فردي / جماعي</Badge>
                     )}
                   </div>
-                  <CardTitle className="text-xl">{portal.title}</CardTitle>
+                  <CardTitle className="text-lg">{portal.title}</CardTitle>
                   <CardDescription className="line-clamp-2 h-10">{portal.description}</CardDescription>
                 </CardHeader>
                 <CardContent className="pt-0">
