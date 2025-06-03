@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
@@ -38,8 +39,8 @@ import CompanyManagement from '@/pages/companies/CompanyManagement';
 // Add import for SystemTestingPage
 import SystemTestingPage from '@/pages/testing/SystemTesting';
 
-// Add import for CompanyIncorporation and Arbitration
-import CompanyIncorporation from '@/pages/company/CompanyIncorporation';
+// Add import for CompanyIncorporation and Arbitration (fixed import path)
+import CompanyIncorporation from '@/pages/gateways/CompanyIncorporation';
 import Arbitration from '@/pages/arbitration/Arbitration';
 import DocumentManagement from '@/pages/documents/DocumentManagement';
 

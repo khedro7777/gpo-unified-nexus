@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu } from 'lucide-react';
@@ -7,7 +8,7 @@ import { NotificationButton } from './navigation/NotificationButton';
 import { useAuth } from '@/hooks/use-auth';
 import { UserDropdown } from './navigation/UserDropdown';
 import { AuthButtons } from './navigation/AuthButtons';
-import LanguageSelector from './navigation/LanguageSelector';
+import LanguageSelector from '@/components/localization/LanguageSelector';
 
 const Navbar = () => {
   const { isAuthenticated } = useAuth();
