@@ -26,7 +26,7 @@ const LanguageSelector = () => {
     localStorage.setItem('gpo-language', langCode);
     document.documentElement.lang = langCode;
     document.documentElement.dir = langCode === 'ar' ? 'rtl' : 'ltr';
-    setIsOpen(false); // Close the popover after selection
+    setIsOpen(false);
   };
 
   return (
