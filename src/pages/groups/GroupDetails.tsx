@@ -1,429 +1,336 @@
 
 import React, { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import NewMainLayout from '@/components/layout/NewMainLayout';
-import { 
-  Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter 
-} from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Button } from '@/components/ui/button';
 import { 
-  Users, FileText, Settings, Calendar, MessageSquare, Briefcase, 
-  CheckCircle, ArrowUpRight, FileCheck, Clock, ThumbsUp, ThumbsDown, ArrowRight
+  Users, 
+  ShoppingCart, 
+  FileText, 
+  Vote, 
+  Upload,
+  Calendar,
+  DollarSign,
+  Target
 } from 'lucide-react';
-import LoomioVoting from '@/components/voting/LoomioVoting';
-import SnapshotVoting from '@/components/voting/SnapshotVoting';
-
-// Sample data for the group details page
-const groupData = {
-  id: "group-123",
-  title: "شراء أجهزة كمبيوتر",
-  description: "مجموعة لشراء أجهزة كمبيوتر للموظفين الجدد في الشركة.",
-  type: "buying", // buying or marketing
-  status: "active", // active or closed
-  creator: "أحمد محمد",
-  createdAt: "2025-05-01",
-  location: "الرياض",
-  country: "السعودية",
-  dueDate: "2025-06-30",
-  target: "100 جهاز",
-  groupValue: "120,000 ريال",
-  progress: 60,
-  members: 12,
-  isAdmin: true
-};
+import ContractNegotiationPanel from '@/components/contracts/ContractNegotiationPanel';
+import SnapDAOIntegration from '@/components/dao/SnapDAOIntegration';
 
 const GroupDetails = () => {
-  const { groupId } = useParams();
+  const { id } = useParams<{ id: string }>();
   const [activeTab, setActiveTab] = useState('overview');
-  const [votingSystem, setVotingSystem] = useState('loomio'); // loomio or snapshot
-  
-  // State for managing the sheet (modal) visibility
-  const [isSheetOpen, setIsSheetOpen] = useState(false);
 
-  // Function to open the sheet
-  const openSheet = () => setIsSheetOpen(true);
-
-  // Function to close the sheet
-  const closeSheet = () => setIsSheetOpen(false);
-  
-  // Sample proposal data for voting components
-  const proposalData = {
-    proposalId: "prop-123",
-    title: "شراء أجهزة كمبيوتر من شركة أمازون",
-    description: "التصويت على قبول عرض الأسعار المقدم من شركة أمازون لشراء 100 جهاز لابتوب بسعر إجمالي قدره 120,000 ريال سعودي",
-    options: [
-      { id: "opt1", title: "موافق", votes: 8 },
-      { id: "opt2", title: "غير موافق", votes: 2 },
-      { id: "opt3", title: "امتناع", votes: 1 }
-    ],
-    createdBy: "أحمد محمد",
-    createdAt: "2025-05-10T10:00:00Z",
-    endDate: "2025-05-17T10:00:00Z",
-    minTokens: 100,
-    deadline: "2025-05-17T10:00:00Z",
-    totalVotes: 11,
-    spaceId: "gpo-buying-123",
-    voters: [
-      { id: "user1", name: "أحمد محمد", avatar: "https://api.dicebear.com/7.x/personas/svg?seed=Ahmed", vote: "agree" },
-      { id: "user2", name: "سارة خالد", avatar: "https://api.dicebear.com/7.x/personas/svg?seed=Sarah", vote: "disagree" },
-      { id: "user3", name: "محمد علي", avatar: "https://api.dicebear.com/7.x/personas/svg?seed=Mohammed", vote: "abstain" }
-    ]
+  // Mock data - في التطبيق الحقيقي، سيتم جلب البيانات من API
+  const groupData = {
+    id: id,
+    name: 'مجموعة شراء الإلكترونيات',
+    type: 'buying',
+    status: 'active',
+    description: 'مجموعة لشراء الأجهزة الإلكترونية بأسعار مخفضة من خلال الشراء الجماعي',
+    targetAmount: 50000,
+    currentAmount: 35000,
+    membersCount: 23,
+    deadline: '2024-02-15',
+    category: 'الإلكترونيات',
+    createdDate: '2024-01-01'
   };
 
-  // Event handlers for voting components
-  const handleVote = (option: string) => {
-    console.log(`تم التصويت: ${option}`);
-    // معالجة التصويت حسب الاحتياج
+  const members = [
+    { id: 1, name: 'أحمد محمد', role: 'منشئ المجموعة', joinDate: '2024-01-01', contribution: 5000 },
+    { id: 2, name: 'فاطمة علي', role: 'عضو', joinDate: '2024-01-05', contribution: 3000 },
+    { id: 3, name: 'خالد أحمد', role: 'عضو', joinDate: '2024-01-08', contribution: 2500 },
+    // ... المزيد من الأعضاء
+  ];
+
+  const offers = [
+    {
+      id: 1,
+      supplier: 'شركة التقنية المتقدمة',
+      product: 'أجهزة لابتوب HP - 10 قطع',
+      price: 25000,
+      status: 'pending',
+      deliveryTime: '14 يوم',
+      warranty: 'سنتان'
+    },
+    {
+      id: 2,
+      supplier: 'مؤسسة الإلكترونيات الحديثة',
+      product: 'أجهزة لابتوب Dell - 10 قطع',
+      price: 28000,
+      status: 'approved',
+      deliveryTime: '10 أيام',
+      warranty: 'سنة واحدة'
+    }
+  ];
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'active': return 'bg-green-100 text-green-800';
+      case 'pending': return 'bg-yellow-100 text-yellow-800';
+      case 'completed': return 'bg-blue-100 text-blue-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
   };
 
-  const handleComment = (comment: string) => {
-    console.log(`تعليق جديد: ${comment}`);
-    // إضافة التعليق إلى قائمة التعليقات
-  };
+  const progress = (groupData.currentAmount / groupData.targetAmount) * 100;
 
   return (
     <NewMainLayout>
       <div className="space-y-6">
         {/* Group Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold">{groupData.title}</h1>
-            <div className="flex items-center gap-2 mt-2">
-              <Badge variant="outline">{groupData.type === 'buying' ? 'مجموعة شراء' : 'مجموعة تسويق'}</Badge>
-              <Badge variant={groupData.status === 'active' ? 'secondary' : 'outline'}>
-                {groupData.status === 'active' ? 'نشطة' : 'مغلقة'}
-              </Badge>
+        <Card>
+          <CardHeader>
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="flex-1">
+                <div className="flex items-center gap-3 mb-2">
+                  <h1 className="text-2xl md:text-3xl font-bold">{groupData.name}</h1>
+                  <Badge className={getStatusColor(groupData.status)}>
+                    {groupData.status === 'active' ? 'نشطة' : 'منتهية'}
+                  </Badge>
+                </div>
+                <p className="text-muted-foreground">{groupData.description}</p>
+              </div>
+              <div className="flex gap-2">
+                <Button>انضمام للمجموعة</Button>
+                <Button variant="outline">مشاركة</Button>
+              </div>
             </div>
-          </div>
-          <div className="flex gap-3">
-            <Button variant="outline" asChild>
-              <Link to="/my-groups">العودة للمجموعات</Link>
-            </Button>
-            {groupData.isAdmin && (
-              <Button variant="default">
-                <Settings className="mr-2 h-4 w-4" />
-                إدارة المجموعة
-              </Button>
-            )}
-          </div>
-        </div>
-        
-        {/* Group Tabs */}
-        <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid grid-cols-7 md:w-fit">
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-1 text-blue-600 mb-1">
+                  <Users className="h-4 w-4" />
+                  <span className="text-2xl font-bold">{groupData.membersCount}</span>
+                </div>
+                <p className="text-sm text-muted-foreground">عضو</p>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-1 text-green-600 mb-1">
+                  <DollarSign className="h-4 w-4" />
+                  <span className="text-2xl font-bold">{groupData.currentAmount.toLocaleString()}</span>
+                </div>
+                <p className="text-sm text-muted-foreground">ر.س مجمع</p>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-1 text-purple-600 mb-1">
+                  <Target className="h-4 w-4" />
+                  <span className="text-2xl font-bold">{Math.round(progress)}%</span>
+                </div>
+                <p className="text-sm text-muted-foreground">مكتمل</p>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-1 text-orange-600 mb-1">
+                  <Calendar className="h-4 w-4" />
+                  <span className="text-2xl font-bold">12</span>
+                </div>
+                <p className="text-sm text-muted-foreground">يوم متبقي</p>
+              </div>
+            </div>
+            
+            {/* Progress Bar */}
+            <div className="mt-4">
+              <div className="flex justify-between text-sm mb-2">
+                <span>التقدم: {groupData.currentAmount.toLocaleString()} / {groupData.targetAmount.toLocaleString()} ر.س</span>
+                <span>{Math.round(progress)}%</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-3">
+                <div 
+                  className="bg-primary h-3 rounded-full transition-all duration-300" 
+                  style={{ width: `${progress}%` }}
+                ></div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Tabs Content */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-6">
             <TabsTrigger value="overview">نظرة عامة</TabsTrigger>
             <TabsTrigger value="members">الأعضاء</TabsTrigger>
             <TabsTrigger value="offers">العروض</TabsTrigger>
-            <TabsTrigger value="voting">التصويت</TabsTrigger>
             <TabsTrigger value="contract">العقد</TabsTrigger>
+            <TabsTrigger value="voting">التصويت</TabsTrigger>
             <TabsTrigger value="files">الملفات</TabsTrigger>
-            <TabsTrigger value="chat">المحادثات</TabsTrigger>
           </TabsList>
-          
-          <TabsContent value="overview" className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card className="md:col-span-2">
-                <CardHeader>
-                  <CardTitle>تفاصيل المجموعة</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <p className="text-muted-foreground">{groupData.description}</p>
-                  
-                  <div className="grid grid-cols-2 gap-4 pt-4">
-                    <div>
-                      <p className="text-sm text-muted-foreground">المؤسس</p>
-                      <p className="font-medium">{groupData.creator}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">تاريخ الإنشاء</p>
-                      <p className="font-medium">{groupData.createdAt}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">الموقع</p>
-                      <p className="font-medium">{groupData.location}، {groupData.country}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">تاريخ الانتهاء</p>
-                      <p className="font-medium">{groupData.dueDate}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">الهدف</p>
-                      <p className="font-medium">{groupData.target}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">القيمة الإجمالية</p>
-                      <p className="font-medium">{groupData.groupValue}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              
-              <Card>
-                <CardHeader>
-                  <CardTitle>الحالة</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-sm">نسبة الاكتمال</span>
-                      <span className="text-sm font-bold">{groupData.progress}%</span>
-                    </div>
-                    <Progress value={groupData.progress} className="h-2" />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-muted-foreground">عدد الأعضاء</span>
-                      <span>{groupData.members}</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-muted-foreground">الوقت المتبقي</span>
-                      <span>25 يوم</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-muted-foreground">المرحلة الحالية</span>
-                      <Badge>جمع العروض</Badge>
-                    </div>
-                  </div>
-                  
-                  <Button className="w-full mt-4">الانضمام للمجموعة</Button>
-                </CardContent>
-              </Card>
-            </div>
-            
+
+          <TabsContent value="overview" className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>المراحل</CardTitle>
+                  <CardTitle>تفاصيل المجموعة</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <div className="bg-primary rounded-full p-1">
-                        <CheckCircle className="h-4 w-4 text-white" />
-                      </div>
-                      <div>
-                        <p className="font-medium">إنشاء المجموعة</p>
-                        <p className="text-sm text-muted-foreground">تم إنشاء المجموعة وتحديد الهدف</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="bg-primary rounded-full p-1">
-                        <CheckCircle className="h-4 w-4 text-white" />
-                      </div>
-                      <div>
-                        <p className="font-medium">جمع الأعضاء</p>
-                        <p className="text-sm text-muted-foreground">انضم 12 عضو من أصل 20 مطلوب</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="bg-primary/20 border border-primary rounded-full p-1">
-                        <Clock className="h-4 w-4 text-primary" />
-                      </div>
-                      <div>
-                        <p className="font-medium">جمع العروض</p>
-                        <p className="text-sm text-muted-foreground">تم استلام 3 عروض حتى الآن</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="border rounded-full p-1 text-muted-foreground">
-                        <Calendar className="h-4 w-4" />
-                      </div>
-                      <div className="text-muted-foreground">
-                        <p className="font-medium">التصويت النهائي</p>
-                        <p className="text-sm">اختيار العرض النهائي</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="border rounded-full p-1 text-muted-foreground">
-                        <FileCheck className="h-4 w-4" />
-                      </div>
-                      <div className="text-muted-foreground">
-                        <p className="font-medium">توقيع العقد</p>
-                        <p className="text-sm">توقيع العقد النهائي مع المورّد</p>
-                      </div>
-                    </div>
+                <CardContent className="space-y-3">
+                  <div>
+                    <span className="font-medium">النوع: </span>
+                    <span>شراء تعاوني</span>
+                  </div>
+                  <div>
+                    <span className="font-medium">الفئة: </span>
+                    <span>{groupData.category}</span>
+                  </div>
+                  <div>
+                    <span className="font-medium">تاريخ الإنشاء: </span>
+                    <span>{groupData.createdDate}</span>
+                  </div>
+                  <div>
+                    <span className="font-medium">الموعد النهائي: </span>
+                    <span>{groupData.deadline}</span>
                   </div>
                 </CardContent>
               </Card>
-              
+
               <Card>
                 <CardHeader>
-                  <CardTitle>آخر النشاطات</CardTitle>
+                  <CardTitle>آخر التحديثات</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex items-start gap-3">
-                      <div className="bg-blue-50 p-1 rounded">
-                        <ArrowUpRight className="h-4 w-4 text-blue-600" />
-                      </div>
-                      <div>
-                        <p className="font-medium">استلام عرض جديد</p>
-                        <p className="text-sm text-muted-foreground">تم استلام عرض جديد من شركة التقنية الحديثة</p>
-                        <p className="text-xs text-muted-foreground">قبل ساعتين</p>
-                      </div>
+                  <div className="space-y-3">
+                    <div className="border-l-4 border-blue-500 pl-3">
+                      <p className="text-sm font-medium">انضمام عضو جديد</p>
+                      <p className="text-xs text-muted-foreground">منذ ساعتين</p>
                     </div>
-                    <div className="flex items-start gap-3">
-                      <div className="bg-green-50 p-1 rounded">
-                        <Users className="h-4 w-4 text-green-600" />
-                      </div>
-                      <div>
-                        <p className="font-medium">انضمام عضو جديد</p>
-                        <p className="text-sm text-muted-foreground">انضم محمد علي إلى المجموعة</p>
-                        <p className="text-xs text-muted-foreground">أمس</p>
-                      </div>
+                    <div className="border-l-4 border-green-500 pl-3">
+                      <p className="text-sm font-medium">وصول عرض جديد من مورد</p>
+                      <p className="text-xs text-muted-foreground">منذ 5 ساعات</p>
                     </div>
-                    <div className="flex items-start gap-3">
-                      <div className="bg-amber-50 p-1 rounded">
-                        <MessageSquare className="h-4 w-4 text-amber-600" />
-                      </div>
-                      <div>
-                        <p className="font-medium">تعليق جديد</p>
-                        <p className="text-sm text-muted-foreground">علّق أحمد خالد على العرض الأول</p>
-                        <p className="text-xs text-muted-foreground">قبل 3 أيام</p>
-                      </div>
+                    <div className="border-l-4 border-yellow-500 pl-3">
+                      <p className="text-sm font-medium">بدء التصويت على العرض</p>
+                      <p className="text-xs text-muted-foreground">منذ يوم واحد</p>
                     </div>
                   </div>
                 </CardContent>
-                <CardFooter>
-                  <Button variant="ghost" className="w-full">
-                    عرض كل النشاطات
-                    <ArrowRight className="h-4 w-4 ml-2" />
-                  </Button>
-                </CardFooter>
               </Card>
             </div>
           </TabsContent>
-          
-          <TabsContent value="members" className="space-y-6">
-            {/* محتوى علامة تبويب الأعضاء */}
+
+          <TabsContent value="members" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>أعضاء المجموعة (12)</CardTitle>
-                <CardDescription>قائمة بالأعضاء المشاركين في المجموعة</CardDescription>
+                <CardTitle className="flex items-center gap-2">
+                  <Users className="h-5 w-5" />
+                  أعضاء المجموعة ({members.length})
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                {/* هنا يمكن وضع قائمة الأعضاء */}
-              </CardContent>
-            </Card>
-          </TabsContent>
-          
-          <TabsContent value="offers" className="space-y-6">
-            {/* محتوى علامة تبويب العروض */}
-            <Card>
-              <CardHeader>
-                <CardTitle>العروض المستلمة (3)</CardTitle>
-                <CardDescription>عروض الموردين للمنتجات المطلوبة</CardDescription>
-              </CardHeader>
-              <CardContent>
-                {/* هنا يمكن وضع قائمة العروض */}
-              </CardContent>
-            </Card>
-          </TabsContent>
-          
-          <TabsContent value="voting" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>التصويت على العروض</CardTitle>
-                <CardDescription>
-                  يمكنك المشاركة في التصويت لاختيار أفضل عرض للمجموعة
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {/* نظام التصويت */}
-                <Tabs value={votingSystem} onValueChange={setVotingSystem} className="mb-6">
-                  <TabsList className="grid grid-cols-2 mb-4">
-                    <TabsTrigger value="loomio">نظام Loomio</TabsTrigger>
-                    <TabsTrigger value="snapshot">نظام Snapshot</TabsTrigger>
-                  </TabsList>
-                  
-                  <TabsContent value="loomio">
-                    <LoomioVoting 
-                      proposalId={proposalData.proposalId}
-                      title={proposalData.title}
-                      description={proposalData.description}
-                      options={proposalData.options}
-                      deadline={proposalData.deadline}
-                      totalVotes={proposalData.totalVotes}
-                      voters={proposalData.voters}
-                      onVote={handleVote}
-                      onComment={handleComment}
-                    />
-                  </TabsContent>
-                  
-                  <TabsContent value="snapshot">
-                    <SnapshotVoting 
-                      proposalId={proposalData.proposalId}
-                      title={proposalData.title}
-                      description={proposalData.description}
-                      options={proposalData.options}
-                      deadline={proposalData.deadline}
-                      spaceId={proposalData.spaceId}
-                      totalVotes={proposalData.totalVotes}
-                      onVote={handleVote}
-                      verifiable={true}
-                    />
-                  </TabsContent>
-                </Tabs>
-                
-                <div className="flex gap-4 mt-6">
-                  <Button variant="outline" className="flex items-center gap-2">
-                    <ThumbsUp className="h-4 w-4" /> مع (8)
-                  </Button>
-                  <Button variant="outline" className="flex items-center gap-2">
-                    <ThumbsDown className="h-4 w-4" /> ضد (2)
-                  </Button>
-                  <Button variant="outline">امتناع (1)</Button>
+                <div className="space-y-4">
+                  {members.map((member) => (
+                    <div key={member.id} className="flex items-center justify-between p-4 border rounded-lg">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                          <span className="text-sm font-medium">{member.name.charAt(0)}</span>
+                        </div>
+                        <div>
+                          <p className="font-medium">{member.name}</p>
+                          <p className="text-sm text-muted-foreground">{member.role}</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-medium">{member.contribution.toLocaleString()} ر.س</p>
+                        <p className="text-sm text-muted-foreground">انضم في {member.joinDate}</p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </CardContent>
             </Card>
           </TabsContent>
-          
-          <TabsContent value="contract" className="space-y-6">
-            {/* محتوى علامة تبويب العقد */}
+
+          <TabsContent value="offers" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>العقد النهائي</CardTitle>
-                <CardDescription>
-                  تفاصيل العقد النهائي بين المجموعة والمورّد
-                </CardDescription>
+                <CardTitle className="flex items-center gap-2">
+                  <ShoppingCart className="h-5 w-5" />
+                  عروض الموردين
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                {/* هنا يمكن وضع تفاصيل العقد */}
+                <div className="space-y-4">
+                  {offers.map((offer) => (
+                    <div key={offer.id} className="border rounded-lg p-4">
+                      <div className="flex items-start justify-between mb-3">
+                        <div>
+                          <h4 className="font-medium">{offer.product}</h4>
+                          <p className="text-sm text-muted-foreground">{offer.supplier}</p>
+                        </div>
+                        <Badge className={getStatusColor(offer.status)}>
+                          {offer.status === 'pending' ? 'قيد المراجعة' : 'موافق عليه'}
+                        </Badge>
+                      </div>
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                        <div>
+                          <span className="font-medium">السعر: </span>
+                          <span>{offer.price.toLocaleString()} ر.س</span>
+                        </div>
+                        <div>
+                          <span className="font-medium">التسليم: </span>
+                          <span>{offer.deliveryTime}</span>
+                        </div>
+                        <div>
+                          <span className="font-medium">الضمان: </span>
+                          <span>{offer.warranty}</span>
+                        </div>
+                      </div>
+                      <div className="flex gap-2 mt-3">
+                        <Button size="sm">قبول العرض</Button>
+                        <Button size="sm" variant="outline">طلب تفاوض</Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
-          
-          <TabsContent value="files" className="space-y-6">
-            {/* محتوى علامة تبويب الملفات */}
-            <Card>
-              <CardHeader>
-                <CardTitle>ملفات المجموعة</CardTitle>
-                <CardDescription>
-                  جميع الملفات والوثائق المرتبطة بالمجموعة
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {/* هنا يمكن وضع قائمة الملفات */}
-              </CardContent>
-            </Card>
+
+          <TabsContent value="contract" className="space-y-4">
+            <ContractNegotiationPanel groupId={id!} />
           </TabsContent>
-          
-          <TabsContent value="chat" className="space-y-6">
-            {/* محتوى علامة تبويب المحادثات */}
+
+          <TabsContent value="voting" className="space-y-4">
+            <SnapDAOIntegration />
+          </TabsContent>
+
+          <TabsContent value="files" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>محادثات المجموعة</CardTitle>
-                <CardDescription>
-                  التواصل بين أعضاء المجموعة
-                </CardDescription>
+                <CardTitle className="flex items-center gap-2">
+                  <FileText className="h-5 w-5" />
+                  الملفات والوثائق
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                {/* هنا يمكن وضع نظام المحادثات */}
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                  <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-600 mb-4">اسحب الملفات هنا أو اضغط للتحميل</p>
+                  <Button>
+                    <Upload className="h-4 w-4 mr-2" />
+                    تحميل ملف
+                  </Button>
+                </div>
+                
+                <div className="mt-6 space-y-3">
+                  <h4 className="font-medium">الملفات المحملة:</h4>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between p-3 border rounded-lg">
+                      <div className="flex items-center gap-3">
+                        <FileText className="h-5 w-5 text-blue-500" />
+                        <span>مواصفات المنتج.pdf</span>
+                      </div>
+                      <Button size="sm" variant="outline">تحميل</Button>
+                    </div>
+                    <div className="flex items-center justify-between p-3 border rounded-lg">
+                      <div className="flex items-center gap-3">
+                        <FileText className="h-5 w-5 text-blue-500" />
+                        <span>شروط التسليم.docx</span>
+                      </div>
+                      <Button size="sm" variant="outline">تحميل</Button>
+                    </div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>

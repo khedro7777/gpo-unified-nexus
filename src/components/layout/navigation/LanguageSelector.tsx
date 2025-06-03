@@ -1,12 +1,12 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Globe } from 'lucide-react';
+import { Globe, Check } from 'lucide-react';
 
 const LanguageSelector = () => {
   const [currentLanguage, setCurrentLanguage] = useState('ar');
+  const [isOpen, setIsOpen] = useState(false);
 
   const languages = [
     { code: 'ar', name: 'العربية', flag: '🇸🇦' },
@@ -26,28 +26,32 @@ const LanguageSelector = () => {
     localStorage.setItem('gpo-language', langCode);
     document.documentElement.lang = langCode;
     document.documentElement.dir = langCode === 'ar' ? 'rtl' : 'ltr';
+    setIsOpen(false); // Close the popover after selection
   };
 
   return (
-    <Popover>
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <Button variant="ghost" size="sm" className="flex items-center gap-2">
           <Globe className="h-4 w-4" />
-          <span className="hidden md:block">{currentLang.flag}</span>
+          <span className="hidden md:block text-sm">{currentLang.flag}</span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-48 p-2" align="end">
+      <PopoverContent className="w-48 p-2 bg-white shadow-lg border" align="end">
         <div className="space-y-1">
           {languages.map((lang) => (
             <Button
               key={lang.code}
-              variant={currentLanguage === lang.code ? "secondary" : "ghost"}
+              variant="ghost"
               size="sm"
-              className="w-full justify-start"
+              className="w-full justify-start relative hover:bg-gray-100"
               onClick={() => handleLanguageChange(lang.code)}
             >
               <span className="mr-2">{lang.flag}</span>
-              {lang.name}
+              <span className="flex-1 text-left">{lang.name}</span>
+              {currentLanguage === lang.code && (
+                <Check className="h-4 w-4 text-primary" />
+              )}
             </Button>
           ))}
         </div>
