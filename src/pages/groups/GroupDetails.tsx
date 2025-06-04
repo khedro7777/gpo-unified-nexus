@@ -403,7 +403,7 @@ const GroupDetails = () => {
 
           <TabsContent value="voting" className="space-y-6">
             <div className="space-y-6">
-              <SnapshotVoting groupId={groupData.id} />
+              <SnapshotVoting proposalId={groupData.id} />
               <LoomioDiscussion topicId={groupData.id} />
             </div>
           </TabsContent>
