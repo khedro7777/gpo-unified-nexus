@@ -2,10 +2,10 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { CheckCircle, XCircle, MinusCircle, Clock } from 'lucide-react';
+import { Progress } from '@/components/ui/progress';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Vote, Check, X, Clock } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface ContractVotingProps {
@@ -13,88 +13,49 @@ interface ContractVotingProps {
   onVotingComplete: () => void;
 }
 
-interface VoteData {
-  id: string;
-  name: string;
-  vote: 'approve' | 'reject' | 'abstain' | null;
-  timestamp?: string;
-}
-
 const ContractVoting: React.FC<ContractVotingProps> = ({ groupId, onVotingComplete }) => {
   const { toast } = useToast();
-  const [userVote, setUserVote] = useState<'approve' | 'reject' | 'abstain' | null>(null);
-  const [votes, setVotes] = useState<VoteData[]>([
-    { id: '1', name: 'أحمد محمد', vote: 'approve', timestamp: '2024-01-15 10:30' },
-    { id: '2', name: 'فاطمة علي', vote: 'approve', timestamp: '2024-01-15 11:15' },
-    { id: '3', name: 'خالد أحمد', vote: null },
-    { id: '4', name: 'سارة حسن', vote: 'abstain', timestamp: '2024-01-15 12:00' },
-    { id: '5', name: 'محمد عبدالله', vote: null },
-  ]);
+  const [userVote, setUserVote] = useState<'approve' | 'reject' | null>(null);
 
-  const totalVoters = votes.length;
-  const votedCount = votes.filter(v => v.vote !== null).length;
-  const approveCount = votes.filter(v => v.vote === 'approve').length;
-  const rejectCount = votes.filter(v => v.vote === 'reject').length;
-  const abstainCount = votes.filter(v => v.vote === 'abstain').length;
+  // Mock voting data
+  const votingData = {
+    totalMembers: 8,
+    votesReceived: 6,
+    approvals: 5,
+    rejections: 1,
+    requiredApprovals: 6, // 75% majority
+    deadline: '2024-01-20T23:59:59Z'
+  };
 
-  const approvePercentage = (approveCount / totalVoters) * 100;
-  const rejectPercentage = (rejectCount / totalVoters) * 100;
-  const abstainPercentage = (abstainCount / totalVoters) * 100;
+  const approvalPercentage = (votingData.approvals / votingData.votesReceived) * 100;
+  const progressPercentage = (votingData.votesReceived / votingData.totalMembers) * 100;
 
-  const handleVote = (voteType: 'approve' | 'reject' | 'abstain') => {
-    if (userVote) {
-      toast({
-        title: "تم التصويت مسبقاً",
-        description: "لا يمكن تغيير التصويت بعد الإرسال",
-        variant: "destructive",
-      });
-      return;
-    }
+  const voters = [
+    { name: 'أحمد محمد', vote: 'approve', timestamp: '2024-01-15 14:30' },
+    { name: 'فاطمة علي', vote: 'approve', timestamp: '2024-01-15 15:45' },
+    { name: 'محمد خالد', vote: 'reject', timestamp: '2024-01-15 16:20' },
+    { name: 'سارة أحمد', vote: 'approve', timestamp: '2024-01-15 17:10' },
+    { name: 'عبدالله حسن', vote: 'approve', timestamp: '2024-01-15 18:00' },
+    { name: 'مريم محمد', vote: 'approve', timestamp: '2024-01-15 19:30' }
+  ];
 
-    setUserVote(voteType);
-    // محاكاة إضافة صوت المستخدم الحالي
-    setVotes(prev => 
-      prev.map(v => 
-        v.id === '3' ? { ...v, vote: voteType, timestamp: new Date().toLocaleString('ar-SA') } : v
-      )
-    );
-
+  const handleVote = (vote: 'approve' | 'reject') => {
+    setUserVote(vote);
+    
     toast({
-      title: "تم التصويت بنجاح",
-      description: `تم تسجيل صوتك: ${voteType === 'approve' ? 'موافق' : voteType === 'reject' ? 'رفض' : 'امتناع'}`,
+      title: "تم تسجيل التصويت",
+      description: `تم تسجيل ${vote === 'approve' ? 'موافقتك' : 'اعتراضك'} على العقد`,
     });
 
-    // إذا وصل التصويت للنصاب المطلوب
-    if (votedCount + 1 >= Math.ceil(totalVoters * 0.6)) {
+    // Check if voting is complete
+    if (votingData.approvals >= votingData.requiredApprovals) {
       setTimeout(() => {
         onVotingComplete();
         toast({
-          title: "انتهى التصويت",
-          description: "تم الوصول للنصاب المطلوب وإقرار العقد",
+          title: "تم اعتماد العقد",
+          description: "حصل العقد على الأغلبية المطلوبة وتم اعتماده",
         });
-      }, 2000);
-    }
-  };
-
-  const getVoteIcon = (vote: string | null) => {
-    switch (vote) {
-      case 'approve':
-        return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case 'reject':
-        return <XCircle className="h-4 w-4 text-red-500" />;
-      case 'abstain':
-        return <MinusCircle className="h-4 w-4 text-yellow-500" />;
-      default:
-        return <Clock className="h-4 w-4 text-gray-400" />;
-    }
-  };
-
-  const getVoteText = (vote: string | null) => {
-    switch (vote) {
-      case 'approve': return 'موافق';
-      case 'reject': return 'رفض';
-      case 'abstain': return 'امتناع';
-      default: return 'لم يصوت';
+      }, 1000);
     }
   };
 
@@ -102,104 +63,104 @@ const ContractVoting: React.FC<ContractVotingProps> = ({ groupId, onVotingComple
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>التصويت على العقد</CardTitle>
-          <div className="text-sm text-muted-foreground">
-            صوت {votedCount} من {totalVoters} أعضاء • النصاب المطلوب: {Math.ceil(totalVoters * 0.6)} أصوات
-          </div>
+          <CardTitle className="flex items-center gap-2">
+            <Vote className="h-5 w-5" />
+            تصويت على العقد
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          {/* نتائج التصويت */}
-          <div className="space-y-3">
-            <div>
-              <div className="flex justify-between mb-1">
-                <span className="text-sm font-medium text-green-600">موافق ({approveCount})</span>
-                <span className="text-sm text-green-600">{approvePercentage.toFixed(1)}%</span>
-              </div>
-              <Progress value={approvePercentage} className="h-2" />
+          {/* Voting Progress */}
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <span className="text-sm font-medium">تقدم التصويت</span>
+              <span className="text-sm text-muted-foreground">
+                {votingData.votesReceived}/{votingData.totalMembers} أصوات
+              </span>
             </div>
-            
-            <div>
-              <div className="flex justify-between mb-1">
-                <span className="text-sm font-medium text-red-600">رفض ({rejectCount})</span>
-                <span className="text-sm text-red-600">{rejectPercentage.toFixed(1)}%</span>
-              </div>
-              <Progress value={rejectPercentage} className="h-2" />
+            <Progress value={progressPercentage} className="h-3" />
+          </div>
+
+          {/* Results */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="text-center p-4 bg-green-50 rounded-lg">
+              <div className="text-2xl font-bold text-green-600">{votingData.approvals}</div>
+              <div className="text-sm text-green-600">موافقة</div>
             </div>
-            
-            <div>
-              <div className="flex justify-between mb-1">
-                <span className="text-sm font-medium text-yellow-600">امتناع ({abstainCount})</span>
-                <span className="text-sm text-yellow-600">{abstainPercentage.toFixed(1)}%</span>
+            <div className="text-center p-4 bg-red-50 rounded-lg">
+              <div className="text-2xl font-bold text-red-600">{votingData.rejections}</div>
+              <div className="text-sm text-red-600">رفض</div>
+            </div>
+            <div className="text-center p-4 bg-gray-50 rounded-lg">
+              <div className="text-2xl font-bold text-gray-600">
+                {votingData.totalMembers - votingData.votesReceived}
               </div>
-              <Progress value={abstainPercentage} className="h-2" />
+              <div className="text-sm text-gray-600">لم يصوت</div>
             </div>
           </div>
 
-          {/* أزرار التصويت */}
+          {/* Approval Status */}
+          <div className="flex items-center gap-2">
+            <div className={`w-3 h-3 rounded-full ${
+              votingData.approvals >= votingData.requiredApprovals ? 'bg-green-500' : 'bg-yellow-500'
+            }`} />
+            <span className="text-sm">
+              مطلوب {votingData.requiredApprovals} موافقة للاعتماد 
+              ({votingData.approvals >= votingData.requiredApprovals ? 'تم الوصول' : `${votingData.requiredApprovals - votingData.approvals} متبقي`})
+            </span>
+          </div>
+
+          {/* Voting Buttons */}
           {!userVote && (
             <div className="flex gap-3">
               <Button 
                 onClick={() => handleVote('approve')}
-                className="flex-1 bg-green-500 hover:bg-green-600"
+                className="flex-1 bg-green-600 hover:bg-green-700"
               >
-                <CheckCircle className="h-4 w-4 mr-2" />
-                موافق
+                <Check className="h-4 w-4 mr-2" />
+                أوافق على العقد
               </Button>
               <Button 
                 onClick={() => handleVote('reject')}
                 variant="destructive"
                 className="flex-1"
               >
-                <XCircle className="h-4 w-4 mr-2" />
-                رفض
-              </Button>
-              <Button 
-                onClick={() => handleVote('abstain')}
-                variant="outline"
-                className="flex-1"
-              >
-                <MinusCircle className="h-4 w-4 mr-2" />
-                امتناع
+                <X className="h-4 w-4 mr-2" />
+                أرفض العقد
               </Button>
             </div>
           )}
 
           {userVote && (
-            <div className="p-4 bg-blue-50 rounded-lg text-center">
-              <p className="text-blue-800">
-                تم تسجيل صوتك: <strong>{getVoteText(userVote)}</strong>
-              </p>
+            <div className="text-center p-4 bg-blue-50 rounded-lg">
+              <Badge variant="default">
+                {userVote === 'approve' ? 'تم التصويت بالموافقة' : 'تم التصويت بالرفض'}
+              </Badge>
             </div>
           )}
         </CardContent>
       </Card>
 
-      {/* قائمة المصوتين */}
+      {/* Voters List */}
       <Card>
         <CardHeader>
-          <CardTitle>أعضاء المجموعة</CardTitle>
+          <CardTitle>المصوتون</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {votes.map((voter) => (
-              <div key={voter.id} className="flex items-center justify-between p-3 border rounded-lg">
+            {voters.map((voter, index) => (
+              <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
                 <div className="flex items-center gap-3">
-                  <Avatar>
+                  <Avatar className="h-8 w-8">
                     <AvatarFallback>{voter.name.charAt(0)}</AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="font-medium">{voter.name}</p>
-                    {voter.timestamp && (
-                      <p className="text-xs text-muted-foreground">{voter.timestamp}</p>
-                    )}
+                    <div className="font-medium text-sm">{voter.name}</div>
+                    <div className="text-xs text-muted-foreground">{voter.timestamp}</div>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  {getVoteIcon(voter.vote)}
-                  <Badge variant={voter.vote ? "default" : "outline"}>
-                    {getVoteText(voter.vote)}
-                  </Badge>
-                </div>
+                <Badge variant={voter.vote === 'approve' ? 'default' : 'destructive'}>
+                  {voter.vote === 'approve' ? 'موافق' : 'معارض'}
+                </Badge>
               </div>
             ))}
           </div>
