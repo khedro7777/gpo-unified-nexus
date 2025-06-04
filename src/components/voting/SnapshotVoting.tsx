@@ -2,10 +2,17 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Vote, CheckCircle, XCircle, Clock } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
+import { Badge } from '@/components/ui/badge';
+import { Vote, Clock, CheckCircle } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+
+interface VotingOption {
+  id: string;
+  text: string;
+  votes: number;
+  percentage: number;
+}
 
 interface SnapshotVotingProps {
   proposalId: string;
@@ -14,144 +21,127 @@ interface SnapshotVotingProps {
   endTime: string;
 }
 
-const SnapshotVoting: React.FC<SnapshotVotingProps> = ({
-  proposalId,
-  title,
-  description,
-  endTime
+const SnapshotVoting: React.FC<SnapshotVotingProps> = ({ 
+  proposalId, 
+  title, 
+  description, 
+  endTime 
 }) => {
-  const { i18n } = useTranslation();
-  const isRTL = i18n.language === 'ar';
-  const [userVote, setUserVote] = useState<'for' | 'against' | null>(null);
+  const { toast } = useToast();
+  const [userVoted, setUserVoted] = useState(false);
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  
+  const [options, setOptions] = useState<VotingOption[]>([
+    { id: 'yes', text: 'موافق', votes: 245, percentage: 68.5 },
+    { id: 'no', text: 'غير موافق', votes: 89, percentage: 24.9 },
+    { id: 'abstain', text: 'امتناع', votes: 23, percentage: 6.4 }
+  ]);
 
-  // Mock voting data
-  const votingData = {
-    totalVotes: 24,
-    forVotes: 18,
-    againstVotes: 6,
-    quorum: 20,
-    status: 'active' as 'active' | 'ended' | 'pending'
-  };
+  const totalVotes = options.reduce((sum, option) => sum + option.votes, 0);
+  const timeRemaining = "2 يوم و 14 ساعة";
 
-  const forPercentage = (votingData.forVotes / votingData.totalVotes) * 100;
-  const againstPercentage = (votingData.againstVotes / votingData.totalVotes) * 100;
-  const quorumReached = votingData.totalVotes >= votingData.quorum;
+  const handleVote = (optionId: string) => {
+    if (userVoted) return;
 
-  const handleVote = (option: 'for' | 'against') => {
-    setUserVote(option);
-    // Here you would integrate with actual Snapshot.js voting
-    console.log(`Voted ${option} on proposal ${proposalId}`);
+    setSelectedOption(optionId);
+    setUserVoted(true);
+    
+    // محاكاة إضافة الصوت
+    setOptions(prev => 
+      prev.map(option => 
+        option.id === optionId 
+          ? { ...option, votes: option.votes + 1 }
+          : option
+      )
+    );
+
+    toast({
+      title: "تم التصويت بنجاح",
+      description: "تم تسجيل صوتك على Snapshot.js بدون رسوم غاز",
+    });
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2">
-            <Vote className="h-5 w-5" />
-            {isRTL ? 'تصويت المجتمع' : 'Community Voting'}
-          </CardTitle>
-          <Badge variant={votingData.status === 'active' ? 'default' : 'secondary'}>
-            {votingData.status === 'active' 
-              ? (isRTL ? 'نشط' : 'Active')
-              : (isRTL ? 'منتهي' : 'Ended')
-            }
-          </Badge>
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        <div>
-          <h3 className="font-medium mb-2">{title}</h3>
-          <p className="text-sm text-muted-foreground">{description}</p>
-        </div>
-
-        {/* Voting Progress */}
-        <div className="space-y-4">
-          <div className="flex items-center justify-between text-sm">
-            <span>{isRTL ? 'النتائج الحالية' : 'Current Results'}</span>
-            <span>{votingData.totalVotes} {isRTL ? 'صوت' : 'votes'}</span>
-          </div>
-
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
-                <span className="text-sm">{isRTL ? 'موافق' : 'For'}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-medium">{votingData.forVotes}</span>
-                <span className="text-xs text-muted-foreground">({forPercentage.toFixed(1)}%)</span>
-              </div>
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <Vote className="h-5 w-5" />
+                {title}
+              </CardTitle>
+              <p className="text-sm text-muted-foreground mt-1">{description}</p>
             </div>
-            <Progress value={forPercentage} className="h-2" />
+            <Badge variant="outline" className="flex items-center gap-1">
+              <Clock className="h-3 w-3" />
+              {timeRemaining}
+            </Badge>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {/* خيارات التصويت */}
+          <div className="space-y-4">
+            {options.map((option) => (
+              <div key={option.id} className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <Button
+                    variant={selectedOption === option.id ? "default" : "outline"}
+                    className="w-full justify-between"
+                    onClick={() => handleVote(option.id)}
+                    disabled={userVoted}
+                  >
+                    <span className="flex items-center gap-2">
+                      {selectedOption === option.id && <CheckCircle className="h-4 w-4" />}
+                      {option.text}
+                    </span>
+                    <span>{option.votes} صوت</span>
+                  </Button>
+                </div>
+                <div className="space-y-1">
+                  <div className="flex justify-between text-sm">
+                    <span>{option.percentage}%</span>
+                    <span>{option.votes} من {totalVotes}</span>
+                  </div>
+                  <Progress value={option.percentage} className="h-2" />
+                </div>
+              </div>
+            ))}
           </div>
 
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <XCircle className="h-4 w-4 text-red-500" />
-                <span className="text-sm">{isRTL ? 'معارض' : 'Against'}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-medium">{votingData.againstVotes}</span>
-                <span className="text-xs text-muted-foreground">({againstPercentage.toFixed(1)}%)</span>
-              </div>
+          {/* حالة التصويت */}
+          {userVoted ? (
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+              <CheckCircle className="h-8 w-8 text-green-500 mx-auto mb-2" />
+              <p className="text-green-800 font-medium">تم تسجيل صوتك بنجاح</p>
+              <p className="text-green-600 text-sm">
+                صوتك محفوظ على Snapshot.js ولا يمكن تغييره
+              </p>
             </div>
-            <Progress value={againstPercentage} className="h-2" />
+          ) : (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
+              <Vote className="h-8 w-8 text-blue-500 mx-auto mb-2" />
+              <p className="text-blue-800 font-medium">اختر خيارك للتصويت</p>
+              <p className="text-blue-600 text-sm">
+                التصويت مجاني تماماً ولا يتطلب رسوم غاز
+              </p>
+            </div>
+          )}
+
+          {/* معلومات إضافية */}
+          <div className="grid grid-cols-2 gap-4 pt-4 border-t">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-primary">{totalVotes}</div>
+              <div className="text-sm text-muted-foreground">إجمالي الأصوات</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-green-600">0 ETH</div>
+              <div className="text-sm text-muted-foreground">رسوم الغاز</div>
+            </div>
           </div>
-        </div>
-
-        {/* Quorum Status */}
-        <div className="flex items-center gap-2 text-sm">
-          <div className={`w-2 h-2 rounded-full ${quorumReached ? 'bg-green-500' : 'bg-yellow-500'}`} />
-          <span>
-            {isRTL ? 'النصاب القانوني' : 'Quorum'}: {votingData.totalVotes}/{votingData.quorum}
-            {quorumReached 
-              ? (isRTL ? ' (تم الوصول)' : ' (Reached)')
-              : (isRTL ? ' (لم يتم الوصول)' : ' (Not Reached)')
-            }
-          </span>
-        </div>
-
-        {/* Time Remaining */}
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Clock className="h-4 w-4" />
-          <span>
-            {isRTL ? 'ينتهي في' : 'Ends in'} 2 {isRTL ? 'أيام' : 'days'}
-          </span>
-        </div>
-
-        {/* Voting Buttons */}
-        {votingData.status === 'active' && (
-          <div className="flex gap-3">
-            <Button 
-              onClick={() => handleVote('for')}
-              variant={userVote === 'for' ? 'default' : 'outline'}
-              className="flex-1"
-              disabled={userVote !== null}
-            >
-              <CheckCircle className="h-4 w-4 mr-2" />
-              {isRTL ? 'موافق' : 'Vote For'}
-            </Button>
-            <Button 
-              onClick={() => handleVote('against')}
-              variant={userVote === 'against' ? 'destructive' : 'outline'}
-              className="flex-1"
-              disabled={userVote !== null}
-            >
-              <XCircle className="h-4 w-4 mr-2" />
-              {isRTL ? 'معارض' : 'Vote Against'}
-            </Button>
-          </div>
-        )}
-
-        {userVote && (
-          <div className="text-center text-sm text-muted-foreground">
-            {isRTL ? 'تم تسجيل صوتك بنجاح' : 'Your vote has been recorded'}
-          </div>
-        )}
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 
