@@ -3,11 +3,10 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import Arbitration from '@/pages/arbitration/Arbitration';
+import CompanyIncorporation from '@/pages/gateways/CompanyIncorporation';
 import DocumentManagement from '@/pages/documents/DocumentManagement';
-import Governance from '@/pages/Governance';
-import DAO from '@/pages/DAO';
-import Legal from '@/pages/Legal';
-import Tools from '@/pages/Tools';
+import Freelance from '@/pages/freelance/Freelance';
+import Governance from '@/pages/governance/Governance';
 
 export const ServiceRoutes = () => (
   <>
@@ -16,29 +15,24 @@ export const ServiceRoutes = () => (
         <Arbitration />
       </ProtectedRoute>
     } />
+    <Route path="/company-incorporation" element={
+      <ProtectedRoute>
+        <CompanyIncorporation />
+      </ProtectedRoute>
+    } />
     <Route path="/documents" element={
       <ProtectedRoute>
         <DocumentManagement />
       </ProtectedRoute>
     } />
+    <Route path="/freelance" element={
+      <ProtectedRoute>
+        <Freelance />
+      </ProtectedRoute>
+    } />
     <Route path="/governance" element={
       <ProtectedRoute>
         <Governance />
-      </ProtectedRoute>
-    } />
-    <Route path="/dao" element={
-      <ProtectedRoute>
-        <DAO />
-      </ProtectedRoute>
-    } />
-    <Route path="/legal" element={
-      <ProtectedRoute>
-        <Legal />
-      </ProtectedRoute>
-    } />
-    <Route path="/tools" element={
-      <ProtectedRoute>
-        <Tools />
       </ProtectedRoute>
     } />
   </>
