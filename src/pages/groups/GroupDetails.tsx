@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -403,7 +402,12 @@ const GroupDetails = () => {
 
           <TabsContent value="voting" className="space-y-6">
             <div className="space-y-6">
-              <SnapshotVoting proposalId={groupData.id} />
+              <SnapshotVoting 
+                proposalId={groupData.id}
+                title={isRTL ? 'اختيار أفضل عرض للمجموعة' : 'Choose Best Offer for Group'}
+                description={isRTL ? 'تصويت لاختيار أفضل عرض من الموردين للمجموعة' : 'Vote to select the best supplier offer for the group'}
+                endTime="2024-01-20T23:59:59Z"
+              />
               <LoomioDiscussion topicId={groupData.id} />
             </div>
           </TabsContent>
