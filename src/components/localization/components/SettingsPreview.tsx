@@ -1,5 +1,7 @@
 
 import React from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Eye } from 'lucide-react';
 import { LocalizationSettings } from '../types';
 import { languages, countries, currencies, timezones, dateFormats } from '../data/localizationData';
 
@@ -8,16 +10,42 @@ interface SettingsPreviewProps {
 }
 
 export const SettingsPreview: React.FC<SettingsPreviewProps> = ({ settings }) => {
+  const language = languages.find(l => l.code === settings.language);
+  const country = countries.find(c => c.code === settings.country);
+  const currency = currencies.find(c => c.code === settings.currency);
+  const timezone = timezones.find(t => t.code === settings.timezone);
+  const dateFormat = dateFormats.find(d => d.code === settings.dateFormat);
+
   return (
-    <div className="bg-muted/50 p-4 rounded-lg">
-      <h3 className="font-medium mb-2">معاينة الإعدادات:</h3>
-      <div className="text-sm space-y-1">
-        <p>اللغة: {languages.find(l => l.code === settings.language)?.name}</p>
-        <p>البلد: {countries.find(c => c.code === settings.country)?.name}</p>
-        <p>العملة: {currencies.find(c => c.code === settings.currency)?.name}</p>
-        <p>المنطقة الزمنية: {timezones.find(t => t.code === settings.timezone)?.name}</p>
-        <p>تنسيق التاريخ: {dateFormats.find(d => d.code === settings.dateFormat)?.example}</p>
-      </div>
-    </div>
+    <Card className="bg-muted/50">
+      <CardHeader>
+        <CardTitle className="text-lg flex items-center gap-2">
+          <Eye className="h-5 w-5" />
+          معاينة الإعدادات
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-2 text-sm">
+        <div className="flex justify-between">
+          <span className="text-muted-foreground">اللغة:</span>
+          <span>{language?.flag} {language?.name}</span>
+        </div>
+        <div className="flex justify-between">
+          <span className="text-muted-foreground">البلد:</span>
+          <span>{country?.flag} {country?.name}</span>
+        </div>
+        <div className="flex justify-between">
+          <span className="text-muted-foreground">العملة:</span>
+          <span>{currency?.symbol} {currency?.name}</span>
+        </div>
+        <div className="flex justify-between">
+          <span className="text-muted-foreground">المنطقة الزمنية:</span>
+          <span>{timezone?.name}</span>
+        </div>
+        <div className="flex justify-between">
+          <span className="text-muted-foreground">تنسيق التاريخ:</span>
+          <span>{dateFormat?.example}</span>
+        </div>
+      </CardContent>
+    </Card>
   );
 };

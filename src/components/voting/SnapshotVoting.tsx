@@ -1,256 +1,147 @@
 
 import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { Vote, Timer, Check, Code, FileJson, CloudUpload } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
+import { Vote, Clock, CheckCircle } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
-interface VoteOption {
+interface VotingOption {
   id: string;
-  title: string;
+  text: string;
   votes: number;
+  percentage: number;
 }
 
 interface SnapshotVotingProps {
   proposalId: string;
   title: string;
   description: string;
-  options: VoteOption[];
-  deadline: string;
-  spaceId: string;
-  ipfsHash?: string;
-  totalVotes: number;
-  onVote?: (optionId: string) => void;
-  verifiable?: boolean;
+  endTime: string;
 }
 
-const SnapshotVoting: React.FC<SnapshotVotingProps> = ({
-  proposalId,
-  title,
-  description,
-  options,
-  deadline,
-  spaceId,
-  ipfsHash,
-  totalVotes,
-  onVote,
-  verifiable = true
+const SnapshotVoting: React.FC<SnapshotVotingProps> = ({ 
+  proposalId, 
+  title, 
+  description, 
+  endTime 
 }) => {
   const { toast } = useToast();
+  const [userVoted, setUserVoted] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
-  const [isVerifying, setIsVerifying] = useState(false);
-  const [showVerification, setShowVerification] = useState(false);
+  
+  const [options, setOptions] = useState<VotingOption[]>([
+    { id: 'yes', text: 'موافق', votes: 245, percentage: 68.5 },
+    { id: 'no', text: 'غير موافق', votes: 89, percentage: 24.9 },
+    { id: 'abstain', text: 'امتناع', votes: 23, percentage: 6.4 }
+  ]);
 
-  const handleVote = () => {
-    if (!selectedOption) {
-      toast({
-        title: "اختيار مطلوب",
-        description: "يرجى اختيار أحد الخيارات قبل التصويت",
-        variant: "destructive"
-      });
-      return;
-    }
+  const totalVotes = options.reduce((sum, option) => sum + option.votes, 0);
+  const timeRemaining = "2 يوم و 14 ساعة";
+
+  const handleVote = (optionId: string) => {
+    if (userVoted) return;
+
+    setSelectedOption(optionId);
+    setUserVoted(true);
     
-    if (onVote) {
-      onVote(selectedOption);
-    }
-    
+    // محاكاة إضافة الصوت
+    setOptions(prev => 
+      prev.map(option => 
+        option.id === optionId 
+          ? { ...option, votes: option.votes + 1 }
+          : option
+      )
+    );
+
     toast({
       title: "تم التصويت بنجاح",
-      description: "تم تسجيل صوتك وتخزينه بشكل لامركزي",
+      description: "تم تسجيل صوتك على Snapshot.js بدون رسوم غاز",
     });
   };
 
-  const handleVerify = () => {
-    setIsVerifying(true);
-    
-    // Simulate verification process
-    setTimeout(() => {
-      setIsVerifying(false);
-      setShowVerification(true);
-      
-      toast({
-        title: "تم التحقق بنجاح",
-        description: "تم التحقق من نتائج التصويت على IPFS",
-      });
-    }, 2000);
-  };
-  
-  const handleExportJSON = () => {
-    // Create a sample result object
-    const results = {
-      proposalId,
-      spaceId,
-      ipfsHash: ipfsHash || "QmZ4tDuvesekSs4qM5ZBKpXiZGun7S2CYtEZRB3DYXkjGx",
-      title,
-      options: options.map(opt => ({
-        id: opt.id,
-        title: opt.title,
-        votes: opt.votes,
-        percentage: (opt.votes / totalVotes * 100).toFixed(2)
-      })),
-      totalVotes,
-      deadline,
-      timestamp: new Date().toISOString()
-    };
-    
-    // Convert to JSON string with pretty formatting
-    const jsonString = JSON.stringify(results, null, 2);
-    
-    // Create a blob and download it
-    const blob = new Blob([jsonString], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `snapshot-results-${proposalId}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    
-    toast({
-      title: "تم التصدير بنجاح",
-      description: "تم تصدير نتائج التصويت بصيغة JSON"
-    });
-  };
-  
-  // Calculate time remaining until deadline
-  const deadlineDate = new Date(deadline);
-  const now = new Date();
-  const timeRemaining = deadlineDate.getTime() - now.getTime();
-  const daysRemaining = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-  const hoursRemaining = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  
   return (
-    <Card className="shadow-sm">
-      <CardHeader>
-        <div className="flex justify-between items-start">
-          <div>
-            <div className="flex items-center gap-2">
-              <CardTitle className="text-xl">{title}</CardTitle>
-              {verifiable && (
-                <Badge variant="outline" className="bg-green-50 text-green-700 text-xs">
-                  قابل للتحقق
-                </Badge>
-              )}
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <Vote className="h-5 w-5" />
+                {title}
+              </CardTitle>
+              <p className="text-sm text-muted-foreground mt-1">{description}</p>
             </div>
-            <CardDescription className="flex gap-2 items-center">
-              <span>التصويت #{proposalId}</span>
-              <span>•</span>
-              <span>Space: {spaceId}</span>
-              {ipfsHash && (
-                <>
-                  <span>•</span>
-                  <span className="flex items-center">
-                    <Code className="h-3 w-3 mr-1" />
-                    {ipfsHash.substring(0, 8)}...{ipfsHash.substring(ipfsHash.length - 6)}
-                  </span>
-                </>
-              )}
-            </CardDescription>
+            <Badge variant="outline" className="flex items-center gap-1">
+              <Clock className="h-3 w-3" />
+              {timeRemaining}
+            </Badge>
           </div>
-          <div className="flex items-center text-sm bg-muted px-3 py-1 rounded-md">
-            <Timer className="h-4 w-4 mr-2" />
-            {daysRemaining > 0 ? (
-              <span>متبقي {daysRemaining} يوم{daysRemaining !== 1 ? '' : ''} و {hoursRemaining} ساعة</span>
-            ) : (
-              hoursRemaining > 0 ? (
-                <span>متبقي {hoursRemaining} ساعة</span>
-              ) : (
-                <span className="text-destructive">انتهى التصويت</span>
-              )
-            )}
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <p className="mb-6 text-muted-foreground">{description}</p>
-        
-        <div className="space-y-4">
-          {options.map((option) => (
-            <div 
-              key={option.id} 
-              className={`border rounded-lg p-4 transition-colors cursor-pointer ${
-                selectedOption === option.id ? 'border-primary bg-primary/5' : 'hover:border-muted-foreground'
-              }`}
-              onClick={() => setSelectedOption(option.id)}
-            >
-              <div className="flex justify-between items-center mb-2">
-                <div className="flex items-center">
-                  <div className={`w-4 h-4 rounded-full border mr-2 ${
-                    selectedOption === option.id ? 'bg-primary border-primary' : 'border-muted-foreground'
-                  }`}></div>
-                  <h4 className="font-medium">{option.title}</h4>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {/* خيارات التصويت */}
+          <div className="space-y-4">
+            {options.map((option) => (
+              <div key={option.id} className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <Button
+                    variant={selectedOption === option.id ? "default" : "outline"}
+                    className="w-full justify-between"
+                    onClick={() => handleVote(option.id)}
+                    disabled={userVoted}
+                  >
+                    <span className="flex items-center gap-2">
+                      {selectedOption === option.id && <CheckCircle className="h-4 w-4" />}
+                      {option.text}
+                    </span>
+                    <span>{option.votes} صوت</span>
+                  </Button>
                 </div>
-                <span className="text-sm">{option.votes} صوت ({((option.votes / totalVotes) * 100).toFixed(1)}%)</span>
+                <div className="space-y-1">
+                  <div className="flex justify-between text-sm">
+                    <span>{option.percentage}%</span>
+                    <span>{option.votes} من {totalVotes}</span>
+                  </div>
+                  <Progress value={option.percentage} className="h-2" />
+                </div>
               </div>
-              <Progress 
-                value={(option.votes / totalVotes) * 100} 
-                className="h-2 mt-2" 
-              />
-            </div>
-          ))}
-          
-          <div className="flex flex-col sm:flex-row gap-2 mt-6">
-            <Button 
-              className="flex-1" 
-              disabled={!selectedOption || daysRemaining < 0 && hoursRemaining < 0}
-              onClick={handleVote}
-            >
-              <Vote className="mr-2 h-4 w-4" />
-              تأكيد التصويت
-            </Button>
-            
-            {verifiable && (
-              <Button 
-                variant="outline" 
-                className="flex-1"
-                onClick={handleVerify}
-                disabled={isVerifying}
-              >
-                <Check className="mr-2 h-4 w-4" />
-                {isVerifying ? 'جاري التحقق...' : 'التحقق من النتائج'}
-              </Button>
-            )}
-            
-            <Button 
-              variant="outline" 
-              className="flex-1"
-              onClick={handleExportJSON}
-            >
-              <FileJson className="mr-2 h-4 w-4" />
-              تصدير النتائج (JSON)
-            </Button>
+            ))}
           </div>
-        </div>
-        
-        {showVerification && (
-          <div className="mt-6 p-4 border rounded-lg bg-muted/30">
-            <h4 className="font-medium mb-2 flex items-center text-green-600">
-              <Check className="h-4 w-4 mr-2" />
-              تم التحقق من صحة التصويت
-            </h4>
-            <div className="text-sm space-y-2">
-              <p><span className="font-medium">IPFS CID:</span> {ipfsHash || "QmZ4tDuvesekSs4qM5ZBKpXiZGun7S2CYtEZRB3DYXkjGx"}</p>
-              <p><span className="font-medium">Snapshot Space:</span> {spaceId}</p>
-              <p><span className="font-medium">تاريخ التحقق:</span> {new Date().toLocaleString('ar')}</p>
-              <div className="flex justify-end">
-                <Button variant="ghost" size="sm" className="flex items-center text-xs">
-                  <CloudUpload className="h-3 w-3 mr-1" />
-                  عرض على IPFS
-                </Button>
-              </div>
+
+          {/* حالة التصويت */}
+          {userVoted ? (
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+              <CheckCircle className="h-8 w-8 text-green-500 mx-auto mb-2" />
+              <p className="text-green-800 font-medium">تم تسجيل صوتك بنجاح</p>
+              <p className="text-green-600 text-sm">
+                صوتك محفوظ على Snapshot.js ولا يمكن تغييره
+              </p>
+            </div>
+          ) : (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
+              <Vote className="h-8 w-8 text-blue-500 mx-auto mb-2" />
+              <p className="text-blue-800 font-medium">اختر خيارك للتصويت</p>
+              <p className="text-blue-600 text-sm">
+                التصويت مجاني تماماً ولا يتطلب رسوم غاز
+              </p>
+            </div>
+          )}
+
+          {/* معلومات إضافية */}
+          <div className="grid grid-cols-2 gap-4 pt-4 border-t">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-primary">{totalVotes}</div>
+              <div className="text-sm text-muted-foreground">إجمالي الأصوات</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-green-600">0 ETH</div>
+              <div className="text-sm text-muted-foreground">رسوم الغاز</div>
             </div>
           </div>
-        )}
-      </CardContent>
-      <CardFooter className="flex justify-between text-xs text-muted-foreground border-t pt-4">
-        <span>تم إنشاؤه بواسطة Snapshot.js</span>
-        <span>{totalVotes} صوت حتى الآن</span>
-      </CardFooter>
-    </Card>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

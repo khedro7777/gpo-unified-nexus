@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import NewMainLayout from '@/components/layout/NewMainLayout';
@@ -14,10 +13,12 @@ import {
   Upload,
   Calendar,
   DollarSign,
-  Target
+  Target,
+  MessageSquare
 } from 'lucide-react';
 import ContractNegotiationPanel from '@/components/contracts/ContractNegotiationPanel';
 import SnapDAOIntegration from '@/components/dao/SnapDAOIntegration';
+import ContractManagement from '@/components/groups/contract/ContractManagement';
 
 const GroupDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -149,12 +150,13 @@ const GroupDetails = () => {
 
         {/* Tabs Content */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-          <TabsList className="grid w-full grid-cols-2 md:grid-cols-6">
+          <TabsList className="grid w-full grid-cols-3 md:grid-cols-7">
             <TabsTrigger value="overview">نظرة عامة</TabsTrigger>
             <TabsTrigger value="members">الأعضاء</TabsTrigger>
             <TabsTrigger value="offers">العروض</TabsTrigger>
             <TabsTrigger value="contract">العقد</TabsTrigger>
             <TabsTrigger value="voting">التصويت</TabsTrigger>
+            <TabsTrigger value="chat">النقاش</TabsTrigger>
             <TabsTrigger value="files">الملفات</TabsTrigger>
           </TabsList>
 
@@ -287,11 +289,35 @@ const GroupDetails = () => {
           </TabsContent>
 
           <TabsContent value="contract" className="space-y-4">
-            <ContractNegotiationPanel groupId={id!} />
+            <ContractManagement groupId={id!} />
           </TabsContent>
 
           <TabsContent value="voting" className="space-y-4">
             <SnapDAOIntegration />
+          </TabsContent>
+
+          <TabsContent value="chat" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <MessageSquare className="h-5 w-5" />
+                  نقاش المجموعة
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-center py-8">
+                  <MessageSquare className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold mb-2">نقاش تفاعلي</h3>
+                  <p className="text-muted-foreground mb-4">
+                    منصة نقاش متقدمة مدعومة بـ Loomio للحوار البناء
+                  </p>
+                  <Button>
+                    <MessageSquare className="h-4 w-4 mr-2" />
+                    بدء النقاش
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="files" className="space-y-4">
