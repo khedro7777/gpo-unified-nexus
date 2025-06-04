@@ -80,11 +80,11 @@ const GroupDetails = () => {
 
   return (
     <NewMainLayout>
-      <div className="space-y-6" dir={isRTL ? 'rtl' : 'ltr'}>
-        {/* Header */}
+      <div className="space-y-8" dir={isRTL ? 'rtl' : 'ltr'}>
+        {/* Enhanced Header */}
         <GroupHeader groupData={groupData} />
 
-        {/* Progress Card */}
+        {/* Enhanced Progress Card */}
         <GroupProgress 
           targetAmount={groupData.targetAmount}
           currentAmount={groupData.currentAmount}
@@ -92,36 +92,36 @@ const GroupDetails = () => {
           offersCount={offers.length}
         />
 
-        {/* Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-6 lg:grid-cols-6">
-            <TabsTrigger value="overview" className="text-xs lg:text-sm">
+        {/* Enhanced Tabs with better styling */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
+          <TabsList className="grid w-full grid-cols-6 lg:grid-cols-6 h-12 bg-muted/30 rounded-xl">
+            <TabsTrigger value="overview" className="text-xs lg:text-sm rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
               <Eye className="h-4 w-4 mr-1" />
               {t('overview')}
             </TabsTrigger>
-            <TabsTrigger value="members" className="text-xs lg:text-sm">
+            <TabsTrigger value="members" className="text-xs lg:text-sm rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
               <Users className="h-4 w-4 mr-1" />
               {t('members')}
             </TabsTrigger>
-            <TabsTrigger value="offers" className="text-xs lg:text-sm">
+            <TabsTrigger value="offers" className="text-xs lg:text-sm rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
               <Briefcase className="h-4 w-4 mr-1" />
               {t('offers')}
             </TabsTrigger>
-            <TabsTrigger value="contract" className="text-xs lg:text-sm">
+            <TabsTrigger value="contract" className="text-xs lg:text-sm rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
               <FileText className="h-4 w-4 mr-1" />
               {t('contract')}
             </TabsTrigger>
-            <TabsTrigger value="voting" className="text-xs lg:text-sm">
+            <TabsTrigger value="voting" className="text-xs lg:text-sm rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
               <Vote className="h-4 w-4 mr-1" />
               {t('voting')}
             </TabsTrigger>
-            <TabsTrigger value="chat" className="text-xs lg:text-sm">
+            <TabsTrigger value="chat" className="text-xs lg:text-sm rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
               <MessageSquare className="h-4 w-4 mr-1" />
               {t('chat')}
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="overview" className="space-y-6">
+          <TabsContent value="overview" className="space-y-8 animate-fade-in">
             <GroupOverview 
               organizer={groupData.organizer}
               type={groupData.type}
@@ -130,20 +130,20 @@ const GroupDetails = () => {
             />
           </TabsContent>
 
-          <TabsContent value="members" className="space-y-6">
+          <TabsContent value="members" className="space-y-8 animate-fade-in">
             <GroupMembers members={members} memberCount={groupData.memberCount} />
           </TabsContent>
 
-          <TabsContent value="offers" className="space-y-6">
+          <TabsContent value="offers" className="space-y-8 animate-fade-in">
             <GroupOffers offers={offers} />
           </TabsContent>
 
-          <TabsContent value="contract" className="space-y-6">
+          <TabsContent value="contract" className="space-y-8 animate-fade-in">
             <ContractManagement groupId={groupData.id} />
           </TabsContent>
 
-          <TabsContent value="voting" className="space-y-6">
-            <div className="space-y-6">
+          <TabsContent value="voting" className="space-y-8 animate-fade-in">
+            <div className="space-y-8">
               <SnapshotVoting 
                 proposalId={groupData.id}
                 title={isRTL ? 'اختيار أفضل عرض للمجموعة' : 'Choose Best Offer for Group'}
@@ -154,24 +154,38 @@ const GroupDetails = () => {
             </div>
           </TabsContent>
 
-          <TabsContent value="chat" className="space-y-6">
-            <Card>
+          <TabsContent value="chat" className="space-y-8 animate-fade-in">
+            <Card className="shadow-lg border-0">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <MessageSquare className="h-5 w-5" />
-                  {isRTL ? 'نقاش المجموعة' : 'Group Discussion'}
+                  <MessageSquare className="h-5 w-5 text-primary" />
+                  {isRTL ? 'نقاش المجموعة المتقدم' : 'Advanced Group Discussion'}
                 </CardTitle>
                 <CardDescription>
                   {isRTL 
-                    ? 'تواصل مع أعضاء المجموعة ومناقشة التفاصيل' 
-                    : 'Communicate with group members and discuss details'
+                    ? 'تواصل مع أعضاء المجموعة ومناقشة التفاصيل باستخدام ميزات الذكاء الاصطناعي' 
+                    : 'Communicate with group members and discuss details using AI-powered features'
                   }
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="text-center py-8 text-muted-foreground">
-                  <MessageSquare className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                  <p>{isRTL ? 'ستتوفر ميزة الدردشة قريباً' : 'Chat feature coming soon'}</p>
+                <div className="text-center py-12">
+                  <div className="bg-gradient-to-br from-primary/10 to-purple-500/10 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
+                    <MessageSquare className="h-12 w-12 text-primary" />
+                  </div>
+                  <h3 className="text-lg font-semibold mb-2">
+                    {isRTL ? 'مناقشات ذكية قادمة' : 'Smart Discussions Coming Soon'}
+                  </h3>
+                  <p className="text-muted-foreground mb-6">
+                    {isRTL 
+                      ? 'ستتوفر ميزة المناقشات المدعومة بالذكاء الاصطناعي قريباً مع دعم الترجمة الفورية والتلخيص التلقائي' 
+                      : 'AI-powered discussions with real-time translation and automatic summarization coming soon'
+                    }
+                  </p>
+                  <Button variant="outline" className="gap-2">
+                    <Bell className="h-4 w-4" />
+                    {isRTL ? 'تنبيهي عند التوفر' : 'Notify When Available'}
+                  </Button>
                 </div>
               </CardContent>
             </Card>

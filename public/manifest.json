@@ -1,0 +1,25 @@
+
+{
+  "name": "GPO Smart Cooperation Platform",
+  "short_name": "GPO",
+  "description": "AI-powered cooperative platform for buying, marketing, freelancing, and company incorporation",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2F80ED",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "categories": ["business", "productivity", "finance"],
+  "lang": "en",
+  "dir": "auto"
+}
