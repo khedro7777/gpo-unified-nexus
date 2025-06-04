@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ShoppingCart, BarChart3, Users, Building, Store, Search, Globe, Tag, MessageSquare, FileText, Gavel, Shield } from 'lucide-react';
+import { ShoppingCart, BarChart3, Users, Building, Store, Search, Globe, Tag, MessageSquare, FileText } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { NavigationLinks } from '@/components/layout/navigation/NavigationLinks';
@@ -20,7 +20,6 @@ const portals = [
     icon: <ShoppingCart className="h-6 w-6 text-white" />,
     type: 'web2',
     collectiveOption: true,
-    route: '/create-group/purchasing'
   },
   {
     id: 'marketing',
@@ -29,7 +28,6 @@ const portals = [
     icon: <BarChart3 className="h-6 w-6 text-white" />,
     type: 'web2',
     collectiveOption: true,
-    route: '/create-group/marketing'
   },
   {
     id: 'freelancers',
@@ -38,7 +36,6 @@ const portals = [
     icon: <Users className="h-6 w-6 text-white" />,
     type: 'web3',
     collectiveOption: true,
-    route: '/freelance'
   },
   {
     id: 'suppliers',
@@ -47,12 +44,11 @@ const portals = [
     icon: <Store className="h-6 w-6 text-white" />,
     type: 'web2',
     collectiveOption: false,
-    route: '/suppliers'
   },
   {
     id: 'company-incorporation',
     title: 'تأسيس الشركات',
-    description: 'خدمات تأسيس الشركات في أفضل الولايات القضائية العالمية (الإمارات، السعودية، مصر، بريطانيا، ديلاوير، هونغ كونغ)',
+    description: 'خدمات تأسيس الشركات في أفضل الولايات القضائية العالمية',
     icon: <Building className="h-6 w-6 text-white" />,
     type: 'web2',
     collectiveOption: false,
@@ -61,8 +57,8 @@ const portals = [
   {
     id: 'arbitration',
     title: 'التحكيم التجاري',
-    description: 'نظام ORDA لحل النزاعات التجارية بطريقة عادلة وسريعة مع توثيق قانوني',
-    icon: <Gavel className="h-6 w-6 text-white" />,
+    description: 'نظام ORDA لحل النزاعات التجارية بطريقة عادلة وسريعة',
+    icon: <Tag className="h-6 w-6 text-white" />,
     type: 'web2',
     collectiveOption: false,
     route: '/arbitration'
@@ -70,20 +66,11 @@ const portals = [
   {
     id: 'document-management',
     title: 'إدارة الوثائق',
-    description: 'رفع وتوثيق وحفظ الملفات بتقنية IPFS اللامركزية مع ضمان الأمان',
+    description: 'رفع وتوثيق وحفظ الملفات بتقنية IPFS اللامركزية',
     icon: <FileText className="h-6 w-6 text-white" />,
     type: 'web3',
     collectiveOption: false,
     route: '/documents'
-  },
-  {
-    id: 'dao-governance',
-    title: 'حوكمة DAO',
-    description: 'إدارة المنظمات اللامركزية والتصويت الذكي باستخدام Snapshot.js',
-    icon: <Shield className="h-6 w-6 text-white" />,
-    type: 'web3',
-    collectiveOption: true,
-    route: '/governance'
   }
 ];
 
@@ -165,19 +152,13 @@ const Index = () => {
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="max-w-xl">
               <h1 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
-                GPO Smart Cooperation Platform
+                منصة عقود ذكية للمشترين والموردين والمستقلين
               </h1>
               <p className="text-lg text-muted-foreground mb-6">
-                منصة التعاون الذكي للمشترين والموردين والمستقلين مع دعم العقود الذكية وتقنيات Web3
+                استفد من قوة التعاون الجماعي، العقود الذكية، وتكنولوجيا GPO لبناء مستقبل أفضل للتعاون والأعمال
               </p>
-              <div className="flex flex-wrap gap-2 mb-6">
-                <Badge className="bg-blue-500">Snapshot.js</Badge>
-                <Badge className="bg-green-500">IPFS</Badge>
-                <Badge className="bg-purple-500">Smart Contracts</Badge>
-                <Badge className="bg-orange-500">ORDA</Badge>
-              </div>
               <Button size="lg" className="px-8 py-6 text-lg">
-                ابدأ رحلتك الآن
+                ابدأ الآن
               </Button>
             </div>
             <div className="w-full md:w-auto">
@@ -245,37 +226,32 @@ const Index = () => {
           </div>
         </div>
         
-        {/* Updated Portal Cards */}
-        <h2 className="text-2xl font-bold mb-6 text-center md:text-right">البوابات الذكية</h2>
+        {/* Smart Cards - Updated */}
+        <h2 className="text-2xl font-bold mb-6 text-center md:text-right">البوابات الرئيسية</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mb-12">
           {portals.map((portal) => (
             <Link 
-              to={portal.route} 
+              to={portal.route || `/create-group/${portal.id}`} 
               key={portal.id} 
-              className="block group"
+              className="block"
             >
-              <Card className="h-full hover:shadow-lg transition-all duration-300 overflow-hidden border-0 shadow-sm group-hover:scale-105">
+              <Card className="h-full hover:shadow-md transition-shadow overflow-hidden border-0 shadow-sm">
                 <div className="h-1.5 bg-gradient-to-r from-primary to-primary/70"></div>
                 <CardHeader className="pb-2">
                   <div className="flex items-center justify-between mb-4">
-                    <div className="bg-primary rounded-md p-2.5 group-hover:bg-primary/90 transition-colors">
+                    <div className="bg-primary rounded-md p-2.5">
                       {portal.icon}
                     </div>
-                    <div className="flex flex-col gap-1">
-                      {portal.collectiveOption && (
-                        <Badge variant="outline" className="text-xs">فردي / جماعي</Badge>
-                      )}
-                      <Badge variant={portal.type === 'web3' ? 'default' : 'secondary'} className="text-xs">
-                        {portal.type === 'web3' ? 'Web3' : 'Web2'}
-                      </Badge>
-                    </div>
+                    {portal.collectiveOption && (
+                      <Badge variant="outline" className="text-xs">فردي / جماعي</Badge>
+                    )}
                   </div>
-                  <CardTitle className="text-lg leading-tight">{portal.title}</CardTitle>
-                  <CardDescription className="line-clamp-3 text-sm">{portal.description}</CardDescription>
+                  <CardTitle className="text-lg">{portal.title}</CardTitle>
+                  <CardDescription className="line-clamp-2 h-10">{portal.description}</CardDescription>
                 </CardHeader>
                 <CardContent className="pt-0">
-                  <Button variant="secondary" className="w-full mt-3 justify-between group-hover:bg-primary group-hover:text-white transition-colors">
-                    ابدأ الآن
+                  <Button variant="secondary" className="w-full mt-3 justify-between">
+                    ابدأ
                     <span className="mr-2">←</span>
                   </Button>
                 </CardContent>
