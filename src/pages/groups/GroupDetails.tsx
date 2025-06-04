@@ -1,5 +1,7 @@
+
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import NewMainLayout from '@/components/layout/NewMainLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -14,56 +16,79 @@ import {
   Calendar,
   DollarSign,
   Target,
-  MessageSquare
+  MessageSquare,
+  Share2,
+  Eye
 } from 'lucide-react';
-import ContractNegotiationPanel from '@/components/contracts/ContractNegotiationPanel';
-import SnapDAOIntegration from '@/components/dao/SnapDAOIntegration';
 import ContractManagement from '@/components/groups/contract/ContractManagement';
+import SnapDAOIntegration from '@/components/dao/SnapDAOIntegration';
+import LoomioDiscussion from '@/components/voting/LoomioDiscussion';
 
 const GroupDetails = () => {
   const { id } = useParams<{ id: string }>();
+  const { t, i18n } = useTranslation();
   const [activeTab, setActiveTab] = useState('overview');
+  const isRTL = i18n.language === 'ar';
 
-  // Mock data - في التطبيق الحقيقي، سيتم جلب البيانات من API
+  // Mock data
   const groupData = {
     id: id,
-    name: 'مجموعة شراء الإلكترونيات',
+    name: isRTL ? 'مجموعة شراء الإلكترونيات' : 'Electronics Buying Group',
     type: 'buying',
     status: 'active',
-    description: 'مجموعة لشراء الأجهزة الإلكترونية بأسعار مخفضة من خلال الشراء الجماعي',
+    description: isRTL 
+      ? 'مجموعة لشراء الأجهزة الإلكترونية بأسعار مخفضة من خلال الشراء الجماعي'
+      : 'Group for buying electronics at discounted prices through bulk purchasing',
     targetAmount: 50000,
     currentAmount: 35000,
     membersCount: 23,
     deadline: '2024-02-15',
-    category: 'الإلكترونيات',
+    category: isRTL ? 'الإلكترونيات' : 'Electronics',
     createdDate: '2024-01-01'
   };
 
   const members = [
-    { id: 1, name: 'أحمد محمد', role: 'منشئ المجموعة', joinDate: '2024-01-01', contribution: 5000 },
-    { id: 2, name: 'فاطمة علي', role: 'عضو', joinDate: '2024-01-05', contribution: 3000 },
-    { id: 3, name: 'خالد أحمد', role: 'عضو', joinDate: '2024-01-08', contribution: 2500 },
-    // ... المزيد من الأعضاء
+    { 
+      id: 1, 
+      name: isRTL ? 'أحمد محمد' : 'Ahmed Mohamed', 
+      role: isRTL ? 'منشئ المجموعة' : 'Group Creator', 
+      joinDate: '2024-01-01', 
+      contribution: 5000 
+    },
+    { 
+      id: 2, 
+      name: isRTL ? 'فاطمة علي' : 'Fatima Ali', 
+      role: isRTL ? 'عضو' : 'Member', 
+      joinDate: '2024-01-05', 
+      contribution: 3000 
+    },
+    { 
+      id: 3, 
+      name: isRTL ? 'خالد أحمد' : 'Khaled Ahmed', 
+      role: isRTL ? 'عضو' : 'Member', 
+      joinDate: '2024-01-08', 
+      contribution: 2500 
+    },
   ];
 
   const offers = [
     {
       id: 1,
-      supplier: 'شركة التقنية المتقدمة',
-      product: 'أجهزة لابتوب HP - 10 قطع',
+      supplier: isRTL ? 'شركة التقنية المتقدمة' : 'Advanced Technology Co.',
+      product: isRTL ? 'أجهزة لابتوب HP - 10 قطع' : 'HP Laptops - 10 units',
       price: 25000,
       status: 'pending',
-      deliveryTime: '14 يوم',
-      warranty: 'سنتان'
+      deliveryTime: isRTL ? '14 يوم' : '14 days',
+      warranty: isRTL ? 'سنتان' : '2 years'
     },
     {
       id: 2,
-      supplier: 'مؤسسة الإلكترونيات الحديثة',
-      product: 'أجهزة لابتوب Dell - 10 قطع',
+      supplier: isRTL ? 'مؤسسة الإلكترونيات الحديثة' : 'Modern Electronics Corp.',
+      product: isRTL ? 'أجهزة لابتوب Dell - 10 قطع' : 'Dell Laptops - 10 units',
       price: 28000,
       status: 'approved',
-      deliveryTime: '10 أيام',
-      warranty: 'سنة واحدة'
+      deliveryTime: isRTL ? '10 أيام' : '10 days',
+      warranty: isRTL ? 'سنة واحدة' : '1 year'
     }
   ];
 
@@ -76,133 +101,204 @@ const GroupDetails = () => {
     }
   };
 
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case 'active': return t('active');
+      case 'pending': return t('pending');
+      case 'approved': return t('approved');
+      case 'completed': return t('completed');
+      default: return status;
+    }
+  };
+
   const progress = (groupData.currentAmount / groupData.targetAmount) * 100;
 
   return (
     <NewMainLayout>
-      <div className="space-y-6">
-        {/* Group Header */}
-        <Card>
-          <CardHeader>
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="space-y-6" dir={isRTL ? 'rtl' : 'ltr'}>
+        {/* Enhanced Group Header */}
+        <Card className="overflow-hidden">
+          <div className="bg-gradient-to-r from-primary/10 to-blue-500/10 p-6">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
               <div className="flex-1">
-                <div className="flex items-center gap-3 mb-2">
-                  <h1 className="text-2xl md:text-3xl font-bold">{groupData.name}</h1>
-                  <Badge className={getStatusColor(groupData.status)}>
-                    {groupData.status === 'active' ? 'نشطة' : 'منتهية'}
-                  </Badge>
+                <div className="flex items-start gap-4 mb-4">
+                  <div className="w-16 h-16 bg-primary/20 rounded-xl flex items-center justify-center">
+                    <ShoppingCart className="h-8 w-8 text-primary" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">{groupData.name}</h1>
+                      <Badge className={getStatusColor(groupData.status)}>
+                        {getStatusText(groupData.status)}
+                      </Badge>
+                    </div>
+                    <p className="text-gray-600 text-lg leading-relaxed">{groupData.description}</p>
+                  </div>
                 </div>
-                <p className="text-muted-foreground">{groupData.description}</p>
               </div>
-              <div className="flex gap-2">
-                <Button>انضمام للمجموعة</Button>
-                <Button variant="outline">مشاركة</Button>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Button size="lg" className="flex items-center gap-2">
+                  <Users className="h-4 w-4" />
+                  {t('join')}
+                </Button>
+                <Button size="lg" variant="outline" className="flex items-center gap-2">
+                  <Share2 className="h-4 w-4" />
+                  {t('share')}
+                </Button>
+                <Button size="lg" variant="outline" className="flex items-center gap-2">
+                  <Eye className="h-4 w-4" />
+                  {isRTL ? 'مراقبة' : 'Watch'}
+                </Button>
               </div>
             </div>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="text-center">
-                <div className="flex items-center justify-center gap-1 text-blue-600 mb-1">
-                  <Users className="h-4 w-4" />
-                  <span className="text-2xl font-bold">{groupData.membersCount}</span>
+          </div>
+          
+          <CardContent className="p-6">
+            {/* Enhanced Stats Grid */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+              <div className="text-center p-4 bg-blue-50 rounded-xl">
+                <div className="flex items-center justify-center gap-2 text-blue-600 mb-2">
+                  <Users className="h-5 w-5" />
+                  <span className="text-3xl font-bold">{groupData.membersCount}</span>
                 </div>
-                <p className="text-sm text-muted-foreground">عضو</p>
+                <p className="text-sm text-gray-600 font-medium">{isRTL ? 'عضو' : 'Members'}</p>
               </div>
-              <div className="text-center">
-                <div className="flex items-center justify-center gap-1 text-green-600 mb-1">
-                  <DollarSign className="h-4 w-4" />
-                  <span className="text-2xl font-bold">{groupData.currentAmount.toLocaleString()}</span>
+              <div className="text-center p-4 bg-green-50 rounded-xl">
+                <div className="flex items-center justify-center gap-2 text-green-600 mb-2">
+                  <DollarSign className="h-5 w-5" />
+                  <span className="text-3xl font-bold">{groupData.currentAmount.toLocaleString()}</span>
                 </div>
-                <p className="text-sm text-muted-foreground">ر.س مجمع</p>
+                <p className="text-sm text-gray-600 font-medium">{isRTL ? 'ر.س مجمع' : 'SAR Collected'}</p>
               </div>
-              <div className="text-center">
-                <div className="flex items-center justify-center gap-1 text-purple-600 mb-1">
-                  <Target className="h-4 w-4" />
-                  <span className="text-2xl font-bold">{Math.round(progress)}%</span>
+              <div className="text-center p-4 bg-purple-50 rounded-xl">
+                <div className="flex items-center justify-center gap-2 text-purple-600 mb-2">
+                  <Target className="h-5 w-5" />
+                  <span className="text-3xl font-bold">{Math.round(progress)}%</span>
                 </div>
-                <p className="text-sm text-muted-foreground">مكتمل</p>
+                <p className="text-sm text-gray-600 font-medium">{isRTL ? 'مكتمل' : 'Complete'}</p>
               </div>
-              <div className="text-center">
-                <div className="flex items-center justify-center gap-1 text-orange-600 mb-1">
-                  <Calendar className="h-4 w-4" />
-                  <span className="text-2xl font-bold">12</span>
+              <div className="text-center p-4 bg-orange-50 rounded-xl">
+                <div className="flex items-center justify-center gap-2 text-orange-600 mb-2">
+                  <Calendar className="h-5 w-5" />
+                  <span className="text-3xl font-bold">12</span>
                 </div>
-                <p className="text-sm text-muted-foreground">يوم متبقي</p>
+                <p className="text-sm text-gray-600 font-medium">{isRTL ? 'يوم متبقي' : 'Days Left'}</p>
               </div>
             </div>
             
-            {/* Progress Bar */}
-            <div className="mt-4">
-              <div className="flex justify-between text-sm mb-2">
-                <span>التقدم: {groupData.currentAmount.toLocaleString()} / {groupData.targetAmount.toLocaleString()} ر.س</span>
-                <span>{Math.round(progress)}%</span>
+            {/* Enhanced Progress Bar */}
+            <div className="space-y-3">
+              <div className="flex justify-between items-center text-sm font-medium">
+                <span className="text-gray-700">
+                  {isRTL ? 'التقدم' : 'Progress'}: {groupData.currentAmount.toLocaleString()} / {groupData.targetAmount.toLocaleString()} {isRTL ? 'ر.س' : 'SAR'}
+                </span>
+                <span className="text-primary font-bold">{Math.round(progress)}%</span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-3">
+              <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
                 <div 
-                  className="bg-primary h-3 rounded-full transition-all duration-300" 
+                  className="bg-gradient-to-r from-primary to-blue-500 h-4 rounded-full transition-all duration-500 ease-out relative overflow-hidden" 
                   style={{ width: `${progress}%` }}
-                ></div>
+                >
+                  <div className="absolute inset-0 bg-white/20 animate-pulse"></div>
+                </div>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Tabs Content */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-          <TabsList className="grid w-full grid-cols-3 md:grid-cols-7">
-            <TabsTrigger value="overview">نظرة عامة</TabsTrigger>
-            <TabsTrigger value="members">الأعضاء</TabsTrigger>
-            <TabsTrigger value="offers">العروض</TabsTrigger>
-            <TabsTrigger value="contract">العقد</TabsTrigger>
-            <TabsTrigger value="voting">التصويت</TabsTrigger>
-            <TabsTrigger value="chat">النقاش</TabsTrigger>
-            <TabsTrigger value="files">الملفات</TabsTrigger>
+        {/* Enhanced Tabs */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+          <TabsList className="grid w-full grid-cols-3 lg:grid-cols-7 h-auto p-1 bg-gray-100">
+            <TabsTrigger value="overview" className="flex items-center gap-2 py-3">
+              <Eye className="h-4 w-4" />
+              <span className="hidden sm:block">{t('overview')}</span>
+            </TabsTrigger>
+            <TabsTrigger value="members" className="flex items-center gap-2 py-3">
+              <Users className="h-4 w-4" />
+              <span className="hidden sm:block">{t('members')}</span>
+            </TabsTrigger>
+            <TabsTrigger value="offers" className="flex items-center gap-2 py-3">
+              <ShoppingCart className="h-4 w-4" />
+              <span className="hidden sm:block">{t('offers')}</span>
+            </TabsTrigger>
+            <TabsTrigger value="contract" className="flex items-center gap-2 py-3">
+              <FileText className="h-4 w-4" />
+              <span className="hidden sm:block">{t('contract')}</span>
+            </TabsTrigger>
+            <TabsTrigger value="voting" className="flex items-center gap-2 py-3">
+              <Vote className="h-4 w-4" />
+              <span className="hidden sm:block">{t('voting')}</span>
+            </TabsTrigger>
+            <TabsTrigger value="chat" className="flex items-center gap-2 py-3">
+              <MessageSquare className="h-4 w-4" />
+              <span className="hidden sm:block">{t('chat')}</span>
+            </TabsTrigger>
+            <TabsTrigger value="files" className="flex items-center gap-2 py-3">
+              <FileText className="h-4 w-4" />
+              <span className="hidden sm:block">{t('files')}</span>
+            </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="overview" className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Card>
+          <TabsContent value="overview" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card className="h-fit">
                 <CardHeader>
-                  <CardTitle>تفاصيل المجموعة</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <Target className="h-5 w-5 text-primary" />
+                    {isRTL ? 'تفاصيل المجموعة' : 'Group Details'}
+                  </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-3">
-                  <div>
-                    <span className="font-medium">النوع: </span>
-                    <span>شراء تعاوني</span>
-                  </div>
-                  <div>
-                    <span className="font-medium">الفئة: </span>
-                    <span>{groupData.category}</span>
-                  </div>
-                  <div>
-                    <span className="font-medium">تاريخ الإنشاء: </span>
-                    <span>{groupData.createdDate}</span>
-                  </div>
-                  <div>
-                    <span className="font-medium">الموعد النهائي: </span>
-                    <span>{groupData.deadline}</span>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <span className="font-medium text-gray-500">{isRTL ? 'النوع:' : 'Type:'}</span>
+                      <p className="font-medium">{t('buying')}</p>
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-500">{isRTL ? 'الفئة:' : 'Category:'}</span>
+                      <p className="font-medium">{groupData.category}</p>
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-500">{isRTL ? 'تاريخ الإنشاء:' : 'Created:'}</span>
+                      <p className="font-medium">{groupData.createdDate}</p>
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-500">{isRTL ? 'الموعد النهائي:' : 'Deadline:'}</span>
+                      <p className="font-medium">{groupData.deadline}</p>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="h-fit">
                 <CardHeader>
-                  <CardTitle>آخر التحديثات</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <Calendar className="h-5 w-5 text-primary" />
+                    {isRTL ? 'آخر التحديثات' : 'Recent Updates'}
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-3">
-                    <div className="border-l-4 border-blue-500 pl-3">
-                      <p className="text-sm font-medium">انضمام عضو جديد</p>
-                      <p className="text-xs text-muted-foreground">منذ ساعتين</p>
+                  <div className="space-y-4">
+                    <div className="flex gap-3 p-3 bg-blue-50 rounded-lg border-l-4 border-blue-500">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium">{isRTL ? 'انضمام عضو جديد' : 'New member joined'}</p>
+                        <p className="text-xs text-gray-500">{isRTL ? 'منذ ساعتين' : '2 hours ago'}</p>
+                      </div>
                     </div>
-                    <div className="border-l-4 border-green-500 pl-3">
-                      <p className="text-sm font-medium">وصول عرض جديد من مورد</p>
-                      <p className="text-xs text-muted-foreground">منذ 5 ساعات</p>
+                    <div className="flex gap-3 p-3 bg-green-50 rounded-lg border-l-4 border-green-500">
+                      <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium">{isRTL ? 'وصول عرض جديد من مورد' : 'New supplier offer received'}</p>
+                        <p className="text-xs text-gray-500">{isRTL ? 'منذ 5 ساعات' : '5 hours ago'}</p>
+                      </div>
                     </div>
-                    <div className="border-l-4 border-yellow-500 pl-3">
-                      <p className="text-sm font-medium">بدء التصويت على العرض</p>
-                      <p className="text-xs text-muted-foreground">منذ يوم واحد</p>
+                    <div className="flex gap-3 p-3 bg-yellow-50 rounded-lg border-l-4 border-yellow-500">
+                      <div className="w-2 h-2 bg-yellow-500 rounded-full mt-2"></div>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium">{isRTL ? 'بدء التصويت على العرض' : 'Voting started on offer'}</p>
+                        <p className="text-xs text-gray-500">{isRTL ? 'منذ يوم واحد' : '1 day ago'}</p>
+                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -214,26 +310,29 @@ const GroupDetails = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Users className="h-5 w-5" />
-                  أعضاء المجموعة ({members.length})
+                  <Users className="h-5 w-5 text-primary" />
+                  {t('members')} ({members.length})
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   {members.map((member) => (
-                    <div key={member.id} className="flex items-center justify-between p-4 border rounded-lg">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                          <span className="text-sm font-medium">{member.name.charAt(0)}</span>
+                    <div key={member.id} className="flex items-center justify-between p-4 border rounded-xl hover:bg-gray-50 transition-colors">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 bg-gradient-to-br from-primary to-blue-500 rounded-full flex items-center justify-center text-white font-bold">
+                          {member.name.charAt(0)}
                         </div>
                         <div>
-                          <p className="font-medium">{member.name}</p>
-                          <p className="text-sm text-muted-foreground">{member.role}</p>
+                          <p className="font-semibold text-gray-900">{member.name}</p>
+                          <p className="text-sm text-gray-500">{member.role}</p>
+                          <p className="text-xs text-gray-400">{isRTL ? 'انضم في' : 'Joined'} {member.joinDate}</p>
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="font-medium">{member.contribution.toLocaleString()} ر.س</p>
-                        <p className="text-sm text-muted-foreground">انضم في {member.joinDate}</p>
+                        <p className="font-bold text-lg text-green-600">{member.contribution.toLocaleString()} {isRTL ? 'ر.س' : 'SAR'}</p>
+                        <Button size="sm" variant="outline" className="mt-2">
+                          {isRTL ? 'تواصل' : 'Contact'}
+                        </Button>
                       </div>
                     </div>
                   ))}
@@ -246,40 +345,47 @@ const GroupDetails = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <ShoppingCart className="h-5 w-5" />
-                  عروض الموردين
+                  <ShoppingCart className="h-5 w-5 text-primary" />
+                  {isRTL ? 'عروض الموردين' : 'Supplier Offers'}
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
+                <div className="space-y-6">
                   {offers.map((offer) => (
-                    <div key={offer.id} className="border rounded-lg p-4">
-                      <div className="flex items-start justify-between mb-3">
-                        <div>
-                          <h4 className="font-medium">{offer.product}</h4>
-                          <p className="text-sm text-muted-foreground">{offer.supplier}</p>
+                    <div key={offer.id} className="border rounded-xl p-6 hover:shadow-md transition-shadow">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex-1">
+                          <h4 className="font-bold text-lg text-gray-900">{offer.product}</h4>
+                          <p className="text-gray-600 font-medium">{offer.supplier}</p>
                         </div>
                         <Badge className={getStatusColor(offer.status)}>
-                          {offer.status === 'pending' ? 'قيد المراجعة' : 'موافق عليه'}
+                          {getStatusText(offer.status)}
                         </Badge>
                       </div>
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
-                        <div>
-                          <span className="font-medium">السعر: </span>
-                          <span>{offer.price.toLocaleString()} ر.س</span>
+                      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+                        <div className="bg-gray-50 p-3 rounded-lg">
+                          <span className="text-xs text-gray-500 uppercase tracking-wide">{isRTL ? 'السعر' : 'Price'}</span>
+                          <p className="font-bold text-xl text-green-600">{offer.price.toLocaleString()} {isRTL ? 'ر.س' : 'SAR'}</p>
                         </div>
-                        <div>
-                          <span className="font-medium">التسليم: </span>
-                          <span>{offer.deliveryTime}</span>
+                        <div className="bg-gray-50 p-3 rounded-lg">
+                          <span className="text-xs text-gray-500 uppercase tracking-wide">{isRTL ? 'التسليم' : 'Delivery'}</span>
+                          <p className="font-semibold">{offer.deliveryTime}</p>
                         </div>
-                        <div>
-                          <span className="font-medium">الضمان: </span>
-                          <span>{offer.warranty}</span>
+                        <div className="bg-gray-50 p-3 rounded-lg">
+                          <span className="text-xs text-gray-500 uppercase tracking-wide">{isRTL ? 'الضمان' : 'Warranty'}</span>
+                          <p className="font-semibold">{offer.warranty}</p>
                         </div>
                       </div>
-                      <div className="flex gap-2 mt-3">
-                        <Button size="sm">قبول العرض</Button>
-                        <Button size="sm" variant="outline">طلب تفاوض</Button>
+                      <div className="flex gap-3">
+                        <Button className="flex-1">
+                          {t('accept')}
+                        </Button>
+                        <Button variant="outline" className="flex-1">
+                          {t('negotiate')}
+                        </Button>
+                        <Button variant="ghost" size="icon">
+                          <Eye className="h-4 w-4" />
+                        </Button>
                       </div>
                     </div>
                   ))}
@@ -297,63 +403,57 @@ const GroupDetails = () => {
           </TabsContent>
 
           <TabsContent value="chat" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <MessageSquare className="h-5 w-5" />
-                  نقاش المجموعة
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-8">
-                  <MessageSquare className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold mb-2">نقاش تفاعلي</h3>
-                  <p className="text-muted-foreground mb-4">
-                    منصة نقاش متقدمة مدعومة بـ Loomio للحوار البناء
-                  </p>
-                  <Button>
-                    <MessageSquare className="h-4 w-4 mr-2" />
-                    بدء النقاش
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+            <LoomioDiscussion groupId={id!} />
           </TabsContent>
 
           <TabsContent value="files" className="space-y-4">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <FileText className="h-5 w-5" />
-                  الملفات والوثائق
+                  <FileText className="h-5 w-5 text-primary" />
+                  {t('files')}
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-                  <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-600 mb-4">اسحب الملفات هنا أو اضغط للتحميل</p>
-                  <Button>
-                    <Upload className="h-4 w-4 mr-2" />
-                    تحميل ملف
+                <div className="border-2 border-dashed border-gray-300 rounded-xl p-12 text-center hover:border-primary/50 transition-colors">
+                  <Upload className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-600 mb-4 text-lg">{isRTL ? 'اسحب الملفات هنا أو اضغط للتحميل' : 'Drag files here or click to upload'}</p>
+                  <Button size="lg" className="flex items-center gap-2">
+                    <Upload className="h-4 w-4" />
+                    {t('upload')}
                   </Button>
                 </div>
                 
-                <div className="mt-6 space-y-3">
-                  <h4 className="font-medium">الملفات المحملة:</h4>
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between p-3 border rounded-lg">
+                <div className="mt-8 space-y-3">
+                  <h4 className="font-semibold text-lg">{isRTL ? 'الملفات المحملة:' : 'Uploaded Files:'}</h4>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors">
                       <div className="flex items-center gap-3">
-                        <FileText className="h-5 w-5 text-blue-500" />
-                        <span>مواصفات المنتج.pdf</span>
+                        <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                          <FileText className="h-5 w-5 text-blue-600" />
+                        </div>
+                        <div>
+                          <p className="font-medium">{isRTL ? 'مواصفات المنتج.pdf' : 'product-specs.pdf'}</p>
+                          <p className="text-sm text-gray-500">2.5 MB</p>
+                        </div>
                       </div>
-                      <Button size="sm" variant="outline">تحميل</Button>
+                      <Button size="sm" variant="outline">
+                        {t('download')}
+                      </Button>
                     </div>
-                    <div className="flex items-center justify-between p-3 border rounded-lg">
+                    <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors">
                       <div className="flex items-center gap-3">
-                        <FileText className="h-5 w-5 text-blue-500" />
-                        <span>شروط التسليم.docx</span>
+                        <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                          <FileText className="h-5 w-5 text-green-600" />
+                        </div>
+                        <div>
+                          <p className="font-medium">{isRTL ? 'شروط التسليم.docx' : 'delivery-terms.docx'}</p>
+                          <p className="text-sm text-gray-500">1.8 MB</p>
+                        </div>
                       </div>
-                      <Button size="sm" variant="outline">تحميل</Button>
+                      <Button size="sm" variant="outline">
+                        {t('download')}
+                      </Button>
                     </div>
                   </div>
                 </div>
