@@ -1,156 +1,255 @@
 
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Vote, CheckCircle, XCircle, Clock } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
+import { Vote, Timer, Check, Code, FileJson, CloudUpload } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import { Badge } from '@/components/ui/badge';
+
+interface VoteOption {
+  id: string;
+  title: string;
+  votes: number;
+}
 
 interface SnapshotVotingProps {
   proposalId: string;
   title: string;
   description: string;
-  endTime: string;
+  options: VoteOption[];
+  deadline: string;
+  spaceId: string;
+  ipfsHash?: string;
+  totalVotes: number;
+  onVote?: (optionId: string) => void;
+  verifiable?: boolean;
 }
 
 const SnapshotVoting: React.FC<SnapshotVotingProps> = ({
   proposalId,
   title,
   description,
-  endTime
+  options,
+  deadline,
+  spaceId,
+  ipfsHash,
+  totalVotes,
+  onVote,
+  verifiable = true
 }) => {
-  const { i18n } = useTranslation();
-  const isRTL = i18n.language === 'ar';
-  const [userVote, setUserVote] = useState<'for' | 'against' | null>(null);
+  const { toast } = useToast();
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [showVerification, setShowVerification] = useState(false);
 
-  // Mock voting data
-  const votingData = {
-    totalVotes: 24,
-    forVotes: 18,
-    againstVotes: 6,
-    quorum: 20,
-    status: 'active' as 'active' | 'ended' | 'pending'
+  const handleVote = () => {
+    if (!selectedOption) {
+      toast({
+        title: "اختيار مطلوب",
+        description: "يرجى اختيار أحد الخيارات قبل التصويت",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    if (onVote) {
+      onVote(selectedOption);
+    }
+    
+    toast({
+      title: "تم التصويت بنجاح",
+      description: "تم تسجيل صوتك وتخزينه بشكل لامركزي",
+    });
   };
 
-  const forPercentage = (votingData.forVotes / votingData.totalVotes) * 100;
-  const againstPercentage = (votingData.againstVotes / votingData.totalVotes) * 100;
-  const quorumReached = votingData.totalVotes >= votingData.quorum;
-
-  const handleVote = (option: 'for' | 'against') => {
-    setUserVote(option);
-    // Here you would integrate with actual Snapshot.js voting
-    console.log(`Voted ${option} on proposal ${proposalId}`);
+  const handleVerify = () => {
+    setIsVerifying(true);
+    
+    // Simulate verification process
+    setTimeout(() => {
+      setIsVerifying(false);
+      setShowVerification(true);
+      
+      toast({
+        title: "تم التحقق بنجاح",
+        description: "تم التحقق من نتائج التصويت على IPFS",
+      });
+    }, 2000);
   };
-
+  
+  const handleExportJSON = () => {
+    // Create a sample result object
+    const results = {
+      proposalId,
+      spaceId,
+      ipfsHash: ipfsHash || "QmZ4tDuvesekSs4qM5ZBKpXiZGun7S2CYtEZRB3DYXkjGx",
+      title,
+      options: options.map(opt => ({
+        id: opt.id,
+        title: opt.title,
+        votes: opt.votes,
+        percentage: (opt.votes / totalVotes * 100).toFixed(2)
+      })),
+      totalVotes,
+      deadline,
+      timestamp: new Date().toISOString()
+    };
+    
+    // Convert to JSON string with pretty formatting
+    const jsonString = JSON.stringify(results, null, 2);
+    
+    // Create a blob and download it
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `snapshot-results-${proposalId}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    toast({
+      title: "تم التصدير بنجاح",
+      description: "تم تصدير نتائج التصويت بصيغة JSON"
+    });
+  };
+  
+  // Calculate time remaining until deadline
+  const deadlineDate = new Date(deadline);
+  const now = new Date();
+  const timeRemaining = deadlineDate.getTime() - now.getTime();
+  const daysRemaining = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+  const hoursRemaining = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  
   return (
-    <Card>
+    <Card className="shadow-sm">
       <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2">
-            <Vote className="h-5 w-5" />
-            {isRTL ? 'تصويت المجتمع' : 'Community Voting'}
-          </CardTitle>
-          <Badge variant={votingData.status === 'active' ? 'default' : 'secondary'}>
-            {votingData.status === 'active' 
-              ? (isRTL ? 'نشط' : 'Active')
-              : (isRTL ? 'منتهي' : 'Ended')
-            }
-          </Badge>
+        <div className="flex justify-between items-start">
+          <div>
+            <div className="flex items-center gap-2">
+              <CardTitle className="text-xl">{title}</CardTitle>
+              {verifiable && (
+                <Badge variant="outline" className="bg-green-50 text-green-700 text-xs">
+                  قابل للتحقق
+                </Badge>
+              )}
+            </div>
+            <CardDescription className="flex gap-2 items-center">
+              <span>التصويت #{proposalId}</span>
+              <span>•</span>
+              <span>Space: {spaceId}</span>
+              {ipfsHash && (
+                <>
+                  <span>•</span>
+                  <span className="flex items-center">
+                    <Code className="h-3 w-3 mr-1" />
+                    {ipfsHash.substring(0, 8)}...{ipfsHash.substring(ipfsHash.length - 6)}
+                  </span>
+                </>
+              )}
+            </CardDescription>
+          </div>
+          <div className="flex items-center text-sm bg-muted px-3 py-1 rounded-md">
+            <Timer className="h-4 w-4 mr-2" />
+            {daysRemaining > 0 ? (
+              <span>متبقي {daysRemaining} يوم{daysRemaining !== 1 ? '' : ''} و {hoursRemaining} ساعة</span>
+            ) : (
+              hoursRemaining > 0 ? (
+                <span>متبقي {hoursRemaining} ساعة</span>
+              ) : (
+                <span className="text-destructive">انتهى التصويت</span>
+              )
+            )}
+          </div>
         </div>
       </CardHeader>
-      <CardContent className="space-y-6">
-        <div>
-          <h3 className="font-medium mb-2">{title}</h3>
-          <p className="text-sm text-muted-foreground">{description}</p>
-        </div>
-
-        {/* Voting Progress */}
+      <CardContent>
+        <p className="mb-6 text-muted-foreground">{description}</p>
+        
         <div className="space-y-4">
-          <div className="flex items-center justify-between text-sm">
-            <span>{isRTL ? 'النتائج الحالية' : 'Current Results'}</span>
-            <span>{votingData.totalVotes} {isRTL ? 'صوت' : 'votes'}</span>
-          </div>
-
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
-                <span className="text-sm">{isRTL ? 'موافق' : 'For'}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-medium">{votingData.forVotes}</span>
-                <span className="text-xs text-muted-foreground">({forPercentage.toFixed(1)}%)</span>
-              </div>
-            </div>
-            <Progress value={forPercentage} className="h-2" />
-          </div>
-
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <XCircle className="h-4 w-4 text-red-500" />
-                <span className="text-sm">{isRTL ? 'معارض' : 'Against'}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-medium">{votingData.againstVotes}</span>
-                <span className="text-xs text-muted-foreground">({againstPercentage.toFixed(1)}%)</span>
-              </div>
-            </div>
-            <Progress value={againstPercentage} className="h-2" />
-          </div>
-        </div>
-
-        {/* Quorum Status */}
-        <div className="flex items-center gap-2 text-sm">
-          <div className={`w-2 h-2 rounded-full ${quorumReached ? 'bg-green-500' : 'bg-yellow-500'}`} />
-          <span>
-            {isRTL ? 'النصاب القانوني' : 'Quorum'}: {votingData.totalVotes}/{votingData.quorum}
-            {quorumReached 
-              ? (isRTL ? ' (تم الوصول)' : ' (Reached)')
-              : (isRTL ? ' (لم يتم الوصول)' : ' (Not Reached)')
-            }
-          </span>
-        </div>
-
-        {/* Time Remaining */}
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Clock className="h-4 w-4" />
-          <span>
-            {isRTL ? 'ينتهي في' : 'Ends in'} 2 {isRTL ? 'أيام' : 'days'}
-          </span>
-        </div>
-
-        {/* Voting Buttons */}
-        {votingData.status === 'active' && (
-          <div className="flex gap-3">
-            <Button 
-              onClick={() => handleVote('for')}
-              variant={userVote === 'for' ? 'default' : 'outline'}
-              className="flex-1"
-              disabled={userVote !== null}
+          {options.map((option) => (
+            <div 
+              key={option.id} 
+              className={`border rounded-lg p-4 transition-colors cursor-pointer ${
+                selectedOption === option.id ? 'border-primary bg-primary/5' : 'hover:border-muted-foreground'
+              }`}
+              onClick={() => setSelectedOption(option.id)}
             >
-              <CheckCircle className="h-4 w-4 mr-2" />
-              {isRTL ? 'موافق' : 'Vote For'}
+              <div className="flex justify-between items-center mb-2">
+                <div className="flex items-center">
+                  <div className={`w-4 h-4 rounded-full border mr-2 ${
+                    selectedOption === option.id ? 'bg-primary border-primary' : 'border-muted-foreground'
+                  }`}></div>
+                  <h4 className="font-medium">{option.title}</h4>
+                </div>
+                <span className="text-sm">{option.votes} صوت ({((option.votes / totalVotes) * 100).toFixed(1)}%)</span>
+              </div>
+              <Progress 
+                value={(option.votes / totalVotes) * 100} 
+                className="h-2 mt-2" 
+              />
+            </div>
+          ))}
+          
+          <div className="flex flex-col sm:flex-row gap-2 mt-6">
+            <Button 
+              className="flex-1" 
+              disabled={!selectedOption || daysRemaining < 0 && hoursRemaining < 0}
+              onClick={handleVote}
+            >
+              <Vote className="mr-2 h-4 w-4" />
+              تأكيد التصويت
             </Button>
+            
+            {verifiable && (
+              <Button 
+                variant="outline" 
+                className="flex-1"
+                onClick={handleVerify}
+                disabled={isVerifying}
+              >
+                <Check className="mr-2 h-4 w-4" />
+                {isVerifying ? 'جاري التحقق...' : 'التحقق من النتائج'}
+              </Button>
+            )}
+            
             <Button 
-              onClick={() => handleVote('against')}
-              variant={userVote === 'against' ? 'destructive' : 'outline'}
+              variant="outline" 
               className="flex-1"
-              disabled={userVote !== null}
+              onClick={handleExportJSON}
             >
-              <XCircle className="h-4 w-4 mr-2" />
-              {isRTL ? 'معارض' : 'Vote Against'}
+              <FileJson className="mr-2 h-4 w-4" />
+              تصدير النتائج (JSON)
             </Button>
           </div>
-        )}
-
-        {userVote && (
-          <div className="text-center text-sm text-muted-foreground">
-            {isRTL ? 'تم تسجيل صوتك بنجاح' : 'Your vote has been recorded'}
+        </div>
+        
+        {showVerification && (
+          <div className="mt-6 p-4 border rounded-lg bg-muted/30">
+            <h4 className="font-medium mb-2 flex items-center text-green-600">
+              <Check className="h-4 w-4 mr-2" />
+              تم التحقق من صحة التصويت
+            </h4>
+            <div className="text-sm space-y-2">
+              <p><span className="font-medium">IPFS CID:</span> {ipfsHash || "QmZ4tDuvesekSs4qM5ZBKpXiZGun7S2CYtEZRB3DYXkjGx"}</p>
+              <p><span className="font-medium">Snapshot Space:</span> {spaceId}</p>
+              <p><span className="font-medium">تاريخ التحقق:</span> {new Date().toLocaleString('ar')}</p>
+              <div className="flex justify-end">
+                <Button variant="ghost" size="sm" className="flex items-center text-xs">
+                  <CloudUpload className="h-3 w-3 mr-1" />
+                  عرض على IPFS
+                </Button>
+              </div>
+            </div>
           </div>
         )}
       </CardContent>
+      <CardFooter className="flex justify-between text-xs text-muted-foreground border-t pt-4">
+        <span>تم إنشاؤه بواسطة Snapshot.js</span>
+        <span>{totalVotes} صوت حتى الآن</span>
+      </CardFooter>
     </Card>
   );
 };

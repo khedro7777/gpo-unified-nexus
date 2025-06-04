@@ -5,12 +5,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { ShoppingCart, BarChart3, Users, Building, Store, Search, Globe, Tag, MessageSquare, FileText, Gavel, Shield } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ShoppingCart, BarChart3, Users, Building, Store, Search, Globe, Tag, MessageSquare, FileText } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { NavigationLinks } from '@/components/layout/navigation/NavigationLinks';
 import { useAuth } from '@/hooks/use-auth';
-import TopBar from '@/components/common/TopBar';
 
 const portals = [
   {
@@ -20,7 +20,6 @@ const portals = [
     icon: <ShoppingCart className="h-6 w-6 text-white" />,
     type: 'web2',
     collectiveOption: true,
-    route: '/create-group/purchasing'
   },
   {
     id: 'marketing',
@@ -29,7 +28,6 @@ const portals = [
     icon: <BarChart3 className="h-6 w-6 text-white" />,
     type: 'web2',
     collectiveOption: true,
-    route: '/create-group/marketing'
   },
   {
     id: 'freelancers',
@@ -38,7 +36,6 @@ const portals = [
     icon: <Users className="h-6 w-6 text-white" />,
     type: 'web3',
     collectiveOption: true,
-    route: '/freelance'
   },
   {
     id: 'suppliers',
@@ -47,12 +44,11 @@ const portals = [
     icon: <Store className="h-6 w-6 text-white" />,
     type: 'web2',
     collectiveOption: false,
-    route: '/suppliers'
   },
   {
     id: 'company-incorporation',
     title: 'تأسيس الشركات',
-    description: 'خدمات تأسيس الشركات في أفضل الولايات القضائية العالمية (الإمارات، السعودية، مصر، بريطانيا، ديلاوير، هونغ كونغ)',
+    description: 'خدمات تأسيس الشركات في أفضل الولايات القضائية العالمية',
     icon: <Building className="h-6 w-6 text-white" />,
     type: 'web2',
     collectiveOption: false,
@@ -61,8 +57,8 @@ const portals = [
   {
     id: 'arbitration',
     title: 'التحكيم التجاري',
-    description: 'نظام ORDA لحل النزاعات التجارية بطريقة عادلة وسريعة مع توثيق قانوني',
-    icon: <Gavel className="h-6 w-6 text-white" />,
+    description: 'نظام ORDA لحل النزاعات التجارية بطريقة عادلة وسريعة',
+    icon: <Tag className="h-6 w-6 text-white" />,
     type: 'web2',
     collectiveOption: false,
     route: '/arbitration'
@@ -70,20 +66,11 @@ const portals = [
   {
     id: 'document-management',
     title: 'إدارة الوثائق',
-    description: 'رفع وتوثيق وحفظ الملفات بتقنية IPFS اللامركزية مع ضمان الأمان',
+    description: 'رفع وتوثيق وحفظ الملفات بتقنية IPFS اللامركزية',
     icon: <FileText className="h-6 w-6 text-white" />,
     type: 'web3',
     collectiveOption: false,
     route: '/documents'
-  },
-  {
-    id: 'dao-governance',
-    title: 'حوكمة DAO',
-    description: 'إدارة المنظمات اللامركزية والتصويت الذكي باستخدام Snapshot.js',
-    icon: <Shield className="h-6 w-6 text-white" />,
-    type: 'web3',
-    collectiveOption: true,
-    route: '/governance'
   }
 ];
 
@@ -156,155 +143,116 @@ const Index = () => {
   });
   
   return (
-    <div className="min-h-screen flex flex-col bg-background">
-      <TopBar />
+    <div className="min-h-screen flex flex-col">
       <Navbar />
       
-      {/* Enhanced Hero Section with AI-guided interface */}
-      <div className="bg-gradient-to-br from-primary/10 via-blue-500/5 to-purple-500/10 py-16 md:py-24">
+      {/* Hero Section */}
+      <div className="bg-gradient-to-br from-primary/10 to-primary/5 py-10 md:py-16">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
-            <div className="max-w-2xl">
-              <div className="inline-flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full text-sm font-medium text-primary mb-6">
-                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                AI-Powered Platform
-              </div>
-              
-              <h1 className="text-4xl md:text-6xl font-bold mb-6 text-foreground leading-tight">
-                GPO Smart
-                <span className="block text-primary">Cooperation Platform</span>
+          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="max-w-xl">
+              <h1 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
+                منصة عقود ذكية للمشترين والموردين والمستقلين
               </h1>
-              
-              <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-                منصة التعاون الذكي للمشترين والموردين والمستقلين مع دعم العقود الذكية وتقنيات Web3 المتقدمة
+              <p className="text-lg text-muted-foreground mb-6">
+                استفد من قوة التعاون الجماعي، العقود الذكية، وتكنولوجيا GPO لبناء مستقبل أفضل للتعاون والأعمال
               </p>
-              
-              <div className="flex flex-wrap gap-3 mb-8">
-                <Badge className="bg-blue-500 hover:bg-blue-600 px-3 py-1">Snapshot.js</Badge>
-                <Badge className="bg-green-500 hover:bg-green-600 px-3 py-1">IPFS Storage</Badge>
-                <Badge className="bg-purple-500 hover:bg-purple-600 px-3 py-1">Smart Contracts</Badge>
-                <Badge className="bg-orange-500 hover:bg-orange-600 px-3 py-1">ORDA Arbitration</Badge>
-                <Badge className="bg-indigo-500 hover:bg-indigo-600 px-3 py-1">MCP Integration</Badge>
-              </div>
-              
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" className="px-8 py-6 text-lg font-medium shadow-lg hover:shadow-xl transition-all">
-                  ابدأ رحلتك الآن
-                  <span className="mr-2">→</span>
-                </Button>
-                <Button size="lg" variant="outline" className="px-8 py-6 text-lg">
-                  جولة تفاعلية
-                </Button>
-              </div>
+              <Button size="lg" className="px-8 py-6 text-lg">
+                ابدأ الآن
+              </Button>
             </div>
-            
-            <div className="w-full lg:w-auto">
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-purple-500/20 rounded-2xl blur-3xl"></div>
-                <YouTubeEmbed videoId="dQw4w9WgXcQ" />
-              </div>
+            <div className="w-full md:w-auto">
+              <YouTubeEmbed videoId="dQw4w9WgXcQ" />
             </div>
           </div>
         </div>
       </div>
       
-      <div className="container mx-auto px-4 py-12">
-        {/* Enhanced Search and Filters */}
-        <div className="bg-card rounded-2xl p-6 shadow-lg border mb-12">
-          <div className="flex flex-col lg:flex-row gap-6">
+      <div className="container mx-auto px-4 py-8">
+        {/* Search and Filters */}
+        <div className="bg-white rounded-xl p-4 shadow-sm border mb-8">
+          <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1 relative">
-              <Search className="absolute left-4 top-4 h-5 w-5 text-muted-foreground" />
+              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input 
-                placeholder="ابحث في المنصة الذكية..." 
-                className="pl-12 h-12 text-lg bg-background border-0 focus:ring-2 focus:ring-primary/20" 
+                placeholder="ابحث في المنصة..." 
+                className="pl-10 bg-muted/20" 
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
                 dir="rtl"
               />
             </div>
-            <div className="flex gap-3 flex-wrap">
+            <div className="flex gap-2 flex-wrap">
               <Select value={typeFilter} onValueChange={setTypeFilter}>
-                <SelectTrigger className="w-[180px] h-12">
+                <SelectTrigger className="w-[150px]">
                   <SelectValue placeholder="نوع الخدمة" />
                 </SelectTrigger>
-                <SelectContent className="bg-white dark:bg-gray-900 border shadow-lg">
+                <SelectContent>
                   <SelectItem value="all">الكل</SelectItem>
-                  <SelectItem value="buying">الشراء التعاوني</SelectItem>
-                  <SelectItem value="marketing">التسويق الجماعي</SelectItem>
+                  <SelectItem value="buying">الشراء</SelectItem>
+                  <SelectItem value="marketing">التسويق</SelectItem>
                   <SelectItem value="freelancers">المستقلون</SelectItem>
-                  <SelectItem value="incorporation">تأسيس الشركات</SelectItem>
                 </SelectContent>
               </Select>
               
               <Select value={sectorFilter} onValueChange={setSectorFilter}>
-                <SelectTrigger className="w-[180px] h-12">
+                <SelectTrigger className="w-[150px]">
                   <Tag className="mr-2 h-4 w-4" />
                   <SelectValue placeholder="القطاع" />
                 </SelectTrigger>
-                <SelectContent className="bg-white dark:bg-gray-900 border shadow-lg">
+                <SelectContent>
                   <SelectItem value="all">كل القطاعات</SelectItem>
                   <SelectItem value="tech">تكنولوجيا</SelectItem>
                   <SelectItem value="retail">تجزئة</SelectItem>
                   <SelectItem value="health">صحة</SelectItem>
                   <SelectItem value="edu">تعليم</SelectItem>
-                  <SelectItem value="finance">مالية</SelectItem>
+                </SelectContent>
+              </Select>
+              
+              <Select value={regionFilter} onValueChange={setRegionFilter}>
+                <SelectTrigger className="w-[150px]">
+                  <Globe className="mr-2 h-4 w-4" />
+                  <SelectValue placeholder="المنطقة" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">كل المناطق</SelectItem>
+                  <SelectItem value="السعودية">السعودية</SelectItem>
+                  <SelectItem value="الإمارات">الإمارات</SelectItem>
+                  <SelectItem value="مصر">مصر</SelectItem>
+                  <SelectItem value="الكويت">الكويت</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
         </div>
         
-        {/* Enhanced Portal Cards with AI-driven interface */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">البوابات الذكية المدعومة بالذكاء الاصطناعي</h2>
-          <p className="text-xl text-muted-foreground">اختر المسار المناسب لاحتياجاتك وابدأ رحلة التعاون الذكي</p>
-        </div>
-        
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-16">
+        {/* Smart Cards - Updated */}
+        <h2 className="text-2xl font-bold mb-6 text-center md:text-right">البوابات الرئيسية</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mb-12">
           {portals.map((portal) => (
             <Link 
-              to={portal.route} 
+              to={portal.route || `/create-group/${portal.id}`} 
               key={portal.id} 
-              className="block group"
+              className="block"
             >
-              <Card className="h-full hover:shadow-2xl transition-all duration-500 overflow-hidden border-0 shadow-lg group-hover:scale-105 group-hover:-translate-y-2 bg-gradient-to-br from-card to-card/80">
-                <div className="h-2 bg-gradient-to-r from-primary via-blue-500 to-purple-500"></div>
-                <CardHeader className="pb-3">
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="bg-gradient-to-br from-primary to-primary/80 rounded-xl p-3 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+              <Card className="h-full hover:shadow-md transition-shadow overflow-hidden border-0 shadow-sm">
+                <div className="h-1.5 bg-gradient-to-r from-primary to-primary/70"></div>
+                <CardHeader className="pb-2">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="bg-primary rounded-md p-2.5">
                       {portal.icon}
                     </div>
-                    <div className="flex flex-col gap-2">
-                      {portal.collectiveOption && (
-                        <Badge variant="outline" className="text-xs border-primary/20 bg-primary/5">
-                          فردي / جماعي
-                        </Badge>
-                      )}
-                      <Badge 
-                        variant={portal.type === 'web3' ? 'default' : 'secondary'} 
-                        className={`text-xs ${portal.type === 'web3' 
-                          ? 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white' 
-                          : 'bg-gray-100 text-gray-700'
-                        }`}
-                      >
-                        {portal.type === 'web3' ? 'Web3' : 'Web2'}
-                      </Badge>
-                    </div>
+                    {portal.collectiveOption && (
+                      <Badge variant="outline" className="text-xs">فردي / جماعي</Badge>
+                    )}
                   </div>
-                  <CardTitle className="text-lg leading-tight mb-3 group-hover:text-primary transition-colors">
-                    {portal.title}
-                  </CardTitle>
-                  <CardDescription className="line-clamp-3 text-sm leading-relaxed">
-                    {portal.description}
-                  </CardDescription>
+                  <CardTitle className="text-lg">{portal.title}</CardTitle>
+                  <CardDescription className="line-clamp-2 h-10">{portal.description}</CardDescription>
                 </CardHeader>
                 <CardContent className="pt-0">
-                  <Button 
-                    variant="secondary" 
-                    className="w-full mt-4 justify-between group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-sm hover:shadow-md"
-                  >
-                    ابدأ الآن
-                    <span className="mr-2 group-hover:translate-x-1 transition-transform">←</span>
+                  <Button variant="secondary" className="w-full mt-3 justify-between">
+                    ابدأ
+                    <span className="mr-2">←</span>
                   </Button>
                 </CardContent>
               </Card>
@@ -312,12 +260,12 @@ const Index = () => {
           ))}
         </div>
         
-        {/* Active Groups Section */}
+        {/* Group Sections */}
         <div className="mb-12">
-          <h2 className="text-3xl font-bold mb-6 text-center md:text-right">المجموعات النشطة</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <h2 className="text-2xl font-bold mb-6 text-center md:text-right">المجموعات النشطة</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {activeGroups.slice(0, 3).map(group => (
-              <Card key={group.id} className="hover:shadow-xl transition-all duration-300 border-0 shadow-lg overflow-hidden">
+              <Card key={group.id} className="hover:shadow-md transition-shadow border-0 shadow-sm overflow-hidden">
                 <div className="h-1 bg-gradient-to-r from-blue-500 to-blue-300"></div>
                 <CardHeader>
                   <div className="flex items-center justify-between">
@@ -328,7 +276,7 @@ const Index = () => {
                     </Badge>
                     <Badge variant="outline">{group.country}</Badge>
                   </div>
-                  <CardTitle className="mt-3 text-lg">{group.title}</CardTitle>
+                  <CardTitle className="mt-2 text-lg">{group.title}</CardTitle>
                   <CardDescription>
                     {group.members} أعضاء
                   </CardDescription>
@@ -366,11 +314,11 @@ const Index = () => {
         </div>
         
         {/* Suppliers Section */}
-        <div className="mb-16">
-          <h2 className="text-3xl font-bold mb-6 text-center md:text-right">المجموعات التي تبحث عن موردين</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold mb-6 text-center md:text-right">المجموعات التي تبحث عن موردين</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {activeGroups.slice(0, 2).map(group => (
-              <Card key={group.id} className="hover:shadow-xl transition-all duration-300 border-0 shadow-lg overflow-hidden">
+              <Card key={group.id} className="hover:shadow-md transition-shadow border-0 shadow-sm overflow-hidden">
                 <div className="h-1 bg-gradient-to-r from-teal-500 to-teal-300"></div>
                 <CardHeader>
                   <div className="flex items-center justify-between">
@@ -379,7 +327,7 @@ const Index = () => {
                     </Badge>
                     <Badge variant="outline">{group.country}</Badge>
                   </div>
-                  <CardTitle className="mt-3 text-lg">{group.title}</CardTitle>
+                  <CardTitle className="mt-2 text-lg">{group.title}</CardTitle>
                   <CardDescription>
                     نوع العرض: {group.type === 'buying' ? 'شراء' : 'خدمات'}
                   </CardDescription>
@@ -400,22 +348,19 @@ const Index = () => {
         </div>
       </div>
       
-      {/* Enhanced Mobile Navigation */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-card border-t shadow-2xl">
+      {/* Mobile Bottom Navigation */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-10">
         <NavigationLinks />
       </div>
       
-      {/* Enhanced MCP Assistant with AI styling */}
-      <div className="fixed bottom-24 md:bottom-8 right-6 z-40">
-        <div className="relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary to-purple-500 rounded-full blur-lg opacity-30 animate-pulse"></div>
-          <Button 
-            className="relative h-14 w-14 rounded-full shadow-2xl bg-gradient-to-r from-primary to-purple-500 hover:from-primary/90 hover:to-purple-500/90 border-2 border-white/20"
-            size="icon"
-          >
-            <MessageSquare className="h-6 w-6" />
-          </Button>
-        </div>
+      {/* MCP Assistant Button */}
+      <div className="fixed bottom-20 md:bottom-6 right-6 z-40">
+        <Button 
+          className="h-12 w-12 rounded-full shadow-lg bg-primary hover:bg-primary/90"
+          size="icon"
+        >
+          <MessageSquare className="h-5 w-5" />
+        </Button>
       </div>
       
       <Footer className="hidden md:block" />

@@ -1,191 +1,335 @@
 
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import NewMainLayout from '@/components/layout/NewMainLayout';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Eye, Users, Briefcase, FileText, Vote, MessageSquare } from 'lucide-react';
-
-// Import refactored components
-import GroupHeader from '@/components/groups/details/GroupHeader';
-import GroupProgress from '@/components/groups/details/GroupProgress';
-import GroupOverview from '@/components/groups/details/GroupOverview';
-import GroupMembers from '@/components/groups/details/GroupMembers';
-import GroupOffers from '@/components/groups/details/GroupOffers';
-import ContractManagement from '@/components/groups/contract/ContractManagement';
-import LoomioDiscussion from '@/components/voting/LoomioDiscussion';
-import SnapshotVoting from '@/components/voting/SnapshotVoting';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { 
+  Users, 
+  ShoppingCart, 
+  FileText, 
+  Vote, 
+  Upload,
+  Calendar,
+  DollarSign,
+  Target
+} from 'lucide-react';
+import ContractNegotiationPanel from '@/components/contracts/ContractNegotiationPanel';
+import SnapDAOIntegration from '@/components/dao/SnapDAOIntegration';
 
 const GroupDetails = () => {
-  const { id } = useParams();
-  const { t, i18n } = useTranslation();
-  const isRTL = i18n.language === 'ar';
+  const { id } = useParams<{ id: string }>();
   const [activeTab, setActiveTab] = useState('overview');
 
-  // Mock data - في التطبيق الحقيقي سيتم جلبها من API
+  // Mock data - في التطبيق الحقيقي، سيتم جلب البيانات من API
   const groupData = {
-    id: id || '1',
-    name: isRTL ? 'مجموعة شراء الأجهزة الذكية' : 'Smart Devices Buying Group',
-    type: isRTL ? 'شراء تعاوني' : 'Cooperative Buying',
-    description: isRTL 
-      ? 'مجموعة لشراء الأجهزة الذكية بأسعار مميزة من خلال التفاوض الجماعي مع الموردين'
-      : 'Group for buying smart devices at special prices through collective negotiation with suppliers',
-    location: isRTL ? 'الرياض، السعودية' : 'Riyadh, Saudi Arabia',
-    targetAmount: 50000,
-    currentAmount: 32500,
-    memberCount: 45,
-    maxMembers: 100,
-    endDate: '2024-01-15',
+    id: id,
+    name: 'مجموعة شراء الإلكترونيات',
+    type: 'buying',
     status: 'active',
-    category: 'electronics',
-    tags: isRTL ? ['أجهزة ذكية', 'إلكترونيات', 'خصومات'] : ['Smart Devices', 'Electronics', 'Discounts'],
-    organizer: {
-      name: isRTL ? 'أحمد محمد' : 'Ahmed Mohamed',
-      avatar: '/placeholder.svg',
-      rating: 4.8,
-      completedGroups: 12
-    }
+    description: 'مجموعة لشراء الأجهزة الإلكترونية بأسعار مخفضة من خلال الشراء الجماعي',
+    targetAmount: 50000,
+    currentAmount: 35000,
+    membersCount: 23,
+    deadline: '2024-02-15',
+    category: 'الإلكترونيات',
+    createdDate: '2024-01-01'
   };
 
   const members = [
-    { id: 1, name: isRTL ? 'سارة أحمد' : 'Sara Ahmed', avatar: '/placeholder.svg', joinDate: '2024-01-01', contribution: 1500 },
-    { id: 2, name: isRTL ? 'محمد علي' : 'Mohamed Ali', avatar: '/placeholder.svg', joinDate: '2024-01-02', contribution: 2000 },
-    { id: 3, name: isRTL ? 'فاطمة محمد' : 'Fatima Mohamed', avatar: '/placeholder.svg', joinDate: '2024-01-03', contribution: 1800 },
-    { id: 4, name: isRTL ? 'خالد أحمد' : 'Khalid Ahmed', avatar: '/placeholder.svg', joinDate: '2024-01-04', contribution: 2200 },
+    { id: 1, name: 'أحمد محمد', role: 'منشئ المجموعة', joinDate: '2024-01-01', contribution: 5000 },
+    { id: 2, name: 'فاطمة علي', role: 'عضو', joinDate: '2024-01-05', contribution: 3000 },
+    { id: 3, name: 'خالد أحمد', role: 'عضو', joinDate: '2024-01-08', contribution: 2500 },
+    // ... المزيد من الأعضاء
   ];
 
   const offers = [
     {
       id: 1,
-      supplier: isRTL ? 'شركة التقنية المتقدمة' : 'Advanced Tech Co.',
-      product: isRTL ? 'هواتف ذكية - باقة 50 جهاز' : 'Smart Phones - 50 Units Package',
-      price: 45000,
-      discount: '15%',
-      delivery: isRTL ? '14 يوم' : '14 days',
-      rating: 4.5,
-      status: 'pending'
+      supplier: 'شركة التقنية المتقدمة',
+      product: 'أجهزة لابتوب HP - 10 قطع',
+      price: 25000,
+      status: 'pending',
+      deliveryTime: '14 يوم',
+      warranty: 'سنتان'
     },
     {
       id: 2,
-      supplier: isRTL ? 'مؤسسة الإلكترونيات الحديثة' : 'Modern Electronics Est.',
-      product: isRTL ? 'هواتف ذكية - باقة 50 جهاز' : 'Smart Phones - 50 Units Package',
-      price: 48000,
-      discount: '12%',
-      delivery: isRTL ? '10 أيام' : '10 days',
-      rating: 4.2,
-      status: 'negotiating'
+      supplier: 'مؤسسة الإلكترونيات الحديثة',
+      product: 'أجهزة لابتوب Dell - 10 قطع',
+      price: 28000,
+      status: 'approved',
+      deliveryTime: '10 أيام',
+      warranty: 'سنة واحدة'
     }
   ];
 
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'active': return 'bg-green-100 text-green-800';
+      case 'pending': return 'bg-yellow-100 text-yellow-800';
+      case 'completed': return 'bg-blue-100 text-blue-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const progress = (groupData.currentAmount / groupData.targetAmount) * 100;
+
   return (
     <NewMainLayout>
-      <div className="space-y-8" dir={isRTL ? 'rtl' : 'ltr'}>
-        {/* Enhanced Header */}
-        <GroupHeader groupData={groupData} />
+      <div className="space-y-6">
+        {/* Group Header */}
+        <Card>
+          <CardHeader>
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="flex-1">
+                <div className="flex items-center gap-3 mb-2">
+                  <h1 className="text-2xl md:text-3xl font-bold">{groupData.name}</h1>
+                  <Badge className={getStatusColor(groupData.status)}>
+                    {groupData.status === 'active' ? 'نشطة' : 'منتهية'}
+                  </Badge>
+                </div>
+                <p className="text-muted-foreground">{groupData.description}</p>
+              </div>
+              <div className="flex gap-2">
+                <Button>انضمام للمجموعة</Button>
+                <Button variant="outline">مشاركة</Button>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-1 text-blue-600 mb-1">
+                  <Users className="h-4 w-4" />
+                  <span className="text-2xl font-bold">{groupData.membersCount}</span>
+                </div>
+                <p className="text-sm text-muted-foreground">عضو</p>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-1 text-green-600 mb-1">
+                  <DollarSign className="h-4 w-4" />
+                  <span className="text-2xl font-bold">{groupData.currentAmount.toLocaleString()}</span>
+                </div>
+                <p className="text-sm text-muted-foreground">ر.س مجمع</p>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-1 text-purple-600 mb-1">
+                  <Target className="h-4 w-4" />
+                  <span className="text-2xl font-bold">{Math.round(progress)}%</span>
+                </div>
+                <p className="text-sm text-muted-foreground">مكتمل</p>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-1 text-orange-600 mb-1">
+                  <Calendar className="h-4 w-4" />
+                  <span className="text-2xl font-bold">12</span>
+                </div>
+                <p className="text-sm text-muted-foreground">يوم متبقي</p>
+              </div>
+            </div>
+            
+            {/* Progress Bar */}
+            <div className="mt-4">
+              <div className="flex justify-between text-sm mb-2">
+                <span>التقدم: {groupData.currentAmount.toLocaleString()} / {groupData.targetAmount.toLocaleString()} ر.س</span>
+                <span>{Math.round(progress)}%</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-3">
+                <div 
+                  className="bg-primary h-3 rounded-full transition-all duration-300" 
+                  style={{ width: `${progress}%` }}
+                ></div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
-        {/* Enhanced Progress Card */}
-        <GroupProgress 
-          targetAmount={groupData.targetAmount}
-          currentAmount={groupData.currentAmount}
-          memberCount={groupData.memberCount}
-          offersCount={offers.length}
-        />
-
-        {/* Enhanced Tabs with better styling */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
-          <TabsList className="grid w-full grid-cols-6 lg:grid-cols-6 h-12 bg-muted/30 rounded-xl">
-            <TabsTrigger value="overview" className="text-xs lg:text-sm rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
-              <Eye className="h-4 w-4 mr-1" />
-              {t('overview')}
-            </TabsTrigger>
-            <TabsTrigger value="members" className="text-xs lg:text-sm rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
-              <Users className="h-4 w-4 mr-1" />
-              {t('members')}
-            </TabsTrigger>
-            <TabsTrigger value="offers" className="text-xs lg:text-sm rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
-              <Briefcase className="h-4 w-4 mr-1" />
-              {t('offers')}
-            </TabsTrigger>
-            <TabsTrigger value="contract" className="text-xs lg:text-sm rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
-              <FileText className="h-4 w-4 mr-1" />
-              {t('contract')}
-            </TabsTrigger>
-            <TabsTrigger value="voting" className="text-xs lg:text-sm rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
-              <Vote className="h-4 w-4 mr-1" />
-              {t('voting')}
-            </TabsTrigger>
-            <TabsTrigger value="chat" className="text-xs lg:text-sm rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
-              <MessageSquare className="h-4 w-4 mr-1" />
-              {t('chat')}
-            </TabsTrigger>
+        {/* Tabs Content */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-6">
+            <TabsTrigger value="overview">نظرة عامة</TabsTrigger>
+            <TabsTrigger value="members">الأعضاء</TabsTrigger>
+            <TabsTrigger value="offers">العروض</TabsTrigger>
+            <TabsTrigger value="contract">العقد</TabsTrigger>
+            <TabsTrigger value="voting">التصويت</TabsTrigger>
+            <TabsTrigger value="files">الملفات</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="overview" className="space-y-8 animate-fade-in">
-            <GroupOverview 
-              organizer={groupData.organizer}
-              type={groupData.type}
-              category={groupData.category}
-              tags={groupData.tags}
-            />
-          </TabsContent>
+          <TabsContent value="overview" className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>تفاصيل المجموعة</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div>
+                    <span className="font-medium">النوع: </span>
+                    <span>شراء تعاوني</span>
+                  </div>
+                  <div>
+                    <span className="font-medium">الفئة: </span>
+                    <span>{groupData.category}</span>
+                  </div>
+                  <div>
+                    <span className="font-medium">تاريخ الإنشاء: </span>
+                    <span>{groupData.createdDate}</span>
+                  </div>
+                  <div>
+                    <span className="font-medium">الموعد النهائي: </span>
+                    <span>{groupData.deadline}</span>
+                  </div>
+                </CardContent>
+              </Card>
 
-          <TabsContent value="members" className="space-y-8 animate-fade-in">
-            <GroupMembers members={members} memberCount={groupData.memberCount} />
-          </TabsContent>
-
-          <TabsContent value="offers" className="space-y-8 animate-fade-in">
-            <GroupOffers offers={offers} />
-          </TabsContent>
-
-          <TabsContent value="contract" className="space-y-8 animate-fade-in">
-            <ContractManagement groupId={groupData.id} />
-          </TabsContent>
-
-          <TabsContent value="voting" className="space-y-8 animate-fade-in">
-            <div className="space-y-8">
-              <SnapshotVoting 
-                proposalId={groupData.id}
-                title={isRTL ? 'اختيار أفضل عرض للمجموعة' : 'Choose Best Offer for Group'}
-                description={isRTL ? 'تصويت لاختيار أفضل عرض من الموردين للمجموعة' : 'Vote to select the best supplier offer for the group'}
-                endTime="2024-01-20T23:59:59Z"
-              />
-              <LoomioDiscussion topicId={groupData.id} />
+              <Card>
+                <CardHeader>
+                  <CardTitle>آخر التحديثات</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="border-l-4 border-blue-500 pl-3">
+                      <p className="text-sm font-medium">انضمام عضو جديد</p>
+                      <p className="text-xs text-muted-foreground">منذ ساعتين</p>
+                    </div>
+                    <div className="border-l-4 border-green-500 pl-3">
+                      <p className="text-sm font-medium">وصول عرض جديد من مورد</p>
+                      <p className="text-xs text-muted-foreground">منذ 5 ساعات</p>
+                    </div>
+                    <div className="border-l-4 border-yellow-500 pl-3">
+                      <p className="text-sm font-medium">بدء التصويت على العرض</p>
+                      <p className="text-xs text-muted-foreground">منذ يوم واحد</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </TabsContent>
 
-          <TabsContent value="chat" className="space-y-8 animate-fade-in">
-            <Card className="shadow-lg border-0">
+          <TabsContent value="members" className="space-y-4">
+            <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <MessageSquare className="h-5 w-5 text-primary" />
-                  {isRTL ? 'نقاش المجموعة المتقدم' : 'Advanced Group Discussion'}
+                  <Users className="h-5 w-5" />
+                  أعضاء المجموعة ({members.length})
                 </CardTitle>
-                <CardDescription>
-                  {isRTL 
-                    ? 'تواصل مع أعضاء المجموعة ومناقشة التفاصيل باستخدام ميزات الذكاء الاصطناعي' 
-                    : 'Communicate with group members and discuss details using AI-powered features'
-                  }
-                </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="text-center py-12">
-                  <div className="bg-gradient-to-br from-primary/10 to-purple-500/10 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
-                    <MessageSquare className="h-12 w-12 text-primary" />
-                  </div>
-                  <h3 className="text-lg font-semibold mb-2">
-                    {isRTL ? 'مناقشات ذكية قادمة' : 'Smart Discussions Coming Soon'}
-                  </h3>
-                  <p className="text-muted-foreground mb-6">
-                    {isRTL 
-                      ? 'ستتوفر ميزة المناقشات المدعومة بالذكاء الاصطناعي قريباً مع دعم الترجمة الفورية والتلخيص التلقائي' 
-                      : 'AI-powered discussions with real-time translation and automatic summarization coming soon'
-                    }
-                  </p>
-                  <Button variant="outline" className="gap-2">
-                    <Bell className="h-4 w-4" />
-                    {isRTL ? 'تنبيهي عند التوفر' : 'Notify When Available'}
+                <div className="space-y-4">
+                  {members.map((member) => (
+                    <div key={member.id} className="flex items-center justify-between p-4 border rounded-lg">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                          <span className="text-sm font-medium">{member.name.charAt(0)}</span>
+                        </div>
+                        <div>
+                          <p className="font-medium">{member.name}</p>
+                          <p className="text-sm text-muted-foreground">{member.role}</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-medium">{member.contribution.toLocaleString()} ر.س</p>
+                        <p className="text-sm text-muted-foreground">انضم في {member.joinDate}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="offers" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <ShoppingCart className="h-5 w-5" />
+                  عروض الموردين
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {offers.map((offer) => (
+                    <div key={offer.id} className="border rounded-lg p-4">
+                      <div className="flex items-start justify-between mb-3">
+                        <div>
+                          <h4 className="font-medium">{offer.product}</h4>
+                          <p className="text-sm text-muted-foreground">{offer.supplier}</p>
+                        </div>
+                        <Badge className={getStatusColor(offer.status)}>
+                          {offer.status === 'pending' ? 'قيد المراجعة' : 'موافق عليه'}
+                        </Badge>
+                      </div>
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                        <div>
+                          <span className="font-medium">السعر: </span>
+                          <span>{offer.price.toLocaleString()} ر.س</span>
+                        </div>
+                        <div>
+                          <span className="font-medium">التسليم: </span>
+                          <span>{offer.deliveryTime}</span>
+                        </div>
+                        <div>
+                          <span className="font-medium">الضمان: </span>
+                          <span>{offer.warranty}</span>
+                        </div>
+                      </div>
+                      <div className="flex gap-2 mt-3">
+                        <Button size="sm">قبول العرض</Button>
+                        <Button size="sm" variant="outline">طلب تفاوض</Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="contract" className="space-y-4">
+            <ContractNegotiationPanel groupId={id!} />
+          </TabsContent>
+
+          <TabsContent value="voting" className="space-y-4">
+            <SnapDAOIntegration />
+          </TabsContent>
+
+          <TabsContent value="files" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <FileText className="h-5 w-5" />
+                  الملفات والوثائق
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                  <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-600 mb-4">اسحب الملفات هنا أو اضغط للتحميل</p>
+                  <Button>
+                    <Upload className="h-4 w-4 mr-2" />
+                    تحميل ملف
                   </Button>
+                </div>
+                
+                <div className="mt-6 space-y-3">
+                  <h4 className="font-medium">الملفات المحملة:</h4>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between p-3 border rounded-lg">
+                      <div className="flex items-center gap-3">
+                        <FileText className="h-5 w-5 text-blue-500" />
+                        <span>مواصفات المنتج.pdf</span>
+                      </div>
+                      <Button size="sm" variant="outline">تحميل</Button>
+                    </div>
+                    <div className="flex items-center justify-between p-3 border rounded-lg">
+                      <div className="flex items-center gap-3">
+                        <FileText className="h-5 w-5 text-blue-500" />
+                        <span>شروط التسليم.docx</span>
+                      </div>
+                      <Button size="sm" variant="outline">تحميل</Button>
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>

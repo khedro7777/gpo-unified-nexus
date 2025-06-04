@@ -23,7 +23,7 @@ export const DateFormatSelect: React.FC<DateFormatSelectProps> = ({ value, onCha
         <SelectContent>
           {dateFormats.map((format) => (
             <SelectItem key={format.code} value={format.code}>
-              {format.name} ({format.example})
+              {format.name} - مثال: {format.example}
             </SelectItem>
           ))}
         </SelectContent>
