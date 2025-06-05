@@ -68,17 +68,17 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				gpo: {
-					blue: '#1a73e8',
-					indigo: '#4c4ce4',
-					purple: '#7b61ff',
-					teal: '#00b8a9',
-					green: '#34a853',
-					yellow: '#fbbc05',
-					orange: '#f26c4f',
-					red: '#ea4335',
-					dark: '#202124',
-					gray: '#5f6368',
-					light: '#f8f9fa'
+					blue: '#2563eb',
+					indigo: '#4f46e5',
+					purple: '#7c3aed',
+					teal: '#0d9488',
+					green: '#059669',
+					yellow: '#d97706',
+					orange: '#ea580c',
+					red: '#dc2626',
+					dark: '#1f2937',
+					gray: '#6b7280',
+					light: '#f9fafb'
 				}
 			},
 			borderRadius: {

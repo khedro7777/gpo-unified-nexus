@@ -43,7 +43,7 @@ const SidebarSection: React.FC<SidebarSectionProps> = ({
                 <NavLink 
                   to={item.url} 
                   className={({ isActive }) => 
-                    `flex items-center gap-3 px-3 py-2 rounded-md transition-colors text-sm ${
+                    `flex items-center gap-3 px-3 py-2 rounded-md transition-all duration-200 text-sm ${
                       isActive 
                         ? 'bg-primary text-primary-foreground shadow-sm font-medium' 
                         : 'hover:bg-muted text-muted-foreground hover:text-foreground'

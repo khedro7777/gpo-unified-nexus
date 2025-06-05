@@ -17,18 +17,27 @@ const ThemeToggle = () => {
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="bg-white dark:bg-gray-900 border shadow-lg">
-        <DropdownMenuItem onClick={() => setTheme('light')} className="hover:bg-gray-100 dark:hover:bg-gray-800">
+      <DropdownMenuContent align="end" className="bg-white dark:bg-gray-900 border shadow-lg z-50">
+        <DropdownMenuItem 
+          onClick={() => setTheme('light')} 
+          className="hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"
+        >
           <Sun className="mr-2 h-4 w-4" />
-          Light
+          <span>Light</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('dark')} className="hover:bg-gray-100 dark:hover:bg-gray-800">
+        <DropdownMenuItem 
+          onClick={() => setTheme('dark')} 
+          className="hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"
+        >
           <Moon className="mr-2 h-4 w-4" />
-          Dark
+          <span>Dark</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('system')} className="hover:bg-gray-100 dark:hover:bg-gray-800">
+        <DropdownMenuItem 
+          onClick={() => setTheme('system')} 
+          className="hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"
+        >
           <Monitor className="mr-2 h-4 w-4" />
-          System
+          <span>System</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
