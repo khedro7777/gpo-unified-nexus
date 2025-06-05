@@ -16,74 +16,82 @@ const portals = [
   {
     id: 'purchasing',
     title: 'الشراء التعاوني',
-    description: 'نظام شراء جماعي للحصول على أفضل الأسعار والشروط من الموردين',
+    description: 'نظام شراء جماعي ذكي مدعوم بالذكاء الاصطناعي للحصول على أفضل الأسعار والشروط',
     icon: <ShoppingCart className="h-6 w-6 text-white" />,
     type: 'web2',
     collectiveOption: true,
-    route: '/create-group/purchasing'
+    route: '/create-group/purchasing',
+    integrations: ['Paddle', 'Loomio', 'Snapshot']
   },
   {
     id: 'marketing',
     title: 'التسويق الجماعي',
-    description: 'حملات تسويقية مشتركة لتقليل التكاليف وزيادة الوصول للجمهور المستهدف',
+    description: 'حملات تسويقية مشتركة ذكية لتقليل التكاليف وزيادة الوصول للجمهور المستهدف',
     icon: <BarChart3 className="h-6 w-6 text-white" />,
     type: 'web2',
     collectiveOption: true,
-    route: '/create-group/marketing'
+    route: '/create-group/marketing',
+    integrations: ['Paddle', 'Loomio']
   },
   {
     id: 'freelancers',
     title: 'المستقلون',
-    description: 'منصة للمستقلين للعمل فرديًا أو ضمن مجموعات على مشاريع متنوعة',
+    description: 'منصة متقدمة للمستقلين مع دعم العقود الذكية وإدارة المشاريع بالذكاء الاصطناعي',
     icon: <Users className="h-6 w-6 text-white" />,
     type: 'web3',
     collectiveOption: true,
-    route: '/freelance'
+    route: '/freelance',
+    integrations: ['OpenZeppelin', 'IPFS']
   },
   {
     id: 'suppliers',
     title: 'الموردون',
-    description: 'نظام متكامل للموردين لتقديم العروض والخدمات لمجموعات الشراء',
+    description: 'نظام متكامل للموردين مع تقييم ذكي وإدارة العقود الرقمية',
     icon: <Store className="h-6 w-6 text-white" />,
     type: 'web2',
     collectiveOption: false,
-    route: '/suppliers'
+    route: '/suppliers',
+    integrations: ['Paddle', 'ODR']
   },
   {
     id: 'company-incorporation',
     title: 'تأسيس الشركات',
-    description: 'خدمات تأسيس الشركات في أفضل الولايات القضائية العالمية (الإمارات، السعودية، مصر، بريطانيا، ديلاوير، هونغ كونغ)',
+    description: 'خدمات تأسيس الشركات الذكية في أفضل الولايات القضائية العالمية مع دعم DAO',
     icon: <Building className="h-6 w-6 text-white" />,
-    type: 'web2',
+    type: 'web3',
     collectiveOption: false,
-    route: '/company-incorporation'
+    route: '/company-incorporation',
+    integrations: ['OpenZeppelin', 'Snapshot', 'Strapi']
   },
   {
     id: 'arbitration',
-    title: 'التحكيم التجاري',
-    description: 'نظام ORDA لحل النزاعات التجارية بطريقة عادلة وسريعة مع توثيق قانوني',
+    title: 'التحكيم التجاري الذكي',
+    description: 'نظام ORDA المدعوم بالذكاء الاصطناعي لحل النزاعات التجارية بطريقة عادلة وسريعة',
     icon: <Gavel className="h-6 w-6 text-white" />,
     type: 'web2',
     collectiveOption: false,
-    route: '/arbitration'
+    route: '/arbitration',
+    integrations: ['ODR', 'IPFS']
   },
   {
     id: 'document-management',
-    title: 'إدارة الوثائق',
-    description: 'رفع وتوثيق وحفظ الملفات بتقنية IPFS اللامركزية مع ضمان الأمان',
+    title: 'إدارة الوثائق اللامركزية',
+    description: 'رفع وتوثيق وحفظ الملفات بتقنية IPFS اللامركزية مع ضمان الأمان والتوثيق',
     icon: <FileText className="h-6 w-6 text-white" />,
     type: 'web3',
     collectiveOption: false,
-    route: '/documents'
+    route: '/documents',
+    integrations: ['IPFS', 'OpenZeppelin']
   },
   {
     id: 'dao-governance',
-    title: 'حوكمة DAO',
-    description: 'إدارة المنظمات اللامركزية والتصويت الذكي باستخدام Snapshot.js',
+    title: 'حوكمة DAO الذكية',
+    description: 'إدارة المنظمات اللامركزية والتصويت الذكي باستخدام Snapshot.js وLoomio',
     icon: <Shield className="h-6 w-6 text-white" />,
     type: 'web3',
     collectiveOption: true,
-    route: '/governance'
+    route: '/governance',
+    integrations: ['Snapshot', 'Loomio', 'OpenZeppelin']
   }
 ];
 
@@ -160,14 +168,14 @@ const Index = () => {
       <TopBar />
       <Navbar />
       
-      {/* Enhanced Hero Section with AI-guided interface */}
+      {/* Enhanced Hero Section with integrated systems branding */}
       <div className="bg-gradient-to-br from-primary/10 via-blue-500/5 to-purple-500/10 py-16 md:py-24">
         <div className="container mx-auto px-4">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
             <div className="max-w-2xl">
               <div className="inline-flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full text-sm font-medium text-primary mb-6">
                 <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                AI-Powered Platform
+                AI-Powered Platform with Integrated Open Source Systems
               </div>
               
               <h1 className="text-4xl md:text-6xl font-bold mb-6 text-foreground leading-tight">
@@ -176,24 +184,26 @@ const Index = () => {
               </h1>
               
               <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-                منصة التعاون الذكي للمشترين والموردين والمستقلين مع دعم العقود الذكية وتقنيات Web3 المتقدمة
+                منصة التعاون الذكي المدمجة مع أنظمة مفتوحة المصدر متقدمة: Paddle، Loomio، Snapshot.js، ODR، OpenZeppelin مع دعم Strapi CMS
               </p>
               
               <div className="flex flex-wrap gap-3 mb-8">
-                <Badge className="bg-blue-500 hover:bg-blue-600 px-3 py-1">Snapshot.js</Badge>
-                <Badge className="bg-green-500 hover:bg-green-600 px-3 py-1">IPFS Storage</Badge>
-                <Badge className="bg-purple-500 hover:bg-purple-600 px-3 py-1">Smart Contracts</Badge>
+                <Badge className="bg-blue-500 hover:bg-blue-600 px-3 py-1">Paddle Billing</Badge>
+                <Badge className="bg-green-500 hover:bg-green-600 px-3 py-1">Loomio Voting</Badge>
+                <Badge className="bg-purple-500 hover:bg-purple-600 px-3 py-1">Snapshot.js DAO</Badge>
                 <Badge className="bg-orange-500 hover:bg-orange-600 px-3 py-1">ORDA Arbitration</Badge>
-                <Badge className="bg-indigo-500 hover:bg-indigo-600 px-3 py-1">MCP Integration</Badge>
+                <Badge className="bg-indigo-500 hover:bg-indigo-600 px-3 py-1">OpenZeppelin Governor</Badge>
+                <Badge className="bg-pink-500 hover:bg-pink-600 px-3 py-1">Strapi CMS</Badge>
+                <Badge className="bg-red-500 hover:bg-red-600 px-3 py-1">IPFS Storage</Badge>
               </div>
               
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button size="lg" className="px-8 py-6 text-lg font-medium shadow-lg hover:shadow-xl transition-all">
-                  ابدأ رحلتك الآن
+                  ابدأ رحلتك الذكية
                   <span className="mr-2">→</span>
                 </Button>
                 <Button size="lg" variant="outline" className="px-8 py-6 text-lg">
-                  جولة تفاعلية
+                  جولة تفاعلية في الأنظمة المدمجة
                 </Button>
               </div>
             </div>
@@ -254,10 +264,10 @@ const Index = () => {
           </div>
         </div>
         
-        {/* Enhanced Portal Cards with AI-driven interface */}
+        {/* Enhanced Portal Cards with integration badges */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">البوابات الذكية المدعومة بالذكاء الاصطناعي</h2>
-          <p className="text-xl text-muted-foreground">اختر المسار المناسب لاحتياجاتك وابدأ رحلة التعاون الذكي</p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">البوابات الذكية المدمجة مع الأنظمة مفتوحة المصدر</h2>
+          <p className="text-xl text-muted-foreground">كل بوابة مدمجة مع أنظمة متقدمة لتجربة متكاملة وموثوقة</p>
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-16">
@@ -294,16 +304,25 @@ const Index = () => {
                   <CardTitle className="text-lg leading-tight mb-3 group-hover:text-primary transition-colors">
                     {portal.title}
                   </CardTitle>
-                  <CardDescription className="line-clamp-3 text-sm leading-relaxed">
+                  <CardDescription className="line-clamp-3 text-sm leading-relaxed mb-4">
                     {portal.description}
                   </CardDescription>
+                  
+                  {/* Integration badges */}
+                  <div className="flex flex-wrap gap-1 mb-4">
+                    {portal.integrations.map((integration) => (
+                      <Badge key={integration} variant="outline" className="text-xs">
+                        {integration}
+                      </Badge>
+                    ))}
+                  </div>
                 </CardHeader>
                 <CardContent className="pt-0">
                   <Button 
                     variant="secondary" 
                     className="w-full mt-4 justify-between group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-sm hover:shadow-md"
                   >
-                    ابدأ الآن
+                    ابدأ مع الأنظمة المدمجة
                     <span className="mr-2 group-hover:translate-x-1 transition-transform">←</span>
                   </Button>
                 </CardContent>

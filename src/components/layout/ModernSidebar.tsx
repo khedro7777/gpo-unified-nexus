@@ -14,7 +14,7 @@ import {
   useSidebar 
 } from '@/components/ui/sidebar';
 import { 
-  Home, 
+  User,
   Users, 
   Briefcase, 
   FileText, 
@@ -25,7 +25,10 @@ import {
   MessageSquare,
   Building,
   BarChart3,
-  ShoppingCart
+  ShoppingCart,
+  HelpCircle,
+  Terminal,
+  Wrench
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
@@ -36,11 +39,11 @@ const ModernSidebar = () => {
   const isRTL = i18n.language === 'ar';
   const isCollapsed = state === 'collapsed';
   
-  const mainItems = [
+  const clientDashboardItems = [
     { 
-      title: isRTL ? 'لوحة التحكم' : 'Dashboard', 
-      url: '/dashboard', 
-      icon: Home 
+      title: isRTL ? 'ملفي الشخصي' : 'My Profile', 
+      url: '/profile', 
+      icon: User 
     },
     { 
       title: isRTL ? 'مجموعاتي' : 'My Groups', 
@@ -48,12 +51,12 @@ const ModernSidebar = () => {
       icon: Users 
     },
     { 
-      title: isRTL ? 'العروض' : 'Offers', 
+      title: isRTL ? 'العروض المرسلة/المستلمة' : 'Offers Sent/Received', 
       url: '/offers', 
       icon: Briefcase 
     },
     { 
-      title: isRTL ? 'الأعمال الحرة' : 'Freelance', 
+      title: isRTL ? 'وظائف المستقلين' : 'Freelance Jobs', 
       url: '/freelance', 
       icon: FileText 
     },
@@ -71,24 +74,26 @@ const ModernSidebar = () => {
       title: isRTL ? 'الإشعارات' : 'Notifications', 
       url: '/notifications', 
       icon: Bell 
-    }
-  ];
-
-  const servicesItems = [
+    },
     { 
-      title: isRTL ? 'تحكيم النزاعات' : 'Arbitration', 
+      title: isRTL ? 'نزاعات ORDA' : 'ORDA Disputes', 
       url: '/arbitration', 
       icon: Gavel 
     },
     { 
       title: isRTL ? 'الدعم' : 'Support', 
       url: '/support', 
+      icon: HelpCircle 
+    },
+    { 
+      title: isRTL ? 'صندوق MCP' : 'MCP Prompt Box', 
+      url: '/mcp', 
       icon: MessageSquare 
     },
     { 
-      title: isRTL ? 'صندوق MCP' : 'MCP Box', 
-      url: '/mcp', 
-      icon: Settings 
+      title: isRTL ? 'وضع التنفيذ اليدوي' : 'Manual Execution Mode', 
+      url: '/manual-mode', 
+      icon: Wrench 
     }
   ];
 
@@ -104,9 +109,37 @@ const ModernSidebar = () => {
       icon: BarChart3 
     },
     { 
-      title: isRTL ? 'تأسيس الشركات' : 'Company Formation', 
+      title: isRTL ? 'المستقلون' : 'Freelancers', 
+      url: '/freelance', 
+      icon: Users 
+    },
+    { 
+      title: isRTL ? 'تأسيس الشركات' : 'Entity Formation', 
       url: '/company-incorporation', 
       icon: Building 
+    }
+  ];
+
+  const systemServices = [
+    { 
+      title: isRTL ? 'لوميو للتصويت' : 'Loomio Voting', 
+      url: '/loomio', 
+      icon: Users 
+    },
+    { 
+      title: isRTL ? 'حوكمة Snapshot' : 'Snapshot Governance', 
+      url: '/governance', 
+      icon: Settings 
+    },
+    { 
+      title: isRTL ? 'OpenZeppelin Governor' : 'OpenZeppelin Governor', 
+      url: '/openzeppelin', 
+      icon: Building 
+    },
+    { 
+      title: isRTL ? 'إدارة المحتوى Strapi' : 'Strapi CMS', 
+      url: '/admin-access', 
+      icon: Terminal 
     }
   ];
 
@@ -121,11 +154,11 @@ const ModernSidebar = () => {
       <SidebarContent className="px-2">
         <SidebarGroup>
           <SidebarGroupLabel className={isCollapsed ? 'sr-only' : ''}>
-            {isRTL ? 'الرئيسية' : 'Main'}
+            {isRTL ? 'منطقة العميل' : 'Client Dashboard'}
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {mainItems.map((item) => (
+              {clientDashboardItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <NavLink 
@@ -179,11 +212,11 @@ const ModernSidebar = () => {
 
         <SidebarGroup>
           <SidebarGroupLabel className={isCollapsed ? 'sr-only' : ''}>
-            {isRTL ? 'الخدمات' : 'Services'}
+            {isRTL ? 'الأنظمة المدمجة' : 'Integrated Systems'}
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {servicesItems.map((item) => (
+              {systemServices.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <NavLink 
