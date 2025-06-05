@@ -32,7 +32,7 @@ const SidebarSection: React.FC<SidebarSectionProps> = ({
 }) => {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel className={isCollapsed ? 'sr-only' : `${colorClass} font-semibold`}>
+      <SidebarGroupLabel className={isCollapsed ? 'sr-only' : `${colorClass} font-semibold text-sm`}>
         {title}
       </SidebarGroupLabel>
       <SidebarGroupContent>
@@ -43,15 +43,15 @@ const SidebarSection: React.FC<SidebarSectionProps> = ({
                 <NavLink 
                   to={item.url} 
                   className={({ isActive }) => 
-                    `flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${
+                    `flex items-center gap-3 px-3 py-2 rounded-md transition-colors text-sm ${
                       isActive 
-                        ? `bg-${colorClass.split('-')[1]}-100 text-${colorClass.split('-')[1]}-700 shadow-sm` 
-                        : 'hover:bg-muted'
+                        ? 'bg-primary text-primary-foreground shadow-sm font-medium' 
+                        : 'hover:bg-muted text-muted-foreground hover:text-foreground'
                     }`
                   }
                 >
                   <item.icon className="h-4 w-4 flex-shrink-0" />
-                  {!isCollapsed && <span className="text-sm">{item.title}</span>}
+                  {!isCollapsed && <span>{item.title}</span>}
                 </NavLink>
               </SidebarMenuButton>
             </SidebarMenuItem>
