@@ -30,10 +30,11 @@ import {
 import { useTranslation } from 'react-i18next';
 
 const ModernSidebar = () => {
-  const { collapsed } = useSidebar();
+  const { state } = useSidebar();
   const location = useLocation();
   const { i18n } = useTranslation();
   const isRTL = i18n.language === 'ar';
+  const isCollapsed = state === 'collapsed';
   
   const mainItems = [
     { 
@@ -112,14 +113,14 @@ const ModernSidebar = () => {
   const isActive = (path: string) => location.pathname === path;
   
   return (
-    <Sidebar className={collapsed ? "w-14" : "w-64"} collapsible>
+    <Sidebar className={isCollapsed ? "w-14" : "w-64"} collapsible="icon">
       <div className="p-2">
         <SidebarTrigger className="mb-4" />
       </div>
       
       <SidebarContent className="px-2">
         <SidebarGroup>
-          <SidebarGroupLabel className={collapsed ? 'sr-only' : ''}>
+          <SidebarGroupLabel className={isCollapsed ? 'sr-only' : ''}>
             {isRTL ? 'الرئيسية' : 'Main'}
           </SidebarGroupLabel>
           <SidebarGroupContent>
@@ -138,7 +139,7 @@ const ModernSidebar = () => {
                       }
                     >
                       <item.icon className="h-4 w-4 flex-shrink-0" />
-                      {!collapsed && <span className="text-sm">{item.title}</span>}
+                      {!isCollapsed && <span className="text-sm">{item.title}</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -148,7 +149,7 @@ const ModernSidebar = () => {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className={collapsed ? 'sr-only' : ''}>
+          <SidebarGroupLabel className={isCollapsed ? 'sr-only' : ''}>
             {isRTL ? 'البوابات الذكية' : 'Smart Gateways'}
           </SidebarGroupLabel>
           <SidebarGroupContent>
@@ -167,7 +168,7 @@ const ModernSidebar = () => {
                       }
                     >
                       <item.icon className="h-4 w-4 flex-shrink-0" />
-                      {!collapsed && <span className="text-sm">{item.title}</span>}
+                      {!isCollapsed && <span className="text-sm">{item.title}</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -177,7 +178,7 @@ const ModernSidebar = () => {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className={collapsed ? 'sr-only' : ''}>
+          <SidebarGroupLabel className={isCollapsed ? 'sr-only' : ''}>
             {isRTL ? 'الخدمات' : 'Services'}
           </SidebarGroupLabel>
           <SidebarGroupContent>
@@ -196,7 +197,7 @@ const ModernSidebar = () => {
                       }
                     >
                       <item.icon className="h-4 w-4 flex-shrink-0" />
-                      {!collapsed && <span className="text-sm">{item.title}</span>}
+                      {!isCollapsed && <span className="text-sm">{item.title}</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

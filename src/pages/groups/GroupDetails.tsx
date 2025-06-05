@@ -5,7 +5,8 @@ import { useTranslation } from 'react-i18next';
 import NewMainLayout from '@/components/layout/NewMainLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Eye, Users, Briefcase, FileText, Vote, MessageSquare } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Eye, Users, Briefcase, FileText, Vote, MessageSquare, Bell } from 'lucide-react';
 
 // Import refactored components
 import GroupHeader from '@/components/groups/details/GroupHeader';
