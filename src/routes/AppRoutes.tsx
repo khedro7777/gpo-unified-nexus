@@ -7,6 +7,7 @@ import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import Index from '@/pages/Index';
 import Dashboard from '@/pages/Dashboard';
 import Profile from '@/pages/Profile';
+import HowItWorks from '@/pages/HowItWorks';
 import CreateGroup from '@/pages/groups/CreateGroup';
 import GroupDetails from '@/pages/groups/GroupDetails';
 import Suppliers from '@/pages/suppliers/Suppliers';
@@ -25,6 +26,7 @@ const AppRoutes = () => {
     <Routes>
       {/* Public Routes */}
       <Route path="/" element={<Index />} />
+      <Route path="/how-it-works" element={<HowItWorks />} />
       
       {/* Protected Routes */}
       <Route path="/dashboard" element={
@@ -60,6 +62,36 @@ const AppRoutes = () => {
       <Route path="/services" element={
         <ProtectedRoute>
           <Services />
+        </ProtectedRoute>
+      } />
+
+      <Route path="/arbitration" element={
+        <ProtectedRoute>
+          <Arbitration />
+        </ProtectedRoute>
+      } />
+
+      <Route path="/company-incorporation" element={
+        <ProtectedRoute>
+          <CompanyIncorporation />
+        </ProtectedRoute>
+      } />
+
+      <Route path="/documents" element={
+        <ProtectedRoute>
+          <DocumentManagement />
+        </ProtectedRoute>
+      } />
+
+      <Route path="/freelance" element={
+        <ProtectedRoute>
+          <Freelance />
+        </ProtectedRoute>
+      } />
+
+      <Route path="/governance" element={
+        <ProtectedRoute>
+          <Governance />
         </ProtectedRoute>
       } />
 

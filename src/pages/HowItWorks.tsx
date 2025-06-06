@@ -1,7 +1,7 @@
-
 import React, { useState } from 'react';
-import MainLayout from '@/components/layout/MainLayout';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import ModernLayout from '@/components/layout/ModernLayout';
+import VideoPlayer from '@/components/video/VideoPlayer';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { 
@@ -553,14 +553,23 @@ const HowItWorks = () => {
   };
   
   return (
-    <MainLayout>
-      <div className="space-y-6">
+    <ModernLayout>
+      <div className="space-y-8" dir="rtl">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold mb-2">كيف تعمل المنصة</h1>
+          <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            كيف تعمل المنصة
+          </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            دليل تفاعلي لاستخدام منصة GPO MCP
+            دليل تفاعلي شامل لاستخدام منصة GPO للتعاون الذكي
           </p>
         </div>
+
+        {/* Video Section */}
+        <VideoPlayer 
+          title="الدليل المرئي لاستخدام المنصة"
+          description="شاهد شرحاً مفصلاً عن كيفية الاستفادة من جميع خدمات منصة GPO الذكية"
+          className="mb-8"
+        />
         
         <Card>
           <CardHeader>
@@ -725,7 +734,7 @@ const HowItWorks = () => {
           </CardContent>
         </Card>
       </div>
-    </MainLayout>
+    </ModernLayout>
   );
 };
 
