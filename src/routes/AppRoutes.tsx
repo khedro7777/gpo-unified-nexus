@@ -1,41 +1,72 @@
 
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Index from '@/pages/Index';
-import NotFound from '@/pages/NotFound';
-import { AuthRoutes } from './AuthRoutes';
-import { DashboardRoutes } from './DashboardRoutes';
-import { GroupRoutes } from './GroupRoutes';
-import { CompanyRoutes } from './CompanyRoutes';
-import { ServiceRoutes } from './ServiceRoutes';
-import { AdminRoutes } from './AdminRoutes';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
 
-export const AppRoutes = () => {
+// Pages
+import Index from '@/pages/Index';
+import Dashboard from '@/pages/Dashboard';
+import Profile from '@/pages/Profile';
+import CreateGroup from '@/pages/groups/CreateGroup';
+import GroupDetails from '@/pages/groups/GroupDetails';
+import Suppliers from '@/pages/suppliers/Suppliers';
+import Services from '@/pages/Services';
+import Arbitration from '@/pages/arbitration/Arbitration';
+import CompanyIncorporation from '@/pages/gateways/CompanyIncorporation';
+import DocumentManagement from '@/pages/documents/DocumentManagement';
+import Freelance from '@/pages/freelance/Freelance';
+import Governance from '@/pages/governance/Governance';
+
+// Service Routes
+import { ServiceRoutes } from './ServiceRoutes';
+
+const AppRoutes = () => {
   return (
     <Routes>
       {/* Public Routes */}
       <Route path="/" element={<Index />} />
       
-      {/* Auth Routes */}
-      {AuthRoutes()}
+      {/* Protected Routes */}
+      <Route path="/dashboard" element={
+        <ProtectedRoute>
+          <Dashboard />
+        </ProtectedRoute>
+      } />
       
-      {/* Dashboard Routes */}
-      {DashboardRoutes()}
+      <Route path="/profile" element={
+        <ProtectedRoute>
+          <Profile />
+        </ProtectedRoute>
+      } />
       
-      {/* Group Routes */}
-      {GroupRoutes()}
+      <Route path="/create-group/:type?" element={
+        <ProtectedRoute>
+          <CreateGroup />
+        </ProtectedRoute>
+      } />
       
-      {/* Company Routes */}
-      {CompanyRoutes()}
+      <Route path="/groups/:id" element={
+        <ProtectedRoute>
+          <GroupDetails />
+        </ProtectedRoute>
+      } />
       
+      <Route path="/suppliers" element={
+        <ProtectedRoute>
+          <Suppliers />
+        </ProtectedRoute>
+      } />
+      
+      <Route path="/services" element={
+        <ProtectedRoute>
+          <Services />
+        </ProtectedRoute>
+      } />
+
       {/* Service Routes */}
       {ServiceRoutes()}
-      
-      {/* Admin Routes */}
-      {AdminRoutes()}
-      
-      {/* 404 Route */}
-      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 };
+
+export default AppRoutes;
