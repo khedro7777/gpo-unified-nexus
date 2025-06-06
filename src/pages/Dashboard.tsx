@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import NewMainLayout from '@/components/layout/NewMainLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,7 +14,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/use-auth';
 
 const Dashboard = () => {
-  const { user } = useAuth();
+  const { user, name } = useAuth();
   const [selectedService, setSelectedService] = useState('overview');
 
   // Mock data - في التطبيق الحقيقي سيتم جلبها من API
@@ -111,6 +110,8 @@ const Dashboard = () => {
     }
   ];
 
+  const displayName = user?.user_metadata?.full_name || name || 'المستخدم';
+
   return (
     <NewMainLayout>
       <div className="space-y-8" dir="rtl">
@@ -118,7 +119,7 @@ const Dashboard = () => {
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">
-              مرحباً، {user?.user_metadata?.full_name || 'المستخدم'}
+              مرحباً، {displayName}
             </h1>
             <p className="text-gray-600 mt-1">
               إليك نظرة عامة على نشاطك في منصة GPO الذكية
