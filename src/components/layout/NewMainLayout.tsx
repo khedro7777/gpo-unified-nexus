@@ -24,13 +24,12 @@ const NewMainLayout: React.FC<NewMainLayoutProps> = ({ children }) => {
           <div className="border-b bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-40">
             <div className="flex items-center justify-between p-4">
               <div className="flex items-center gap-4">
-                {/* Mobile Menu */}
-                <HamburgerMenu>
-                  <div className="p-4 space-y-4">
-                    <h2 className="text-lg font-semibold text-gray-900 mb-4">القائمة الرئيسية</h2>
+                {/* Mobile Menu - Only shows on mobile */}
+                <div className="lg:hidden">
+                  <HamburgerMenu>
                     <ModernSidebar />
-                  </div>
-                </HamburgerMenu>
+                  </HamburgerMenu>
+                </div>
                 
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
