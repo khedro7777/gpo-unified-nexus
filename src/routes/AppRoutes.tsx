@@ -17,6 +17,8 @@ import CompanyIncorporation from '@/pages/gateways/CompanyIncorporation';
 import DocumentManagement from '@/pages/documents/DocumentManagement';
 import Freelance from '@/pages/freelance/Freelance';
 import Governance from '@/pages/governance/Governance';
+import Contracts from '@/pages/contracts/Contracts';
+import Notifications from '@/pages/notifications/Notifications';
 
 // Service Routes
 import { ServiceRoutes } from './ServiceRoutes';
@@ -92,6 +94,18 @@ const AppRoutes = () => {
       <Route path="/governance" element={
         <ProtectedRoute>
           <Governance />
+        </ProtectedRoute>
+      } />
+
+      <Route path="/contracts" element={
+        <ProtectedRoute>
+          <Contracts />
+        </ProtectedRoute>
+      } />
+
+      <Route path="/notifications" element={
+        <ProtectedRoute>
+          <Notifications />
         </ProtectedRoute>
       } />
 
