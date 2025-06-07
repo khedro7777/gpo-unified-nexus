@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Users, FileText, Scale, Briefcase } from 'lucide-react';
+import { Home, Users, FileText, Building2, Briefcase } from 'lucide-react';
 
 export const NavigationLinks: React.FC = () => {
   return (
@@ -10,8 +10,8 @@ export const NavigationLinks: React.FC = () => {
         { name: 'الرئيسية', path: '/', icon: Home },
         { name: 'المجموعات', path: '/groups', icon: Users },
         { name: 'العروض', path: '/offers', icon: FileText },
-        { name: 'ORDA', path: '/disputes', icon: Scale },
-        { name: 'المستقلون', path: '/freelancers', icon: Briefcase },
+        { name: 'تأسيس شركات', path: '/company-incorporation', icon: Building2 },
+        { name: 'المستقلون', path: '/freelance', icon: Briefcase },
       ].map((item) => (
         <NavLink
           key={item.name}
