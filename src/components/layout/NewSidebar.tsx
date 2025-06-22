@@ -47,10 +47,10 @@ const NewSidebar = ({ isCollapsed, setIsCollapsed }: NewSidebarProps) => {
 
   const getNavLinkClass = (path: string) => {
     return cn(
-      "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 w-full text-right",
+      "flex items-center gap-3 px-3 py-2 rounded-md transition-colors w-full text-right",
       isActive(path) 
-        ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium shadow-md" 
-        : "text-gray-700 hover:bg-blue-50 hover:text-blue-700 hover:shadow-sm"
+        ? "bg-primary text-primary-foreground font-medium shadow-sm" 
+        : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
     );
   };
 
@@ -74,7 +74,6 @@ const NewSidebar = ({ isCollapsed, setIsCollapsed }: NewSidebarProps) => {
 
   const systemMenuItems = [
     { name: 'نزاعات ORDA', path: '/disputes', icon: Gavel },
-    { name: 'العقود', path: '/contracts', icon: FileText },
     { name: 'الدعم', path: '/support', icon: MessageSquare },
     { name: 'صندوق MCP', path: '/mcp', icon: Wrench },
     { name: 'الأدوات القانونية', path: '/legal', icon: FileText },
@@ -84,14 +83,14 @@ const NewSidebar = ({ isCollapsed, setIsCollapsed }: NewSidebarProps) => {
   return (
     <Sidebar 
       className={cn(
-        "fixed top-16 bottom-0 z-10 hidden md:flex flex-col border-r border-gray-200 transition-all duration-300 bg-white shadow-lg",
+        "fixed top-16 bottom-0 z-10 hidden md:flex flex-col border-r border-gray-200 transition-all duration-300 bg-white shadow-sm",
         isCollapsed ? "w-16" : "w-64"
       )}
     >
       <SidebarContent className="py-4 px-2 bg-white">
         <SidebarGroup>
           <SidebarGroupLabel className={cn(
-            "text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 px-3",
+            "text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 px-3",
             isCollapsed ? "sr-only" : ""
           )}>
             القائمة الرئيسية
@@ -103,7 +102,7 @@ const NewSidebar = ({ isCollapsed, setIsCollapsed }: NewSidebarProps) => {
                   <SidebarMenuButton asChild>
                     <Link to={item.path} className={getNavLinkClass(item.path)}>
                       <item.icon className="h-5 w-5 flex-shrink-0" />
-                      {!isCollapsed && <span className="text-sm font-medium">{item.name}</span>}
+                      {!isCollapsed && <span className="text-sm">{item.name}</span>}
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -114,7 +113,7 @@ const NewSidebar = ({ isCollapsed, setIsCollapsed }: NewSidebarProps) => {
 
         <SidebarGroup>
           <SidebarGroupLabel className={cn(
-            "text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 px-3 mt-6",
+            "text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 px-3 mt-6",
             isCollapsed ? "sr-only" : ""
           )}>
             إدارة الشركات
@@ -126,7 +125,7 @@ const NewSidebar = ({ isCollapsed, setIsCollapsed }: NewSidebarProps) => {
                   <SidebarMenuButton asChild>
                     <Link to={item.path} className={getNavLinkClass(item.path)}>
                       <item.icon className="h-5 w-5 flex-shrink-0" />
-                      {!isCollapsed && <span className="text-sm font-medium">{item.name}</span>}
+                      {!isCollapsed && <span className="text-sm">{item.name}</span>}
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -137,7 +136,7 @@ const NewSidebar = ({ isCollapsed, setIsCollapsed }: NewSidebarProps) => {
 
         <SidebarGroup>
           <SidebarGroupLabel className={cn(
-            "text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 px-3 mt-6",
+            "text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 px-3 mt-6",
             isCollapsed ? "sr-only" : ""
           )}>
             أدوات النظام
@@ -149,7 +148,7 @@ const NewSidebar = ({ isCollapsed, setIsCollapsed }: NewSidebarProps) => {
                   <SidebarMenuButton asChild>
                     <Link to={item.path} className={getNavLinkClass(item.path)}>
                       <item.icon className="h-5 w-5 flex-shrink-0" />
-                      {!isCollapsed && <span className="text-sm font-medium">{item.name}</span>}
+                      {!isCollapsed && <span className="text-sm">{item.name}</span>}
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -164,10 +163,10 @@ const NewSidebar = ({ isCollapsed, setIsCollapsed }: NewSidebarProps) => {
               <SidebarMenuButton asChild>
                 <button 
                   onClick={logout} 
-                  className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 w-full text-right text-red-600 hover:bg-red-50 hover:text-red-700 hover:shadow-sm"
+                  className="flex items-center gap-3 px-3 py-2 rounded-md transition-colors w-full text-right text-red-600 hover:bg-red-50 hover:text-red-700"
                 >
                   <LogOut className="h-5 w-5 flex-shrink-0" />
-                  {!isCollapsed && <span className="text-sm font-medium">تسجيل الخروج</span>}
+                  {!isCollapsed && <span className="text-sm">تسجيل الخروج</span>}
                 </button>
               </SidebarMenuButton>
             </SidebarMenuItem>

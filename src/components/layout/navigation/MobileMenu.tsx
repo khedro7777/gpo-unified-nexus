@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { X, ChevronLeft } from 'lucide-react';
+import { X, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/use-auth';
 import LanguageSelector from './LanguageSelector';
@@ -32,24 +32,22 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isMenuOpen, closeMenu, s
         onClick={closeMenu}
       />
       
-      {/* Menu Content - Opens from Right */}
-      <div className="fixed top-0 right-0 h-full w-80 max-w-[90vw] bg-white shadow-2xl z-50 overflow-y-auto">
+      {/* Menu Content */}
+      <div className="fixed top-0 right-0 h-full w-80 max-w-[90vw] bg-white shadow-xl z-50 overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b bg-gradient-to-r from-blue-600 to-purple-600">
-          <h2 className="text-lg font-bold text-white">القائمة الرئيسية</h2>
-          <Button variant="ghost" size="icon" onClick={closeMenu} className="text-white hover:bg-white/20">
+        <div className="flex items-center justify-between p-4 border-b">
+          <h2 className="text-lg font-semibold">القائمة</h2>
+          <Button variant="ghost" size="icon" onClick={closeMenu}>
             <X className="h-5 w-5" />
           </Button>
         </div>
 
         {/* Content */}
-        <div className="p-4 space-y-6 bg-white">
+        <div className="p-4 space-y-6">
           {/* Language Selector */}
           <div>
             <h3 className="text-sm font-medium text-gray-500 mb-3">اللغة والمنطقة</h3>
-            <div className="bg-gray-50 rounded-lg p-3">
-              <LanguageSelector />
-            </div>
+            <LanguageSelector />
           </div>
 
           {/* Main Navigation */}
@@ -58,27 +56,19 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isMenuOpen, closeMenu, s
             <div className="space-y-2">
               <Link 
                 to="/" 
-                className="flex items-center justify-between p-3 rounded-lg hover:bg-blue-50 hover:shadow-sm transition-all duration-200 text-gray-700 hover:text-blue-700"
+                className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50"
                 onClick={closeMenu}
               >
-                <span className="font-medium">الرئيسية</span>
-                <ChevronLeft className="h-4 w-4 text-gray-400" />
+                <span>الرئيسية</span>
+                <ChevronRight className="h-4 w-4 text-gray-400" />
               </Link>
               <Link 
                 to="/groups" 
-                className="flex items-center justify-between p-3 rounded-lg hover:bg-blue-50 hover:shadow-sm transition-all duration-200 text-gray-700 hover:text-blue-700"
+                className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50"
                 onClick={closeMenu}
               >
-                <span className="font-medium">المجموعات</span>
-                <ChevronLeft className="h-4 w-4 text-gray-400" />
-              </Link>
-              <Link 
-                to="/wallet" 
-                className="flex items-center justify-between p-3 rounded-lg hover:bg-blue-50 hover:shadow-sm transition-all duration-200 text-gray-700 hover:text-blue-700"
-                onClick={closeMenu}
-              >
-                <span className="font-medium">المحفظة</span>
-                <ChevronLeft className="h-4 w-4 text-gray-400" />
+                <span>المجموعات</span>
+                <ChevronRight className="h-4 w-4 text-gray-400" />
               </Link>
             </div>
           </div>
@@ -92,15 +82,15 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isMenuOpen, closeMenu, s
                   <Link
                     key={service.name}
                     to={service.path}
-                    className="flex items-start gap-3 p-3 rounded-lg hover:bg-blue-50 hover:shadow-sm transition-all duration-200"
+                    className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50"
                     onClick={closeMenu}
                   >
-                    <service.icon className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                    <service.icon className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                     <div className="flex-1">
                       <div className="font-medium text-gray-900 text-sm">{service.name}</div>
                       <div className="text-xs text-gray-500 mt-1">{service.desc}</div>
                     </div>
-                    <ChevronLeft className="h-4 w-4 text-gray-400 mt-0.5" />
+                    <ChevronRight className="h-4 w-4 text-gray-400 mt-0.5" />
                   </Link>
                 ))}
               </div>
@@ -114,53 +104,29 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isMenuOpen, closeMenu, s
               <div className="space-y-2">
                 <Link 
                   to="/profile" 
-                  className="flex items-center justify-between p-3 rounded-lg hover:bg-blue-50 hover:shadow-sm transition-all duration-200 text-gray-700 hover:text-blue-700"
+                  className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50"
                   onClick={closeMenu}
                 >
-                  <span className="font-medium">ملفي الشخصي</span>
-                  <ChevronLeft className="h-4 w-4 text-gray-400" />
+                  <span>ملفي الشخصي</span>
+                  <ChevronRight className="h-4 w-4 text-gray-400" />
                 </Link>
                 <Link 
-                  to="/notifications" 
-                  className="flex items-center justify-between p-3 rounded-lg hover:bg-blue-50 hover:shadow-sm transition-all duration-200 text-gray-700 hover:text-blue-700"
+                  to="/wallet" 
+                  className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50"
                   onClick={closeMenu}
                 >
-                  <span className="font-medium">الإشعارات</span>
-                  <ChevronLeft className="h-4 w-4 text-gray-400" />
-                </Link>
-                <Link 
-                  to="/contracts" 
-                  className="flex items-center justify-between p-3 rounded-lg hover:bg-blue-50 hover:shadow-sm transition-all duration-200 text-gray-700 hover:text-blue-700"
-                  onClick={closeMenu}
-                >
-                  <span className="font-medium">العقود</span>
-                  <ChevronLeft className="h-4 w-4 text-gray-400" />
+                  <span>المحفظة</span>
+                  <ChevronRight className="h-4 w-4 text-gray-400" />
                 </Link>
                 <Link 
                   to="/settings" 
-                  className="flex items-center justify-between p-3 rounded-lg hover:bg-blue-50 hover:shadow-sm transition-all duration-200 text-gray-700 hover:text-blue-700"
+                  className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50"
                   onClick={closeMenu}
                 >
-                  <span className="font-medium">الإعدادات</span>
-                  <ChevronLeft className="h-4 w-4 text-gray-400" />
+                  <span>الإعدادات</span>
+                  <ChevronRight className="h-4 w-4 text-gray-400" />
                 </Link>
               </div>
-            </div>
-          )}
-
-          {/* Logout */}
-          {isAuthenticated && (
-            <div className="pt-4 border-t border-gray-200">
-              <button
-                onClick={() => {
-                  // Add logout logic here
-                  closeMenu();
-                }}
-                className="flex items-center justify-between p-3 rounded-lg hover:bg-red-50 hover:shadow-sm transition-all duration-200 text-red-600 hover:text-red-700 w-full"
-              >
-                <span className="font-medium">تسجيل الخروج</span>
-                <ChevronLeft className="h-4 w-4" />
-              </button>
             </div>
           )}
         </div>
