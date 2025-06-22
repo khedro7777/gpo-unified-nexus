@@ -10,6 +10,7 @@ import Profile from '@/pages/Profile';
 import HowItWorks from '@/pages/HowItWorks';
 import CreateGroup from '@/pages/groups/CreateGroup';
 import GroupDetails from '@/pages/groups/GroupDetails';
+import Groups from '@/pages/Groups';
 import Suppliers from '@/pages/suppliers/Suppliers';
 import Services from '@/pages/Services';
 import Arbitration from '@/pages/arbitration/Arbitration';
@@ -19,6 +20,8 @@ import Freelance from '@/pages/freelance/Freelance';
 import Governance from '@/pages/governance/Governance';
 import Contracts from '@/pages/contracts/Contracts';
 import Notifications from '@/pages/notifications/Notifications';
+import Offers from '@/pages/offers/Offers';
+import Wallet from '@/pages/Wallet';
 
 // Service Routes
 import { ServiceRoutes } from './ServiceRoutes';
@@ -40,6 +43,24 @@ const AppRoutes = () => {
       <Route path="/profile" element={
         <ProtectedRoute>
           <Profile />
+        </ProtectedRoute>
+      } />
+
+      <Route path="/groups" element={
+        <ProtectedRoute>
+          <Groups />
+        </ProtectedRoute>
+      } />
+
+      <Route path="/offers" element={
+        <ProtectedRoute>
+          <Offers />
+        </ProtectedRoute>
+      } />
+
+      <Route path="/wallet" element={
+        <ProtectedRoute>
+          <Wallet />
         </ProtectedRoute>
       } />
       
