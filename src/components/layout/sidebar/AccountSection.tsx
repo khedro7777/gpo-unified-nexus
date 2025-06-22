@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { User, Users, Wallet, CreditCard, FileText } from 'lucide-react';
+import { User, Wallet, Bell, FileText, Settings } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import SidebarSection from './SidebarSection';
 
@@ -14,38 +14,38 @@ const AccountSection: React.FC<AccountSectionProps> = ({ isCollapsed }) => {
 
   const accountItems = [
     { 
-      title: isRTL ? 'ملفي الشخصي' : 'My Profile', 
+      title: isRTL ? 'الملف الشخصي' : 'Profile', 
       url: '/profile', 
       icon: User 
     },
     { 
-      title: isRTL ? 'مجموعاتي' : 'My Groups', 
-      url: '/my-groups', 
-      icon: Users 
-    },
-    { 
-      title: isRTL ? 'المحفظة والمدفوعات' : 'Wallet & Payments', 
+      title: isRTL ? 'المحفظة' : 'Wallet', 
       url: '/wallet', 
       icon: Wallet 
     },
     { 
-      title: isRTL ? 'الاشتراكات' : 'Subscriptions', 
-      url: '/subscriptions', 
-      icon: CreditCard 
+      title: isRTL ? 'الإشعارات' : 'Notifications', 
+      url: '/notifications', 
+      icon: Bell 
     },
     { 
-      title: isRTL ? 'الفواتير والإيصالات' : 'Invoices & Receipts', 
-      url: '/invoices', 
+      title: isRTL ? 'العقود' : 'Contracts', 
+      url: '/contracts', 
       icon: FileText 
+    },
+    { 
+      title: isRTL ? 'الإعدادات' : 'Settings', 
+      url: '/settings', 
+      icon: Settings 
     }
   ];
 
   return (
     <SidebarSection
-      title={isRTL ? '👤 إدارة حسابي' : '👤 My Account'}
+      title={isRTL ? '👤 الحساب الشخصي' : '👤 Account'}
       items={accountItems}
       isCollapsed={isCollapsed}
-      colorClass="text-orange-600"
+      colorClass="text-blue-600"
     />
   );
 };

@@ -1,185 +1,264 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Users, ThumbsUp, ThumbsDown, MessageCircle, Clock } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
+import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { MessageSquare, Users, Clock, CheckCircle, ThumbsUp, ThumbsDown, Minus } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
-interface LoomioVote {
+interface Discussion {
   id: string;
   title: string;
   description: string;
-  options: { id: string; text: string; votes: number }[];
-  totalVotes: number;
-  deadline: Date;
-  status: 'active' | 'closed' | 'pending';
-  groupId: string;
+  author: string;
+  createdAt: string;
+  status: 'active' | 'closed' | 'proposal';
+  participants: number;
+  comments: number;
+  votes?: {
+    yes: number;
+    no: number;
+    abstain: number;
+    total: number;
+  };
 }
 
-interface LoomioIntegrationProps {
-  groupId: string;
-}
-
-const LoomioIntegration: React.FC<LoomioIntegrationProps> = ({ groupId }) => {
-  const { i18n } = useTranslation();
-  const isRTL = i18n.language === 'ar';
-  const [votes, setVotes] = useState<LoomioVote[]>([]);
-  const [loading, setLoading] = useState(false);
-
-  // Sample data
-  useEffect(() => {
-    setVotes([
-      {
-        id: '1',
-        title: isRTL ? 'اختيار المورد للمشروع' : 'Supplier Selection for Project',
-        description: isRTL ? 'يجب اختيار أفضل مورد لمشروعنا القادم' : 'We need to select the best supplier for our upcoming project',
-        options: [
-          { id: '1', text: isRTL ? 'الشركة أ' : 'Company A', votes: 15 },
-          { id: '2', text: isRTL ? 'الشركة ب' : 'Company B', votes: 8 },
-          { id: '3', text: isRTL ? 'الشركة ج' : 'Company C', votes: 12 }
-        ],
-        totalVotes: 35,
-        deadline: new Date(Date.now() + 86400000 * 3), // 3 days from now
-        status: 'active',
-        groupId
-      },
-      {
-        id: '2',
-        title: isRTL ? 'ميزانية التسويق' : 'Marketing Budget',
-        description: isRTL ? 'تحديد ميزانية الحملة التسويقية القادمة' : 'Determine budget for upcoming marketing campaign',
-        options: [
-          { id: '1', text: '$5,000', votes: 20 },
-          { id: '2', text: '$10,000', votes: 25 },
-          { id: '3', text: '$15,000', votes: 10 }
-        ],
-        totalVotes: 55,
-        deadline: new Date(Date.now() + 86400000 * 5), // 5 days from now
-        status: 'active',
-        groupId
-      }
-    ]);
-  }, [groupId, isRTL]);
-
-  const handleVote = async (voteId: string, optionId: string) => {
-    setLoading(true);
-    try {
-      // Simulate API call to Loomio
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      setVotes(prev => prev.map(vote => {
-        if (vote.id === voteId) {
-          return {
-            ...vote,
-            options: vote.options.map(option => ({
-              ...option,
-              votes: option.id === optionId ? option.votes + 1 : option.votes
-            })),
-            totalVotes: vote.totalVotes + 1
-          };
-        }
-        return vote;
-      }));
-    } catch (error) {
-      console.error('Voting error:', error);
-    } finally {
-      setLoading(false);
+const LoomioIntegration = () => {
+  const [discussions, setDiscussions] = useState<Discussion[]>([
+    {
+      id: 'disc-001',
+      title: 'اختيار مورد أجهزة الحاسب',
+      description: 'مناقشة حول اختيار أفضل مورد لأجهزة الحاسب المحمول بناءً على العروض المقدمة',
+      author: 'أحمد محمد',
+      createdAt: '2025-05-28',
+      status: 'proposal',
+      participants: 12,
+      comments: 8,
+      votes: { yes: 9, no: 2, abstain: 1, total: 12 }
+    },
+    {
+      id: 'disc-002',
+      title: 'خطة التسويق المشترك',
+      description: 'مناقشة استراتيجية التسويق المشترك للربع القادم وتحديد الميزانية المطلوبة',
+      author: 'فاطمة أحمد',
+      createdAt: '2025-05-27',
+      status: 'active',
+      participants: 8,
+      comments: 15
+    },
+    {
+      id: 'disc-003',
+      title: 'تطوير منصة تجارة إلكترونية',
+      description: 'مناقشة إمكانية تطوير منصة تجارة إلكترونية موحدة للأعضاء',
+      author: 'سارة علي',
+      createdAt: '2025-05-26',
+      status: 'closed',
+      participants: 15,
+      comments: 22
     }
+  ]);
+
+  const [newDiscussion, setNewDiscussion] = useState({
+    title: '',
+    description: '',
+    type: 'discussion'
+  });
+
+  const { toast } = useToast();
+
+  const getStatusBadge = (status: Discussion['status']) => {
+    const variants = {
+      active: { label: 'نشط', variant: 'default' as const, icon: MessageSquare },
+      closed: { label: 'مغلق', variant: 'secondary' as const, icon: CheckCircle },
+      proposal: { label: 'اقتراح للتصويت', variant: 'default' as const, icon: Users }
+    };
+    
+    const config = variants[status];
+    const Icon = config.icon;
+    
+    return (
+      <Badge variant={config.variant} className="flex items-center gap-1">
+        <Icon className="h-3 w-3" />
+        {config.label}
+      </Badge>
+    );
   };
 
-  const getTimeRemaining = (deadline: Date) => {
-    const now = new Date();
-    const diff = deadline.getTime() - now.getTime();
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    
-    if (days > 0) {
-      return isRTL ? `${days} أيام متبقية` : `${days} days left`;
-    } else if (hours > 0) {
-      return isRTL ? `${hours} ساعات متبقية` : `${hours} hours left`;
-    } else {
-      return isRTL ? 'انتهت المهلة' : 'Expired';
+  const handleCreateDiscussion = () => {
+    if (!newDiscussion.title || !newDiscussion.description) {
+      toast({
+        title: "خطأ",
+        description: "يرجى ملء جميع الحقول المطلوبة",
+        variant: "destructive"
+      });
+      return;
     }
+
+    const discussion: Discussion = {
+      id: `disc-${Date.now()}`,
+      title: newDiscussion.title,
+      description: newDiscussion.description,
+      author: 'المستخدم الحالي',
+      createdAt: new Date().toISOString().split('T')[0],
+      status: newDiscussion.type === 'proposal' ? 'proposal' : 'active',
+      participants: 1,
+      comments: 0,
+      ...(newDiscussion.type === 'proposal' && {
+        votes: { yes: 0, no: 0, abstain: 0, total: 0 }
+      })
+    };
+
+    setDiscussions([discussion, ...discussions]);
+    setNewDiscussion({ title: '', description: '', type: 'discussion' });
+    
+    toast({
+      title: "تم إنشاء المناقشة",
+      description: "تم إنشاء المناقشة بنجاح"
+    });
   };
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h3 className="text-xl font-semibold flex items-center gap-2">
-          <Users className="h-5 w-5" />
-          {isRTL ? 'تصويت المجموعة - Loomio' : 'Group Voting - Loomio'}
-        </h3>
-        <Button size="sm">
-          {isRTL ? 'إنشاء تصويت جديد' : 'Create New Vote'}
-        </Button>
+      <div>
+        <h2 className="text-2xl font-bold">منصة Loomio للنقاش</h2>
+        <p className="text-muted-foreground">
+          منصة تفاعلية للنقاش الجماعي واتخاذ القرارات التشاركية
+        </p>
       </div>
 
-      {votes.map((vote) => (
-        <Card key={vote.id} className="overflow-hidden">
-          <CardHeader>
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <CardTitle className="text-lg">{vote.title}</CardTitle>
-                <CardDescription className="mt-2">{vote.description}</CardDescription>
-              </div>
-              <div className="flex items-center gap-2">
-                <Badge variant={vote.status === 'active' ? 'default' : 'secondary'}>
-                  {vote.status === 'active' ? (isRTL ? 'نشط' : 'Active') : (isRTL ? 'مغلق' : 'Closed')}
-                </Badge>
-                <Badge variant="outline" className="flex items-center gap-1">
-                  <Clock className="h-3 w-3" />
-                  {getTimeRemaining(vote.deadline)}
-                </Badge>
-              </div>
-            </div>
-          </CardHeader>
+      {/* إنشاء مناقشة جديدة */}
+      <Card>
+        <CardHeader>
+          <CardTitle>إنشاء مناقشة جديدة</CardTitle>
+          <CardDescription>ابدأ مناقشة جديدة أو اقتراح للتصويت</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <Label htmlFor="title">عنوان المناقشة</Label>
+            <Input
+              id="title"
+              value={newDiscussion.title}
+              onChange={(e) => setNewDiscussion({...newDiscussion, title: e.target.value})}
+              placeholder="أدخل عنوان المناقشة"
+            />
+          </div>
           
-          <CardContent className="space-y-4">
-            <div className="flex items-center gap-4 text-sm text-muted-foreground">
-              <span className="flex items-center gap-1">
-                <Users className="h-4 w-4" />
-                {vote.totalVotes} {isRTL ? 'صوت' : 'votes'}
-              </span>
-              <span className="flex items-center gap-1">
-                <MessageCircle className="h-4 w-4" />
-                {isRTL ? 'مناقشة نشطة' : 'Active discussion'}
-              </span>
-            </div>
+          <div>
+            <Label htmlFor="description">وصف المناقشة</Label>
+            <Textarea
+              id="description"
+              value={newDiscussion.description}
+              onChange={(e) => setNewDiscussion({...newDiscussion, description: e.target.value})}
+              placeholder="اكتب وصفاً تفصيلياً للمناقشة"
+              rows={3}
+            />
+          </div>
 
-            <div className="space-y-3">
-              {vote.options.map((option) => {
-                const percentage = vote.totalVotes > 0 ? (option.votes / vote.totalVotes) * 100 : 0;
-                
-                return (
-                  <div key={option.id} className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="font-medium">{option.text}</span>
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm text-muted-foreground">
-                          {option.votes} {isRTL ? 'صوت' : 'votes'} ({percentage.toFixed(1)}%)
-                        </span>
-                        {vote.status === 'active' && (
-                          <Button 
-                            size="sm" 
-                            variant="outline"
-                            onClick={() => handleVote(vote.id, option.id)}
-                            disabled={loading}
-                          >
-                            <ThumbsUp className="h-3 w-3 mr-1" />
-                            {isRTL ? 'صوت' : 'Vote'}
-                          </Button>
-                        )}
+          <div>
+            <Label htmlFor="type">نوع المناقشة</Label>
+            <Select value={newDiscussion.type} onValueChange={(value) => setNewDiscussion({...newDiscussion, type: value})}>
+              <SelectTrigger>
+                <SelectValue placeholder="اختر نوع المناقشة" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="discussion">مناقشة عامة</SelectItem>
+                <SelectItem value="proposal">اقتراح للتصويت</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <Button onClick={handleCreateDiscussion} className="w-full">
+            إنشاء المناقشة
+          </Button>
+        </CardContent>
+      </Card>
+
+      {/* قائمة المناقشات */}
+      <div className="space-y-4">
+        {discussions.map((discussion) => (
+          <Card key={discussion.id}>
+            <CardHeader>
+              <div className="flex justify-between items-start">
+                <div className="space-y-1">
+                  <CardTitle className="text-lg">{discussion.title}</CardTitle>
+                  <CardDescription>{discussion.description}</CardDescription>
+                </div>
+                {getStatusBadge(discussion.status)}
+              </div>
+            </CardHeader>
+            
+            <CardContent className="space-y-4">
+              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                <div className="flex items-center gap-1">
+                  <Users className="h-4 w-4" />
+                  {discussion.participants} مشارك
+                </div>
+                <div className="flex items-center gap-1">
+                  <MessageSquare className="h-4 w-4" />
+                  {discussion.comments} تعليق
+                </div>
+                <div className="flex items-center gap-1">
+                  <Clock className="h-4 w-4" />
+                  {discussion.createdAt}
+                </div>
+                <span>بواسطة: {discussion.author}</span>
+              </div>
+
+              {discussion.votes && (
+                <div className="border rounded-lg p-4 bg-muted/30">
+                  <h4 className="font-medium mb-3">نتائج التصويت</h4>
+                  <div className="grid grid-cols-3 gap-4">
+                    <div className="text-center">
+                      <div className="flex items-center justify-center gap-1 text-green-600 mb-1">
+                        <ThumbsUp className="h-4 w-4" />
+                        <span className="font-bold">{discussion.votes.yes}</span>
                       </div>
+                      <p className="text-xs text-muted-foreground">موافق</p>
                     </div>
-                    <Progress value={percentage} className="h-2" />
+                    <div className="text-center">
+                      <div className="flex items-center justify-center gap-1 text-red-600 mb-1">
+                        <ThumbsDown className="h-4 w-4" />
+                        <span className="font-bold">{discussion.votes.no}</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground">معارض</p>
+                    </div>
+                    <div className="text-center">
+                      <div className="flex items-center justify-center gap-1 text-gray-600 mb-1">
+                        <Minus className="h-4 w-4" />
+                        <span className="font-bold">{discussion.votes.abstain}</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground">ممتنع</p>
+                    </div>
                   </div>
-                );
-              })}
-            </div>
-          </CardContent>
-        </Card>
-      ))}
+                </div>
+              )}
+
+              <div className="flex justify-between items-center">
+                <Button variant="outline" size="sm">
+                  <MessageSquare className="h-4 w-4 mr-1" />
+                  عرض المناقشة
+                </Button>
+                {discussion.status === 'proposal' && (
+                  <div className="flex gap-2">
+                    <Button size="sm" variant="outline" className="text-green-600 hover:bg-green-50">
+                      <ThumbsUp className="h-4 w-4 mr-1" />
+                      موافق
+                    </Button>
+                    <Button size="sm" variant="outline" className="text-red-600 hover:bg-red-50">
+                      <ThumbsDown className="h-4 w-4 mr-1" />
+                      معارض
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 };
