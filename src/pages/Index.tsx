@@ -5,97 +5,78 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { ShoppingCart, BarChart3, Users, Building, Store, Search, Globe, Tag, MessageSquare, FileText, Gavel, Shield } from 'lucide-react';
+import { ShoppingCart, BarChart3, Users, Building, Store, Search, Globe, Tag, MessageSquare, FileText, Gavel, Shield, Building2 } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { NavigationLinks } from '@/components/layout/navigation/NavigationLinks';
 import { useAuth } from '@/hooks/use-auth';
 import TopBar from '@/components/common/TopBar';
 
+// Enhanced portals with Investment gateway and better organization
 const portals = [
   {
     id: 'purchasing',
     title: 'الشراء التعاوني',
     description: 'نظام شراء جماعي ذكي مدعوم بالذكاء الاصطناعي للحصول على أفضل الأسعار والشروط',
     icon: <ShoppingCart className="h-6 w-6 text-white" />,
-    type: 'web2',
+    type: 'cooperative' as const,
     collectiveOption: true,
     route: '/create-group/purchasing',
     integrations: ['Paddle', 'Loomio', 'Snapshot']
   },
   {
     id: 'marketing',
-    title: 'التسويق الجماعي',
+    title: 'التسويق التعاوني',
     description: 'حملات تسويقية مشتركة ذكية لتقليل التكاليف وزيادة الوصول للجمهور المستهدف',
     icon: <BarChart3 className="h-6 w-6 text-white" />,
-    type: 'web2',
+    type: 'cooperative' as const,
     collectiveOption: true,
     route: '/create-group/marketing',
     integrations: ['Paddle', 'Loomio']
-  },
-  {
-    id: 'freelancers',
-    title: 'المستقلون',
-    description: 'منصة متقدمة للمستقلين مع دعم العقود الذكية وإدارة المشاريع بالذكاء الاصطناعي',
-    icon: <Users className="h-6 w-6 text-white" />,
-    type: 'web3',
-    collectiveOption: true,
-    route: '/freelance',
-    integrations: ['OpenZeppelin', 'IPFS']
   },
   {
     id: 'suppliers',
     title: 'الموردون',
     description: 'نظام متكامل للموردين مع تقييم ذكي وإدارة العقود الرقمية',
     icon: <Store className="h-6 w-6 text-white" />,
-    type: 'web2',
+    type: 'service' as const,
     collectiveOption: false,
     route: '/suppliers',
     integrations: ['Paddle', 'ODR']
+  },
+  {
+    id: 'freelancers',
+    title: 'المستقلون',
+    description: 'منصة متقدمة للمستقلين مع دعم العقود الذكية وإدارة المشاريع بالذكاء الاصطناعي',
+    icon: <Users className="h-6 w-6 text-white" />,
+    type: 'service' as const,
+    collectiveOption: true,
+    route: '/freelance',
+    integrations: ['OpenZeppelin', 'IPFS']
   },
   {
     id: 'company-incorporation',
     title: 'تأسيس الشركات',
     description: 'خدمات تأسيس الشركات الذكية في أفضل الولايات القضائية العالمية مع دعم DAO',
     icon: <Building className="h-6 w-6 text-white" />,
-    type: 'web3',
-    collectiveOption: false,
+    type: 'business' as const,
+    collectiveOption: true,
     route: '/company-incorporation',
     integrations: ['OpenZeppelin', 'Snapshot', 'Strapi']
   },
   {
-    id: 'arbitration',
-    title: 'التحكيم التجاري الذكي',
-    description: 'نظام ORDA المدعوم بالذكاء الاصطناعي لحل النزاعات التجارية بطريقة عادلة وسريعة',
-    icon: <Gavel className="h-6 w-6 text-white" />,
-    type: 'web2',
-    collectiveOption: false,
-    route: '/arbitration',
-    integrations: ['ODR', 'IPFS']
-  },
-  {
-    id: 'document-management',
-    title: 'إدارة الوثائق اللامركزية',
-    description: 'رفع وتوثيق وحفظ الملفات بتقنية IPFS اللامركزية مع ضمان الأمان والتوثيق',
-    icon: <FileText className="h-6 w-6 text-white" />,
-    type: 'web3',
-    collectiveOption: false,
-    route: '/documents',
-    integrations: ['IPFS', 'OpenZeppelin']
-  },
-  {
-    id: 'dao-governance',
-    title: 'حوكمة DAO الذكية',
-    description: 'إدارة المنظمات اللامركزية والتصويت الذكي باستخدام Snapshot.js وLoomio',
-    icon: <Shield className="h-6 w-6 text-white" />,
-    type: 'web3',
+    id: 'investment',
+    title: 'بوابة الاستثمار',
+    description: 'إنشاء وإدارة الشركات الاستثمارية بين المساهمين مع نظام حوكمة متقدم',
+    icon: <Building2 className="h-6 w-6 text-white" />,
+    type: 'investment' as const,
     collectiveOption: true,
-    route: '/governance',
-    integrations: ['Snapshot', 'Loomio', 'OpenZeppelin']
+    route: '/investment',
+    integrations: ['OpenZeppelin', 'Snapshot', 'Paddle', 'ODR']
   }
 ];
 
-// Sample active groups data
+// Sample active groups data with enhanced categorization
 const activeGroups = [
   {
     id: 'group-1',
@@ -129,6 +110,7 @@ const activeGroups = [
   }
 ];
 
+// YouTube video component for hero section
 const YouTubeEmbed: React.FC<{videoId: string}> = ({ videoId }) => {
   return (
     <div className="relative w-full max-w-md aspect-video rounded-lg overflow-hidden">
@@ -144,7 +126,13 @@ const YouTubeEmbed: React.FC<{videoId: string}> = ({ videoId }) => {
   );
 };
 
+/**
+ * Main Index Component - Home Page
+ * Implements the complete GPO platform structure with scalable architecture
+ * Features: Hero section, Portal cards, Active groups, Smart filters
+ */
 const Index = () => {
+  // State management for filters and UI
   const [searchText, setSearchText] = useState('');
   const [typeFilter, setTypeFilter] = useState<string>('all');
   const [sectorFilter, setSectorFilter] = useState<string>('all');
@@ -154,7 +142,7 @@ const Index = () => {
   const [activeTab, setActiveTab] = useState('portals');
   const { isAuthenticated } = useAuth();
   
-  // Filter groups
+  // Filter groups based on search criteria
   const filteredGroups = activeGroups.filter(group => {
     const matchesSearch = group.title.toLowerCase().includes(searchText.toLowerCase());
     const matchesType = typeFilter === 'all' || group.type === typeFilter;
@@ -165,49 +153,53 @@ const Index = () => {
   
   return (
     <div className="min-h-screen flex flex-col bg-background">
+      {/* Enhanced Top Bar with localization support */}
       <TopBar />
-      <Navbar />
       
       {/* Enhanced Hero Section with integrated systems branding */}
       <div className="bg-gradient-to-br from-primary/10 via-blue-500/5 to-purple-500/10 py-16 md:py-24">
         <div className="container mx-auto px-4">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
             <div className="max-w-2xl">
+              {/* Status indicator with integrated systems */}
               <div className="inline-flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full text-sm font-medium text-primary mb-6">
                 <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                AI-Powered Platform with Integrated Open Source Systems
+                منصة ذكية مدمجة مع أنظمة مفتوحة المصدر متقدمة
               </div>
               
+              {/* Main heading */}
               <h1 className="text-4xl md:text-6xl font-bold mb-6 text-foreground leading-tight">
                 GPO Smart
                 <span className="block text-primary">Cooperation Platform</span>
               </h1>
               
+              {/* Platform description */}
               <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-                منصة التعاون الذكي المدمجة مع أنظمة مفتوحة المصدر متقدمة: Paddle، Loomio، Snapshot.js، ODR، OpenZeppelin مع دعم Strapi CMS
+                منصة التعاون الذكي الشاملة للشراء التعاوني، التسويق المشترك، إدارة المستقلين، تأسيس الشركات، والاستثمار الجماعي
               </p>
               
+              {/* Integration badges */}
               <div className="flex flex-wrap gap-3 mb-8">
-                <Badge className="bg-blue-500 hover:bg-blue-600 px-3 py-1">Paddle Billing</Badge>
-                <Badge className="bg-green-500 hover:bg-green-600 px-3 py-1">Loomio Voting</Badge>
-                <Badge className="bg-purple-500 hover:bg-purple-600 px-3 py-1">Snapshot.js DAO</Badge>
-                <Badge className="bg-orange-500 hover:bg-orange-600 px-3 py-1">ORDA Arbitration</Badge>
-                <Badge className="bg-indigo-500 hover:bg-indigo-600 px-3 py-1">OpenZeppelin Governor</Badge>
-                <Badge className="bg-pink-500 hover:bg-pink-600 px-3 py-1">Strapi CMS</Badge>
-                <Badge className="bg-red-500 hover:bg-red-600 px-3 py-1">IPFS Storage</Badge>
+                {['Paddle Billing', 'Loomio Voting', 'Snapshot.js DAO', 'ORDA Arbitration', 'OpenZeppelin Governor', 'Strapi CMS', 'IPFS Storage'].map((tech) => (
+                  <Badge key={tech} className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-3 py-1 hover:shadow-lg transition-shadow">
+                    {tech}
+                  </Badge>
+                ))}
               </div>
               
+              {/* Call to action buttons */}
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button size="lg" className="px-8 py-6 text-lg font-medium shadow-lg hover:shadow-xl transition-all">
                   ابدأ رحلتك الذكية
                   <span className="mr-2">→</span>
                 </Button>
                 <Button size="lg" variant="outline" className="px-8 py-6 text-lg">
-                  جولة تفاعلية في الأنظمة المدمجة
+                  جولة تفاعلية في المنصة
                 </Button>
               </div>
             </div>
             
+            {/* Video section */}
             <div className="w-full lg:w-auto">
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-purple-500/20 rounded-2xl blur-3xl"></div>
@@ -218,10 +210,12 @@ const Index = () => {
         </div>
       </div>
       
+      {/* Main content container */}
       <div className="container mx-auto px-4 py-12">
-        {/* Enhanced Search and Filters */}
+        {/* Enhanced Search and Filters Section */}
         <div className="bg-card rounded-2xl p-6 shadow-lg border mb-12">
           <div className="flex flex-col lg:flex-row gap-6">
+            {/* Search input */}
             <div className="flex-1 relative">
               <Search className="absolute left-4 top-4 h-5 w-5 text-muted-foreground" />
               <Input 
@@ -232,6 +226,7 @@ const Index = () => {
                 dir="rtl"
               />
             </div>
+            {/* Filter controls */}
             <div className="flex gap-3 flex-wrap">
               <Select value={typeFilter} onValueChange={setTypeFilter}>
                 <SelectTrigger className="w-[180px] h-12">
@@ -239,10 +234,10 @@ const Index = () => {
                 </SelectTrigger>
                 <SelectContent className="bg-white dark:bg-gray-900 border shadow-lg">
                   <SelectItem value="all">الكل</SelectItem>
-                  <SelectItem value="buying">الشراء التعاوني</SelectItem>
-                  <SelectItem value="marketing">التسويق الجماعي</SelectItem>
-                  <SelectItem value="freelancers">المستقلون</SelectItem>
-                  <SelectItem value="incorporation">تأسيس الشركات</SelectItem>
+                  <SelectItem value="cooperative">التعاوني</SelectItem>
+                  <SelectItem value="service">الخدمات</SelectItem>
+                  <SelectItem value="business">الأعمال</SelectItem>
+                  <SelectItem value="investment">الاستثمار</SelectItem>
                 </SelectContent>
               </Select>
               
@@ -264,13 +259,14 @@ const Index = () => {
           </div>
         </div>
         
-        {/* Enhanced Portal Cards with integration badges */}
+        {/* Enhanced Portal Cards Section */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">البوابات الذكية المدمجة مع الأنظمة مفتوحة المصدر</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">البوابات الذكية المتكاملة</h2>
           <p className="text-xl text-muted-foreground">كل بوابة مدمجة مع أنظمة متقدمة لتجربة متكاملة وموثوقة</p>
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-16">
+        {/* Portal grid with enhanced cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
           {portals.map((portal) => (
             <Link 
               to={portal.route} 
@@ -278,8 +274,16 @@ const Index = () => {
               className="block group"
             >
               <Card className="h-full hover:shadow-2xl transition-all duration-500 overflow-hidden border-0 shadow-lg group-hover:scale-105 group-hover:-translate-y-2 bg-gradient-to-br from-card to-card/80">
-                <div className="h-2 bg-gradient-to-r from-primary via-blue-500 to-purple-500"></div>
+                {/* Portal type indicator */}
+                <div className={`h-2 bg-gradient-to-r ${
+                  portal.type === 'cooperative' ? 'from-blue-500 to-blue-300' :
+                  portal.type === 'service' ? 'from-green-500 to-green-300' :
+                  portal.type === 'business' ? 'from-purple-500 to-purple-300' :
+                  'from-orange-500 to-orange-300'
+                }`}></div>
+                
                 <CardHeader className="pb-3">
+                  {/* Portal header with icon and badges */}
                   <div className="flex items-center justify-between mb-6">
                     <div className="bg-gradient-to-br from-primary to-primary/80 rounded-xl p-3 group-hover:scale-110 transition-transform duration-300 shadow-lg">
                       {portal.icon}
@@ -291,16 +295,22 @@ const Index = () => {
                         </Badge>
                       )}
                       <Badge 
-                        variant={portal.type === 'web3' ? 'default' : 'secondary'} 
-                        className={`text-xs ${portal.type === 'web3' 
-                          ? 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white' 
-                          : 'bg-gray-100 text-gray-700'
+                        variant="secondary"
+                        className={`text-xs ${
+                          portal.type === 'investment' ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white' :
+                          portal.type === 'business' ? 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white' :
+                          portal.type === 'service' ? 'bg-gradient-to-r from-green-500 to-teal-500 text-white' :
+                          'bg-gradient-to-r from-blue-500 to-cyan-500 text-white'
                         }`}
                       >
-                        {portal.type === 'web3' ? 'Web3' : 'Web2'}
+                        {portal.type === 'cooperative' ? 'تعاوني' :
+                         portal.type === 'service' ? 'خدمي' :
+                         portal.type === 'business' ? 'أعمال' : 'استثماري'}
                       </Badge>
                     </div>
                   </div>
+                  
+                  {/* Portal details */}
                   <CardTitle className="text-lg leading-tight mb-3 group-hover:text-primary transition-colors">
                     {portal.title}
                   </CardTitle>
@@ -317,12 +327,14 @@ const Index = () => {
                     ))}
                   </div>
                 </CardHeader>
+                
+                {/* Portal action button */}
                 <CardContent className="pt-0">
                   <Button 
                     variant="secondary" 
                     className="w-full mt-4 justify-between group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-sm hover:shadow-md"
                   >
-                    ابدأ مع الأنظمة المدمجة
+                    ابدأ مع {portal.title}
                     <span className="mr-2 group-hover:translate-x-1 transition-transform">←</span>
                   </Button>
                 </CardContent>
@@ -419,11 +431,6 @@ const Index = () => {
         </div>
       </div>
       
-      {/* Enhanced Mobile Navigation */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-card border-t shadow-2xl">
-        <NavigationLinks />
-      </div>
-      
       {/* Enhanced MCP Assistant with AI styling */}
       <div className="fixed bottom-24 md:bottom-8 right-6 z-40">
         <div className="relative">
@@ -431,6 +438,7 @@ const Index = () => {
           <Button 
             className="relative h-14 w-14 rounded-full shadow-2xl bg-gradient-to-r from-primary to-purple-500 hover:from-primary/90 hover:to-purple-500/90 border-2 border-white/20"
             size="icon"
+            title="مساعد MCP الذكي"
           >
             <MessageSquare className="h-6 w-6" />
           </Button>

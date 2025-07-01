@@ -1,6 +1,13 @@
 
 import React from 'react';
-import { Star, BarChart3, Building, Factory } from 'lucide-react';
+import { 
+  Briefcase, 
+  Store, 
+  Building, 
+  TrendingUp, 
+  Gavel, 
+  FileText 
+} from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import SidebarSection from './SidebarSection';
 
@@ -8,20 +15,25 @@ interface ServicesSectionProps {
   isCollapsed: boolean;
 }
 
+/**
+ * Services Section for Sidebar
+ * Contains all service-related navigation items
+ * Includes: Freelance, Suppliers, Company formation, Investment, Arbitration, Documents
+ */
 const ServicesSection: React.FC<ServicesSectionProps> = ({ isCollapsed }) => {
   const { i18n } = useTranslation();
   const isRTL = i18n.language === 'ar';
 
   const servicesItems = [
     { 
-      title: isRTL ? 'وظائف المستقلين' : 'Freelance Jobs', 
+      title: isRTL ? 'المستقلون' : 'Freelancers', 
       url: '/freelance', 
-      icon: Star 
+      icon: Briefcase 
     },
     { 
-      title: isRTL ? 'التسويق التعاوني' : 'Cooperative Marketing', 
-      url: '/create-group/marketing', 
-      icon: BarChart3 
+      title: isRTL ? 'الموردون' : 'Suppliers', 
+      url: '/suppliers', 
+      icon: Store 
     },
     { 
       title: isRTL ? 'تأسيس الشركات' : 'Company Formation', 
@@ -29,15 +41,25 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isCollapsed }) => {
       icon: Building 
     },
     { 
-      title: isRTL ? 'المصانع والموردين' : 'Factories & Suppliers', 
-      url: '/suppliers', 
-      icon: Factory 
+      title: isRTL ? 'بوابة الاستثمار' : 'Investment Gateway', 
+      url: '/investment', 
+      icon: TrendingUp 
+    },
+    { 
+      title: isRTL ? 'التحكيم والتوثيق' : 'Arbitration', 
+      url: '/arbitration', 
+      icon: Gavel 
+    },
+    { 
+      title: isRTL ? 'إدارة الوثائق' : 'Documents', 
+      url: '/documents', 
+      icon: FileText 
     }
   ];
 
   return (
     <SidebarSection
-      title={isRTL ? '🏢 الخدمات والأعمال' : '🏢 Services & Business'}
+      title={isRTL ? '🔧 الخدمات' : '🔧 Services'}
       items={servicesItems}
       isCollapsed={isCollapsed}
       colorClass="text-green-600"

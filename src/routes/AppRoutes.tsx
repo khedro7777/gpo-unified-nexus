@@ -22,18 +22,24 @@ import Contracts from '@/pages/contracts/Contracts';
 import Notifications from '@/pages/notifications/Notifications';
 import Offers from '@/pages/offers/Offers';
 import Wallet from '@/pages/Wallet';
+import Investment from '@/pages/investment/Investment';
 
 // Service Routes
 import { ServiceRoutes } from './ServiceRoutes';
 
+/**
+ * Main Application Routes Configuration
+ * Organized by access level: Public, Protected, and Service routes
+ * Each route includes proper authentication and navigation handling
+ */
 const AppRoutes = () => {
   return (
     <Routes>
-      {/* Public Routes */}
+      {/* Public Routes - Accessible without authentication */}
       <Route path="/" element={<Index />} />
       <Route path="/how-it-works" element={<HowItWorks />} />
       
-      {/* Protected Routes */}
+      {/* Protected Routes - Require user authentication */}
       <Route path="/dashboard" element={
         <ProtectedRoute>
           <Dashboard />
@@ -130,7 +136,14 @@ const AppRoutes = () => {
         </ProtectedRoute>
       } />
 
-      {/* Service Routes */}
+      {/* New Investment Route */}
+      <Route path="/investment" element={
+        <ProtectedRoute>
+          <Investment />
+        </ProtectedRoute>
+      } />
+
+      {/* Service Routes - Extended functionality */}
       {ServiceRoutes()}
     </Routes>
   );
