@@ -1,247 +1,228 @@
 
 import React, { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { DollarSign, TrendingUp, Building, Users } from 'lucide-react';
 
 interface InvestmentFormProps {
   investmentType: 'individual' | 'group';
 }
 
-/**
- * Investment Form Component
- * Handles creation of new investment opportunities
- * Supports both individual and group investment types
- */
 const InvestmentForm: React.FC<InvestmentFormProps> = ({ investmentType }) => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     sector: '',
-    targetAmount: '',
-    minimumInvestment: '',
+    amount: '',
     expectedReturn: '',
-    duration: '',
-    riskLevel: '',
-    country: '',
-    documents: null as File[] | null
+    duration: ''
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Investment form submitted:', formData);
-    // Handle form submission logic here
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setFormData({ ...formData, documents: Array.from(e.target.files) });
+  const mockOpportunities = [
+    {
+      id: 1,
+      title: 'شركة التقنية المتقدمة',
+      description: 'استثمار في شركة تقنية ناشئة متخصصة في الذكاء الاصطناعي',
+      sector: 'تقنية',
+      targetAmount: 500000,
+      currentAmount: 320000,
+      minInvestment: 5000,
+      expectedReturn: '25%',
+      duration: '3 سنوات',
+      investors: 45
+    },
+    {
+      id: 2,
+      title: 'المشروع الصناعي الأخضر',
+      description: 'مصنع للطاقة المتجددة وإنتاج الألواح الشمسية',
+      sector: 'طاقة',
+      targetAmount: 1200000,
+      currentAmount: 800000,
+      minInvestment: 10000,
+      expectedReturn: '18%',
+      duration: '5 سنوات',
+      investors: 67
+    },
+    {
+      id: 3,
+      title: 'سلسلة مطاعم صحية',
+      description: 'توسيع سلسلة مطاعم تقدم أكلات صحية ومتوازنة',
+      sector: 'غذاء',
+      targetAmount: 300000,
+      currentAmount: 180000,
+      minInvestment: 2000,
+      expectedReturn: '22%',
+      duration: '2 سنة',
+      investors: 89
     }
-  };
+  ];
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Investment type indicator */}
-      <div className="flex items-center gap-2 mb-4">
-        <Badge variant={investmentType === 'group' ? 'default' : 'secondary'}>
-          {investmentType === 'group' ? 'استثمار جماعي' : 'استثمار فردي'}
-        </Badge>
+    <div className="space-y-6">
+      {/* Investment Opportunities */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {mockOpportunities.map((opportunity) => (
+          <Card key={opportunity.id} className="hover:shadow-lg transition-shadow">
+            <CardHeader>
+              <div className="flex justify-between items-start">
+                <CardTitle className="text-lg">{opportunity.title}</CardTitle>
+                <Badge variant="outline">{opportunity.sector}</Badge>
+              </div>
+              <CardDescription className="text-sm">
+                {opportunity.description}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <p className="text-muted-foreground">الهدف المالي</p>
+                  <p className="font-semibold">${opportunity.targetAmount.toLocaleString()}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground">تم جمع</p>
+                  <p className="font-semibold text-green-600">${opportunity.currentAmount.toLocaleString()}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground">العائد المتوقع</p>
+                  <p className="font-semibold text-blue-600">{opportunity.expectedReturn}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground">المدة</p>
+                  <p className="font-semibold">{opportunity.duration}</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Users className="h-4 w-4" />
+                <span>{opportunity.investors} مستثمر</span>
+              </div>
+
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div 
+                  className="bg-blue-600 h-2 rounded-full" 
+                  style={{ width: `${(opportunity.currentAmount / opportunity.targetAmount) * 100}%` }}
+                ></div>
+              </div>
+
+              <div className="flex gap-2">
+                <Button size="sm" className="flex-1">
+                  <DollarSign className="h-4 w-4 mr-1" />
+                  استثمر الآن
+                </Button>
+                <Button size="sm" variant="outline">تفاصيل</Button>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
       </div>
 
-      {/* Basic Information */}
+      {/* Investment Form */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">المعلومات الأساسية</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <TrendingUp className="h-5 w-5" />
+            إنشاء فرصة استثمار جديدة
+          </CardTitle>
+          <CardDescription>
+            {investmentType === 'group' ? 'إنشاء فرصة استثمار جماعية' : 'إنشاء فرصة استثمار فردية'}
+          </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="title">عنوان الاستثمار *</Label>
-              <Input
-                id="title"
-                value={formData.title}
-                onChange={(e) => setFormData({...formData, title: e.target.value})}
-                placeholder="مثال: صندوق التكنولوجيا المالية"
-                required
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="title">عنوان المشروع</Label>
+                <Input
+                  id="title"
+                  value={formData.title}
+                  onChange={(e) => setFormData({...formData, title: e.target.value})}
+                  placeholder="اسم المشروع الاستثماري"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="sector">القطاع</Label>
+                <Select onValueChange={(value) => setFormData({...formData, sector: value})}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="اختر القطاع" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="tech">تقنية</SelectItem>
+                    <SelectItem value="energy">طاقة</SelectItem>
+                    <SelectItem value="food">غذاء</SelectItem>
+                    <SelectItem value="real-estate">عقارات</SelectItem>
+                    <SelectItem value="healthcare">صحة</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="description">وصف المشروع</Label>
+              <Textarea
+                id="description"
+                value={formData.description}
+                onChange={(e) => setFormData({...formData, description: e.target.value})}
+                placeholder="وصف تفصيلي للمشروع الاستثماري"
+                rows={3}
               />
             </div>
-            <div>
-              <Label htmlFor="sector">القطاع *</Label>
-              <Select value={formData.sector} onValueChange={(value) => setFormData({...formData, sector: value})}>
-                <SelectTrigger>
-                  <SelectValue placeholder="اختر القطاع" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="tech">تكنولوجيا</SelectItem>
-                  <SelectItem value="fintech">تكنولوجيا مالية</SelectItem>
-                  <SelectItem value="healthcare">رعاية صحية</SelectItem>
-                  <SelectItem value="education">تعليم</SelectItem>
-                  <SelectItem value="retail">تجارة تجزئة</SelectItem>
-                  <SelectItem value="manufacturing">تصنيع</SelectItem>
-                  <SelectItem value="realestate">عقارات</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
 
-          <div>
-            <Label htmlFor="description">وصف الاستثمار *</Label>
-            <Textarea
-              id="description"
-              value={formData.description}
-              onChange={(e) => setFormData({...formData, description: e.target.value})}
-              placeholder="وصف مفصل عن فرصة الاستثمار والأهداف المتوقعة..."
-              rows={4}
-              required
-            />
-          </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="amount">المبلغ المطلوب ($)</Label>
+                <Input
+                  id="amount"
+                  type="number"
+                  value={formData.amount}
+                  onChange={(e) => setFormData({...formData, amount: e.target.value})}
+                  placeholder="100000"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="expectedReturn">العائد المتوقع (%)</Label>
+                <Input
+                  id="expectedReturn"
+                  type="number"
+                  value={formData.expectedReturn}
+                  onChange={(e) => setFormData({...formData, expectedReturn: e.target.value})}
+                  placeholder="15"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="duration">مدة الاستثمار</Label>
+                <Select onValueChange={(value) => setFormData({...formData, duration: value})}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="اختر المدة" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="1-year">سنة واحدة</SelectItem>
+                    <SelectItem value="2-years">سنتان</SelectItem>
+                    <SelectItem value="3-years">3 سنوات</SelectItem>
+                    <SelectItem value="5-years">5 سنوات</SelectItem>
+                    <SelectItem value="10-years">10 سنوات</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <Button type="submit" className="w-full">
+              <Building className="h-4 w-4 mr-2" />
+              إنشاء فرصة الاستثمار
+            </Button>
+          </form>
         </CardContent>
       </Card>
-
-      {/* Financial Information */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">المعلومات المالية</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="targetAmount">المبلغ المستهدف (دولار) *</Label>
-              <Input
-                id="targetAmount"
-                type="number"
-                value={formData.targetAmount}
-                onChange={(e) => setFormData({...formData, targetAmount: e.target.value})}
-                placeholder="500000"
-                required
-              />
-            </div>
-            <div>
-              <Label htmlFor="minimumInvestment">الحد الأدنى للاستثمار (دولار) *</Label>
-              <Input
-                id="minimumInvestment"
-                type="number"
-                value={formData.minimumInvestment}
-                onChange={(e) => setFormData({...formData, minimumInvestment: e.target.value})}
-                placeholder="5000"
-                required
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <Label htmlFor="expectedReturn">العائد المتوقع (%)</Label>
-              <Input
-                id="expectedReturn"
-                value={formData.expectedReturn}
-                onChange={(e) => setFormData({...formData, expectedReturn: e.target.value})}
-                placeholder="15-25"
-              />
-            </div>
-            <div>
-              <Label htmlFor="duration">مدة الاستثمار</Label>
-              <Select value={formData.duration} onValueChange={(value) => setFormData({...formData, duration: value})}>
-                <SelectTrigger>
-                  <SelectValue placeholder="اختر المدة" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="6months">6 أشهر</SelectItem>
-                  <SelectItem value="1year">سنة واحدة</SelectItem>
-                  <SelectItem value="2years">سنتان</SelectItem>
-                  <SelectItem value="3years">3 سنوات</SelectItem>
-                  <SelectItem value="5years">5 سنوات</SelectItem>
-                  <SelectItem value="longterm">أكثر من 5 سنوات</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label htmlFor="riskLevel">مستوى المخاطر</Label>
-              <Select value={formData.riskLevel} onValueChange={(value) => setFormData({...formData, riskLevel: value})}>
-                <SelectTrigger>
-                  <SelectValue placeholder="اختر مستوى المخاطر" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="low">منخفض</SelectItem>
-                  <SelectItem value="medium">متوسط</SelectItem>
-                  <SelectItem value="high">عالي</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Location and Documents */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">معلومات إضافية</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div>
-            <Label htmlFor="country">الدولة/المنطقة *</Label>
-            <Select value={formData.country} onValueChange={(value) => setFormData({...formData, country: value})}>
-              <SelectTrigger>
-                <SelectValue placeholder="اختر الدولة" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="sa">السعودية</SelectItem>
-                <SelectItem value="ae">الإمارات</SelectItem>
-                <SelectItem value="kw">الكويت</SelectItem>
-                <SelectItem value="qa">قطر</SelectItem>
-                <SelectItem value="bh">البحرين</SelectItem>
-                <SelectItem value="om">عمان</SelectItem>
-                <SelectItem value="eg">مصر</SelectItem>
-                <SelectItem value="jo">الأردن</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div>
-            <Label htmlFor="documents">المستندات والمرفقات</Label>
-            <Input
-              id="documents"
-              type="file"
-              multiple
-              onChange={handleFileChange}
-              accept=".pdf,.doc,.docx,.jpg,.png"
-              className="cursor-pointer"
-            />
-            <p className="text-sm text-muted-foreground mt-1">
-              يمكنك رفع دراسة الجدوى، خطة العمل، أو أي مستندات داعمة
-            </p>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Group-specific options */}
-      {investmentType === 'group' && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">إعدادات الاستثمار الجماعي</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-sm text-muted-foreground">
-              سيتم تفعيل نظام التصويت الجماعي والحوكمة التلقائية عند إنشاء الاستثمار
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Submit buttons */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <Button type="submit" className="flex-1">
-          إنشاء فرصة الاستثمار
-        </Button>
-        <Button type="button" variant="outline" className="flex-1">
-          حفظ كمسودة
-        </Button>
-      </div>
-    </form>
+    </div>
   );
 };
 

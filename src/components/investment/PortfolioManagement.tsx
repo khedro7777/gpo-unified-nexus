@@ -1,231 +1,287 @@
 
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { TrendingUp, TrendingDown, DollarSign, PieChart, BarChart3 } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { 
+  TrendingUp, 
+  TrendingDown, 
+  DollarSign, 
+  PieChart, 
+  BarChart3,
+  Calendar,
+  Download
+} from 'lucide-react';
 
-/**
- * Portfolio Management Component
- * Displays and manages user's investment portfolio
- * Features: Performance tracking, investment overview, detailed analytics
- */
 const PortfolioManagement = () => {
-  // Sample portfolio data
-  const portfolioData = {
-    totalValue: 125000,
-    totalInvested: 100000,
-    totalReturn: 25000,
-    returnPercentage: 25,
-    activeInvestments: 8,
-    completedInvestments: 3
-  };
-
-  const investments = [
+  const portfolioData = [
     {
-      id: 'port-001',
-      title: 'صندوق التكنولوجيا المالية',
-      amount: 45000,
-      currentValue: 58500,
-      return: 13500,
-      returnPercentage: 30,
+      id: 1,
+      name: 'شركة التقنية المتقدمة',
+      sector: 'تقنية',
+      investment: 25000,
+      currentValue: 32500,
+      return: 30,
       status: 'نشط',
-      duration: '18 شهر',
-      riskLevel: 'متوسط'
+      lastUpdate: '2024-01-15'
     },
     {
-      id: 'port-002',
-      title: 'مشروع التجارة الإلكترونية',
-      amount: 25000,
-      currentValue: 31000,
-      return: 6000,
-      returnPercentage: 24,
+      id: 2,
+      name: 'المشروع الصناعي الأخضر',
+      sector: 'طاقة',
+      investment: 15000,
+      currentValue: 17700,
+      return: 18,
       status: 'نشط',
-      duration: '12 شهر',
-      riskLevel: 'عالي'
+      lastUpdate: '2024-01-10'
     },
     {
-      id: 'port-003',
-      title: 'صندوق العقارات',
-      amount: 30000,
-      currentValue: 35500,
-      return: 5500,
-      returnPercentage: 18.3,
+      id: 3,
+      name: 'سلسلة مطاعم صحية',
+      sector: 'غذاء',
+      investment: 8000,
+      currentValue: 9200,
+      return: 15,
       status: 'مكتمل',
-      duration: '24 شهر',
-      riskLevel: 'منخفض'
+      lastUpdate: '2023-12-20'
     }
   ];
 
+  const totalInvestment = portfolioData.reduce((sum, item) => sum + item.investment, 0);
+  const totalCurrentValue = portfolioData.reduce((sum, item) => sum + item.currentValue, 0);
+  const totalReturn = ((totalCurrentValue - totalInvestment) / totalInvestment) * 100;
+
   return (
     <div className="space-y-6">
-      {/* Portfolio Overview */}
+      {/* Portfolio Summary */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">إجمالي المحفظة</p>
-              <p className="text-2xl font-bold">${portfolioData.totalValue.toLocaleString()}</p>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground">إجمالي الاستثمار</p>
+                <p className="text-2xl font-bold">${totalInvestment.toLocaleString()}</p>
+              </div>
+              <DollarSign className="h-8 w-8 text-blue-500" />
             </div>
-            <PieChart className="h-8 w-8 text-blue-500" />
-          </div>
+          </CardContent>
         </Card>
 
-        <Card className="p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">المبلغ المستثمر</p>
-              <p className="text-2xl font-bold">${portfolioData.totalInvested.toLocaleString()}</p>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground">القيمة الحالية</p>
+                <p className="text-2xl font-bold text-green-600">${totalCurrentValue.toLocaleString()}</p>
+              </div>
+              <TrendingUp className="h-8 w-8 text-green-500" />
             </div>
-            <DollarSign className="h-8 w-8 text-green-500" />
-          </div>
+          </CardContent>
         </Card>
 
-        <Card className="p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">إجمالي الأرباح</p>
-              <p className="text-2xl font-bold text-green-600">
-                +${portfolioData.totalReturn.toLocaleString()}
-              </p>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground">إجمالي العائد</p>
+                <p className="text-2xl font-bold text-green-600">+{totalReturn.toFixed(1)}%</p>
+              </div>
+              <BarChart3 className="h-8 w-8 text-green-500" />
             </div>
-            <TrendingUp className="h-8 w-8 text-green-500" />
-          </div>
+          </CardContent>
         </Card>
 
-        <Card className="p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">نسبة العائد</p>
-              <p className="text-2xl font-bold text-green-600">
-                +{portfolioData.returnPercentage}%
-              </p>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground">عدد الاستثمارات</p>
+                <p className="text-2xl font-bold">{portfolioData.length}</p>
+              </div>
+              <PieChart className="h-8 w-8 text-purple-500" />
             </div>
-            <BarChart3 className="h-8 w-8 text-purple-500" />
-          </div>
+          </CardContent>
         </Card>
       </div>
 
-      {/* Portfolio Performance */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <TrendingUp className="h-5 w-5" />
-            أداء المحفظة
-          </CardTitle>
-          <CardDescription>
-            إجمالي الأداء: {portfolioData.activeInvestments} استثمارات نشطة، {portfolioData.completedInvestments} مكتملة
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div>
-              <div className="flex justify-between text-sm mb-2">
-                <span>تقدم المحفظة</span>
-                <span>{portfolioData.returnPercentage}%</span>
-              </div>
-              <Progress value={portfolioData.returnPercentage} className="h-3" />
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-              <div className="text-center p-4 bg-green-50 rounded-lg">
-                <p className="font-semibold text-green-700">الاستثمارات الرابحة</p>
-                <p className="text-2xl font-bold text-green-600">85%</p>
-              </div>
-              <div className="text-center p-4 bg-blue-50 rounded-lg">
-                <p className="font-semibold text-blue-700">متوسط العائد</p>
-                <p className="text-2xl font-bold text-blue-600">22%</p>
-              </div>
-              <div className="text-center p-4 bg-purple-50 rounded-lg">
-                <p className="font-semibold text-purple-700">أفضل استثمار</p>
-                <p className="text-2xl font-bold text-purple-600">30%</p>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      <Tabs defaultValue="investments" className="space-y-4">
+        <TabsList>
+          <TabsTrigger value="investments">استثماراتي</TabsTrigger>
+          <TabsTrigger value="performance">الأداء</TabsTrigger>
+          <TabsTrigger value="reports">التقارير</TabsTrigger>
+        </TabsList>
 
-      {/* Investment Details */}
-      <Card>
-        <CardHeader>
-          <CardTitle>تفاصيل الاستثمارات</CardTitle>
-          <CardDescription>جميع استثماراتك النشطة والمكتملة</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {investments.map((investment) => (
-              <div key={investment.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <h3 className="font-semibold text-lg">{investment.title}</h3>
+        <TabsContent value="investments" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>محفظة الاستثمارات</CardTitle>
+              <CardDescription>تفاصيل جميع استثماراتك النشطة والمكتملة</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {portfolioData.map((investment) => (
+                  <div key={investment.id} className="p-4 border rounded-lg hover:shadow-md transition-shadow">
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <h4 className="font-semibold text-lg">{investment.name}</h4>
+                        <p className="text-sm text-muted-foreground">{investment.sector}</p>
+                      </div>
                       <Badge variant={investment.status === 'نشط' ? 'default' : 'secondary'}>
                         {investment.status}
                       </Badge>
-                      <Badge variant="outline" className={`${
-                        investment.riskLevel === 'عالي' ? 'text-red-600 border-red-200' :
-                        investment.riskLevel === 'متوسط' ? 'text-yellow-600 border-yellow-200' :
-                        'text-green-600 border-green-200'
-                      }`}>
-                        {investment.riskLevel}
-                      </Badge>
                     </div>
-                    
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                       <div>
-                        <span className="text-muted-foreground">المبلغ المستثمر: </span>
-                        <span className="font-medium">${investment.amount.toLocaleString()}</span>
+                        <p className="text-sm text-muted-foreground">المبلغ المستثمر</p>
+                        <p className="font-semibold">${investment.investment.toLocaleString()}</p>
                       </div>
                       <div>
-                        <span className="text-muted-foreground">القيمة الحالية: </span>
-                        <span className="font-medium">${investment.currentValue.toLocaleString()}</span>
+                        <p className="text-sm text-muted-foreground">القيمة الحالية</p>
+                        <p className="font-semibold text-green-600">${investment.currentValue.toLocaleString()}</p>
                       </div>
                       <div>
-                        <span className="text-muted-foreground">الربح: </span>
-                        <span className="font-medium text-green-600">
-                          +${investment.return.toLocaleString()} ({investment.returnPercentage}%)
-                        </span>
+                        <p className="text-sm text-muted-foreground">العائد</p>
+                        <p className="font-semibold text-green-600">+{investment.return}%</p>
                       </div>
                       <div>
-                        <span className="text-muted-foreground">المدة: </span>
-                        <span className="font-medium">{investment.duration}</span>
+                        <p className="text-sm text-muted-foreground">آخر تحديث</p>
+                        <p className="font-semibold text-sm">{investment.lastUpdate}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-2">
+                      <Button size="sm" variant="outline">عرض التفاصيل</Button>
+                      <Button size="sm" variant="outline">تقرير الأداء</Button>
+                      {investment.status === 'نشط' && (
+                        <Button size="sm" variant="outline">زيادة الاستثمار</Button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="performance" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>أداء المحفظة</CardTitle>
+              <CardDescription>تحليل أداء استثماراتك عبر الوقت</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                {/* Performance by Sector */}
+                <div>
+                  <h4 className="font-semibold mb-4">الأداء حسب القطاع</h4>
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span>تقنية</span>
+                      <div className="flex items-center gap-2">
+                        <Progress value={75} className="w-20" />
+                        <span className="text-green-600 font-semibold">+30%</span>
+                      </div>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span>طاقة</span>
+                      <div className="flex items-center gap-2">
+                        <Progress value={60} className="w-20" />
+                        <span className="text-green-600 font-semibold">+18%</span>
+                      </div>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span>غذاء</span>
+                      <div className="flex items-center gap-2">
+                        <Progress value={50} className="w-20" />
+                        <span className="text-green-600 font-semibold">+15%</span>
                       </div>
                     </div>
                   </div>
-                  
-                  <div className="flex gap-2">
-                    <Button variant="outline" size="sm">
-                      عرض التفاصيل
-                    </Button>
-                    {investment.status === 'نشط' && (
-                      <Button size="sm">
-                        إدارة الاستثمار
-                      </Button>
-                    )}
+                </div>
+
+                {/* Monthly Performance */}
+                <div>
+                  <h4 className="font-semibold mb-4">الأداء الشهري</h4>
+                  <div className="grid grid-cols-3 gap-4">
+                    <div className="text-center p-3 border rounded">
+                      <p className="text-sm text-muted-foreground">هذا الشهر</p>
+                      <p className="text-lg font-bold text-green-600">+5.2%</p>
+                    </div>
+                    <div className="text-center p-3 border rounded">
+                      <p className="text-sm text-muted-foreground">الشهر السابق</p>
+                      <p className="text-lg font-bold text-green-600">+3.8%</p>
+                    </div>
+                    <div className="text-center p-3 border rounded">
+                      <p className="text-sm text-muted-foreground">آخر 3 شهور</p>
+                      <p className="text-lg font-bold text-green-600">+12.1%</p>
+                    </div>
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-      {/* Performance Chart Placeholder */}
-      <Card>
-        <CardHeader>
-          <CardTitle>الرسم البياني للأداء</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="h-64 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg flex items-center justify-center">
-            <div className="text-center">
-              <BarChart3 className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <p className="text-muted-foreground">سيتم عرض الرسم البياني للأداء هنا</p>
-              <Badge variant="secondary" className="mt-2">قريباً</Badge>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+        <TabsContent value="reports" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Calendar className="h-5 w-5" />
+                التقارير والوثائق
+              </CardTitle>
+              <CardDescription>تحميل التقارير المالية ووثائق الاستثمار</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Button variant="outline" className="h-auto p-4 justify-start">
+                    <div className="flex items-center gap-3">
+                      <Download className="h-5 w-5" />
+                      <div className="text-left">
+                        <p className="font-semibold">التقرير الشهري</p>
+                        <p className="text-sm text-muted-foreground">يناير 2024</p>
+                      </div>
+                    </div>
+                  </Button>
+                  
+                  <Button variant="outline" className="h-auto p-4 justify-start">
+                    <div className="flex items-center gap-3">
+                      <Download className="h-5 w-5" />
+                      <div className="text-left">
+                        <p className="font-semibold">تقرير الأداء السنوي</p>
+                        <p className="text-sm text-muted-foreground">2023</p>
+                      </div>
+                    </div>
+                  </Button>
+                  
+                  <Button variant="outline" className="h-auto p-4 justify-start">
+                    <div className="flex items-center gap-3">
+                      <Download className="h-5 w-5" />
+                      <div className="text-left">
+                        <p className="font-semibold">كشف حساب تفصيلي</p>
+                        <p className="text-sm text-muted-foreground">آخر 6 شهور</p>
+                      </div>
+                    </div>
+                  </Button>
+                  
+                  <Button variant="outline" className="h-auto p-4 justify-start">
+                    <div className="flex items-center gap-3">
+                      <Download className="h-5 w-5" />
+                      <div className="text-left">
+                        <p className="font-semibold">وثائق الاستثمار</p>
+                        <p className="text-sm text-muted-foreground">جميع العقود</p>
+                      </div>
+                    </div>
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

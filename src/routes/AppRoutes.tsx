@@ -25,6 +25,11 @@ import Offers from '@/pages/offers/Offers';
 import Wallet from '@/pages/Wallet';
 import Investment from '@/pages/investment/Investment';
 
+// Auth Routes
+import Login from '@/pages/auth/Login';
+import Register from '@/pages/auth/Register';
+import RoleSelection from '@/pages/auth/RoleSelection';
+
 // Service Routes
 import { ServiceRoutes } from './ServiceRoutes';
 
@@ -39,6 +44,11 @@ const AppRoutes = () => {
       {/* Public Routes - Accessible without authentication */}
       <Route path="/" element={<Index />} />
       <Route path="/how-it-works" element={<HowItWorks />} />
+      
+      {/* Auth Routes */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/role-selection" element={<RoleSelection />} />
       
       {/* Protected Routes - Require user authentication */}
       <Route path="/dashboard" element={
@@ -107,7 +117,6 @@ const AppRoutes = () => {
         </ProtectedRoute>
       } />
 
-      {/* Company Formation Route - المسار المفقود */}
       <Route path="/company-formation" element={
         <ProtectedRoute>
           <CompanyFormation />
@@ -144,7 +153,6 @@ const AppRoutes = () => {
         </ProtectedRoute>
       } />
 
-      {/* Investment Route */}
       <Route path="/investment" element={
         <ProtectedRoute>
           <Investment />
