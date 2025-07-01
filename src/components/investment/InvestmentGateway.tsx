@@ -157,7 +157,7 @@ const InvestmentGateway = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <InvestmentForm />
+              <InvestmentForm investmentType="group" />
             </CardContent>
           </Card>
         </TabsContent>
