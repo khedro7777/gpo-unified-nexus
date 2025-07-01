@@ -17,18 +17,18 @@ const ModernSidebar = () => {
   const isCollapsed = state === 'collapsed';
   
   return (
-    <Sidebar className={`bg-white border-r border-gray-200 ${isCollapsed ? "w-16" : "w-64"}`} collapsible="icon">
-      <div className="p-2 border-b border-gray-200">
-        <SidebarTrigger className="mb-2 text-gray-600 hover:text-gray-900" />
+    <Sidebar className={`bg-gradient-to-b from-blue-50 to-purple-50 border-r border-gray-200 ${isCollapsed ? "w-16" : "w-64"}`} collapsible="icon">
+      <div className="p-2 border-b border-gray-200 bg-gradient-to-r from-blue-600 to-purple-600">
+        <SidebarTrigger className="mb-2 text-white hover:bg-white/20 hover:text-white" />
         {!isCollapsed && (
           <div className="text-center py-2">
-            <h2 className="text-lg font-bold text-gray-900">القائمة الرئيسية</h2>
-            <p className="text-sm text-gray-500">GPO Smart Platform</p>
+            <h2 className="text-lg font-bold text-white">القائمة الرئيسية</h2>
+            <p className="text-sm text-blue-100">GPO Smart Platform</p>
           </div>
         )}
       </div>
       
-      <SidebarContent className="px-2 py-4 bg-white">
+      <SidebarContent className="px-2 py-4 bg-gradient-to-b from-blue-50 to-purple-50">
         <BuyingGroupSection isCollapsed={isCollapsed} />
         <AccountSection isCollapsed={isCollapsed} />
         <ServicesSection isCollapsed={isCollapsed} />
