@@ -15,6 +15,7 @@ import Suppliers from '@/pages/suppliers/Suppliers';
 import Services from '@/pages/Services';
 import Arbitration from '@/pages/arbitration/Arbitration';
 import CompanyIncorporation from '@/pages/gateways/CompanyIncorporation';
+import CompanyFormation from '@/pages/formation/CompanyFormation';
 import DocumentManagement from '@/pages/documents/DocumentManagement';
 import Freelance from '@/pages/freelance/Freelance';
 import Governance from '@/pages/governance/Governance';
@@ -106,6 +107,13 @@ const AppRoutes = () => {
         </ProtectedRoute>
       } />
 
+      {/* Company Formation Route - المسار المفقود */}
+      <Route path="/company-formation" element={
+        <ProtectedRoute>
+          <CompanyFormation />
+        </ProtectedRoute>
+      } />
+
       <Route path="/documents" element={
         <ProtectedRoute>
           <DocumentManagement />
@@ -136,7 +144,7 @@ const AppRoutes = () => {
         </ProtectedRoute>
       } />
 
-      {/* New Investment Route */}
+      {/* Investment Route */}
       <Route path="/investment" element={
         <ProtectedRoute>
           <Investment />
