@@ -5,6 +5,7 @@ import ProtectedRoute from '@/components/auth/ProtectedRoute';
 
 // Pages
 import Index from '@/pages/Index';
+import EnhancedHomePage from '@/pages/EnhancedHomePage';
 import Dashboard from '@/pages/Dashboard';
 import Profile from '@/pages/Profile';
 import HowItWorks from '@/pages/HowItWorks';
@@ -42,7 +43,8 @@ const AppRoutes = () => {
   return (
     <Routes>
       {/* Public Routes - Accessible without authentication */}
-      <Route path="/" element={<Index />} />
+      <Route path="/" element={<EnhancedHomePage />} />
+      <Route path="/old-home" element={<Index />} />
       <Route path="/how-it-works" element={<HowItWorks />} />
       
       {/* Auth Routes */}
@@ -50,7 +52,7 @@ const AppRoutes = () => {
       <Route path="/register" element={<Register />} />
       <Route path="/role-selection" element={<RoleSelection />} />
       
-      {/* Protected Routes - Require user authentication */}
+      {/* Protected Routes - Require authentication */}
       <Route path="/dashboard" element={
         <ProtectedRoute>
           <Dashboard />
@@ -63,104 +65,74 @@ const AppRoutes = () => {
         </ProtectedRoute>
       } />
 
-      <Route path="/groups" element={
+      {/* Group Management Routes */}
+      <Route path="/groups" element={<Groups />} />
+      <Route path="/groups/:id" element={<GroupDetails />} />
+      <Route path="/create-group" element={
         <ProtectedRoute>
-          <Groups />
+          <CreateGroup />
+        </ProtectedRoute>
+      } />
+      <Route path="/create-group/:type" element={
+        <ProtectedRoute>
+          <CreateGroup />
         </ProtectedRoute>
       } />
 
+      {/* Business Function Routes */}
+      <Route path="/suppliers" element={<Suppliers />} />
+      <Route path="/freelance" element={<Freelance />} />
+      <Route path="/governance" element={<Governance />} />
+      <Route path="/investment" element={<Investment />} />
+      
+      {/* Company Formation Routes */}
+      <Route path="/company-incorporation" element={<CompanyIncorporation />} />
+      <Route path="/company-formation" element={<CompanyFormation />} />
+      
+      {/* Service and Management Routes */}
+      <Route path="/services" element={<Services />} />
+      <Route path="/contracts" element={
+        <ProtectedRoute>
+          <Contracts />
+        </ProtectedRoute>
+      } />
       <Route path="/offers" element={
         <ProtectedRoute>
           <Offers />
         </ProtectedRoute>
       } />
-
       <Route path="/wallet" element={
         <ProtectedRoute>
           <Wallet />
         </ProtectedRoute>
       } />
       
-      <Route path="/create-group/:type?" element={
+      {/* Communication and Support Routes */}
+      <Route path="/notifications" element={
         <ProtectedRoute>
-          <CreateGroup />
+          <Notifications />
         </ProtectedRoute>
       } />
-      
-      <Route path="/groups/:id" element={
-        <ProtectedRoute>
-          <GroupDetails />
-        </ProtectedRoute>
-      } />
-      
-      <Route path="/suppliers" element={
-        <ProtectedRoute>
-          <Suppliers />
-        </ProtectedRoute>
-      } />
-      
-      <Route path="/services" element={
-        <ProtectedRoute>
-          <Services />
-        </ProtectedRoute>
-      } />
-
-      <Route path="/arbitration" element={
-        <ProtectedRoute>
-          <Arbitration />
-        </ProtectedRoute>
-      } />
-
-      <Route path="/company-incorporation" element={
-        <ProtectedRoute>
-          <CompanyIncorporation />
-        </ProtectedRoute>
-      } />
-
-      <Route path="/company-formation" element={
-        <ProtectedRoute>
-          <CompanyFormation />
-        </ProtectedRoute>
-      } />
-
+      <Route path="/arbitration" element={<Arbitration />} />
       <Route path="/documents" element={
         <ProtectedRoute>
           <DocumentManagement />
         </ProtectedRoute>
       } />
 
-      <Route path="/freelance" element={
-        <ProtectedRoute>
-          <Freelance />
-        </ProtectedRoute>
+      {/* Service-specific routes */}
+      <Route path="/services/*" element={<ServiceRoutes />} />
+      
+      {/* Catch-all route for 404 */}
+      <Route path="*" element={
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold text-gray-800 mb-4">404</h1>
+            <p className="text-gray-600 mb-6">الصفحة غير موجودة</p>
+            <a href="/" className="text-primary hover:underline">العودة للصفحة الرئيسية</a>
+          </div>
+        </div>
       } />
-
-      <Route path="/governance" element={
-        <ProtectedRoute>
-          <Governance />
-        </ProtectedRoute>
-      } />
-
-      <Route path="/contracts" element={
-        <ProtectedRoute>
-          <Contracts />
-        </ProtectedRoute>
-      } />
-
-      <Route path="/notifications" element={
-        <ProtectedRoute>
-          <Notifications />
-        </ProtectedRoute>
-      } />
-
-      <Route path="/investment" element={
-        <ProtectedRoute>
-          <Investment />
-        </ProtectedRoute>
-      } />
-
-      {/* Service Routes - Extended functionality */}
-      {ServiceRoutes()}
     </Routes>
   );
 };
