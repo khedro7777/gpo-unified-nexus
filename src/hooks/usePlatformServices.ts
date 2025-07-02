@@ -80,9 +80,13 @@ export const useRequestService = () => {
       requestDetails?: any;
       pointsCost: number;
     }) => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('المستخدم غير مسجل الدخول');
+
       const { data, error } = await supabase
         .from('service_requests')
         .insert({
+          user_id: user.id,
           service_id: serviceId,
           group_id: groupId,
           request_details: requestDetails,

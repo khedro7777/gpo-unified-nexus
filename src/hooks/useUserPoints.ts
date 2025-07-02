@@ -71,9 +71,13 @@ export const useSpendPoints = () => {
       referenceId?: string; 
       referenceType?: string; 
     }) => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('المستخدم غير مسجل الدخول');
+
       const { data: userPoints } = await supabase
         .from('user_points')
-        .select('available_points')
+        .select('available_points, spent_points')
+        .eq('user_id', user.id)
         .single();
 
       if (!userPoints || userPoints.available_points < points) {
@@ -83,6 +87,7 @@ export const useSpendPoints = () => {
       const { error: transactionError } = await supabase
         .from('points_transactions')
         .insert({
+          user_id: user.id,
           transaction_type: 'spend',
           points_amount: -points,
           description,
@@ -96,9 +101,9 @@ export const useSpendPoints = () => {
         .from('user_points')
         .update({
           available_points: userPoints.available_points - points,
-          spent_points: userPoints.available_points + points,
+          spent_points: userPoints.spent_points + points,
         })
-        .eq('user_id', (await supabase.auth.getUser()).data.user?.id);
+        .eq('user_id', user.id);
 
       if (updateError) throw updateError;
     },

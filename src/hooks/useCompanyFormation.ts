@@ -43,9 +43,15 @@ export const useCreateCompanyFormation = () => {
 
   return useMutation({
     mutationFn: async (formationData: Omit<CompanyFormation, 'id' | 'user_id' | 'created_at' | 'updated_at' | 'status'>) => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('المستخدم غير مسجل الدخول');
+
       const { data, error } = await supabase
         .from('company_formations')
-        .insert(formationData)
+        .insert({
+          ...formationData,
+          user_id: user.id,
+        })
         .select()
         .single();
 

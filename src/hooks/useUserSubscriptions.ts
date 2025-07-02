@@ -46,9 +46,13 @@ export const useCreateSubscription = () => {
       pointsAllowance: number;
       paddleSubscriptionId?: string;
     }) => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('المستخدم غير مسجل الدخول');
+
       const { data, error } = await supabase
         .from('user_subscriptions')
         .insert({
+          user_id: user.id,
           subscription_type: subscriptionType,
           points_balance: pointsAllowance,
           monthly_points_allowance: pointsAllowance,
