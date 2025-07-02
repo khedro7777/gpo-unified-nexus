@@ -9,7 +9,7 @@ import ActiveGroups from '@/components/groups/ActiveGroups';
 import ServiceRequests from '@/components/services/ServiceRequests';
 
 const ServicesContent = () => {
-  const [serviceType, setServiceType] = useState<'all' | 'web2' | 'web3'>('all');
+  const [serviceType, setServiceType] = useState<'all' | 'automation' | 'advanced'>('all');
   
   return (
     <div className="space-y-6">
@@ -18,20 +18,20 @@ const ServicesContent = () => {
         <Tabs value={serviceType} onValueChange={(value) => setServiceType(value as any)} className="w-full sm:w-auto">
           <TabsList className="grid grid-cols-3 w-full sm:w-auto">
             <TabsTrigger value="all">الكل</TabsTrigger>
-            <TabsTrigger value="web2">WEB2</TabsTrigger>
-            <TabsTrigger value="web3">WEB3</TabsTrigger>
+            <TabsTrigger value="automation">الأتمتة</TabsTrigger>
+            <TabsTrigger value="advanced">المتقدمة</TabsTrigger>
           </TabsList>
         </Tabs>
       </div>
       <p className="text-muted-foreground">
-        استعرض وأدر الخدمات المتكاملة لمنصة GPO.
+        استعرض وأدر الخدمات المتكاملة لمنصة التعاون الذكي.
       </p>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card className="p-6">
-          <h3 className="text-lg font-medium mb-2">تكامل SnapDAO</h3>
+          <h3 className="text-lg font-medium mb-2">نظام التصويت المتقدم</h3>
           <p className="text-sm text-muted-foreground mb-4">
-            الاتصال بـ SnapDAO للحوكمة ووظائف التصويت.
+            نظام التصويت والحوكمة للقرارات الجماعية.
           </p>
           <div className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full inline-block">
             نشط
@@ -39,9 +39,9 @@ const ServicesContent = () => {
         </Card>
         
         <Card className="p-6">
-          <h3 className="text-lg font-medium mb-2">فوترة Paddle</h3>
+          <h3 className="text-lg font-medium mb-2">نظام الفوترة الذكي</h3>
           <p className="text-sm text-muted-foreground mb-4">
-            خدمة معالجة الاشتراك والدفع.
+            خدمة معالجة الاشتراكات والمدفوعات.
           </p>
           <div className="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full inline-block">
             يتطلب تكوين
@@ -49,9 +49,9 @@ const ServicesContent = () => {
         </Card>
         
         <Card className="p-6">
-          <h3 className="text-lg font-medium mb-2">ERPNext</h3>
+          <h3 className="text-lg font-medium mb-2">إدارة الموارد</h3>
           <p className="text-sm text-muted-foreground mb-4">
-            تخطيط موارد المؤسسات للإدارة المالية.
+            تخطيط وإدارة موارد المؤسسات والمالية.
           </p>
           <div className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full inline-block">
             متصل
@@ -59,9 +59,9 @@ const ServicesContent = () => {
         </Card>
         
         <Card className="p-6">
-          <h3 className="text-lg font-medium mb-2">Loomio</h3>
+          <h3 className="text-lg font-medium mb-2">منصة المداولات</h3>
           <p className="text-sm text-muted-foreground mb-4">
-            منصة المداولات وبناء التوافق.
+            منصة المناقشات وبناء التوافق الجماعي.
           </p>
           <div className="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full inline-block">
             متاح
@@ -69,9 +69,9 @@ const ServicesContent = () => {
         </Card>
         
         <Card className="p-6">
-          <h3 className="text-lg font-medium mb-2">نظام ODR</h3>
+          <h3 className="text-lg font-medium mb-2">نظام حل النزاعات</h3>
           <p className="text-sm text-muted-foreground mb-4">
-            حل النزاعات عبر الإنترنت للتحكيم.
+            حل النزاعات والتحكيم الرقمي المتقدم.
           </p>
           <div className="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full inline-block">
             متاح
@@ -81,7 +81,7 @@ const ServicesContent = () => {
         <Card className="p-6">
           <h3 className="text-lg font-medium mb-2">مركز العقود الذكية</h3>
           <p className="text-sm text-muted-foreground mb-4">
-            إدارة ونشر عقود DAO الذكية.
+            إدارة ونشر العقود والاتفاقيات الذكية.
           </p>
           <div className="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full inline-block">
             متاح
