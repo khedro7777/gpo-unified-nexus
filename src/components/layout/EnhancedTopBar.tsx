@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/use-auth';
 
 const EnhancedTopBar = () => {
-  const { isAuthenticated, user, logout } = useAuth();
+  const { isAuthenticated, name, logout } = useAuth();
   const [language, setLanguage] = useState('ar');
   const [country, setCountry] = useState('sa');
   const [currency, setCurrency] = useState('sar');
@@ -157,7 +157,7 @@ const EnhancedTopBar = () => {
                 <Link to="/dashboard">
                   <Button variant="ghost" size="sm" className="flex items-center gap-2">
                     <User className="h-4 w-4" />
-                    <span className="hidden md:inline">{user?.name || 'لوحة التحكم'}</span>
+                    <span className="hidden md:inline">{name || 'لوحة التحكم'}</span>
                   </Button>
                 </Link>
                 <Button variant="outline" size="sm" onClick={logout}>
