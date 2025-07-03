@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
 
@@ -85,6 +85,20 @@ const AppRoutes = () => {
 
       {/* Business Function Routes */}
       <Route path="/suppliers" element={<Suppliers />} />
+      <Route path="/suppliers/register" element={
+        <ProtectedRoute>
+          <div className="min-h-screen bg-background py-8">
+            <div className="container mx-auto px-4">
+              <div className="max-w-6xl mx-auto">
+                <h1 className="text-3xl font-bold text-center mb-8">تسجيل كمورد معتمد</h1>
+                <Suspense fallback={<div>جاري التحميل...</div>}>
+                  {React.createElement(React.lazy(() => import('@/components/suppliers/SupplierRegistration')))}
+                </Suspense>
+              </div>
+            </div>
+          </div>
+        </ProtectedRoute>
+      } />
       <Route path="/freelance" element={<Freelance />} />
       <Route path="/governance" element={<Governance />} />
       <Route path="/investment" element={<Investment />} />
