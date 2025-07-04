@@ -1,7 +1,8 @@
 
 import React from 'react';
-import { User, Wallet, Bell, FileText, Settings } from 'lucide-react';
+import { User, Wallet, Bell, FileText, Settings, CreditCard } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '@/hooks/use-auth';
 import SidebarSection from './SidebarSection';
 
 interface AccountSectionProps {
@@ -10,7 +11,10 @@ interface AccountSectionProps {
 
 const AccountSection: React.FC<AccountSectionProps> = ({ isCollapsed }) => {
   const { i18n } = useTranslation();
+  const { user } = useAuth();
   const isRTL = i18n.language === 'ar';
+
+  if (!user) return null;
 
   const accountItems = [
     { 
@@ -24,9 +28,15 @@ const AccountSection: React.FC<AccountSectionProps> = ({ isCollapsed }) => {
       icon: Wallet 
     },
     { 
+      title: isRTL ? 'الاشتراكات' : 'Subscriptions', 
+      url: '/wallet?tab=subscriptions', 
+      icon: CreditCard 
+    },
+    { 
       title: isRTL ? 'الإشعارات' : 'Notifications', 
       url: '/notifications', 
-      icon: Bell 
+      icon: Bell,
+      badge: 3 // Example notification count
     },
     { 
       title: isRTL ? 'العقود' : 'Contracts', 
@@ -35,7 +45,7 @@ const AccountSection: React.FC<AccountSectionProps> = ({ isCollapsed }) => {
     },
     { 
       title: isRTL ? 'الإعدادات' : 'Settings', 
-      url: '/settings', 
+      url: '/profile?tab=settings', 
       icon: Settings 
     }
   ];
@@ -45,7 +55,7 @@ const AccountSection: React.FC<AccountSectionProps> = ({ isCollapsed }) => {
       title={isRTL ? '👤 الحساب الشخصي' : '👤 Account'}
       items={accountItems}
       isCollapsed={isCollapsed}
-      colorClass="text-blue-600"
+      colorClass="text-blue-600 dark:text-blue-400"
     />
   );
 };

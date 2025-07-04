@@ -36,122 +36,159 @@ import RoleSelection from '@/pages/auth/RoleSelection';
 // Service Routes
 import { ServiceRoutes } from './ServiceRoutes';
 
-/**
- * Main Application Routes Configuration
- * Organized by access level: Public, Protected, and Service routes
- * Each route includes proper authentication and navigation handling
- */
+// Loading component
+const LoadingSpinner = () => (
+  <div className="min-h-screen flex items-center justify-center bg-background">
+    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+  </div>
+);
+
 const AppRoutes = () => {
   return (
-    <Routes>
-      {/* Public Routes - Accessible without authentication */}
-      <Route path="/" element={<EnhancedHomePage />} />
-      <Route path="/old-home" element={<Index />} />
-      <Route path="/about" element={<About />} />
-      <Route path="/support" element={<Support />} />
-      <Route path="/how-it-works" element={<HowItWorks />} />
-      
-      {/* Auth Routes */}
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/role-selection" element={<RoleSelection />} />
-      
-      {/* Protected Routes - Require authentication */}
-      <Route path="/dashboard" element={
-        <ProtectedRoute>
-          <Dashboard />
-        </ProtectedRoute>
-      } />
-      
-      <Route path="/profile" element={
-        <ProtectedRoute>
-          <Profile />
-        </ProtectedRoute>
-      } />
+    <Suspense fallback={<LoadingSpinner />}>
+      <Routes>
+        {/* Public Routes - Accessible without authentication */}
+        <Route path="/" element={<EnhancedHomePage />} />
+        <Route path="/old-home" element={<Index />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/support" element={<Support />} />
+        <Route path="/how-it-works" element={<HowItWorks />} />
+        
+        {/* Auth Routes */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/role-selection" element={<RoleSelection />} />
+        
+        {/* Protected Routes - Require authentication */}
+        <Route path="/dashboard" element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/profile" element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        } />
 
-      {/* Group Management Routes */}
-      <Route path="/groups" element={<Groups />} />
-      <Route path="/groups/:id" element={<GroupDetails />} />
-      <Route path="/create-group" element={
-        <ProtectedRoute>
-          <CreateGroup />
-        </ProtectedRoute>
-      } />
-      <Route path="/create-group/:type" element={
-        <ProtectedRoute>
-          <CreateGroup />
-        </ProtectedRoute>
-      } />
+        {/* Group Management Routes */}
+        <Route path="/groups" element={
+          <ProtectedRoute>
+            <Groups />
+          </ProtectedRoute>
+        } />
+        <Route path="/groups/:id" element={
+          <ProtectedRoute>
+            <GroupDetails />
+          </ProtectedRoute>
+        } />
+        <Route path="/create-group" element={
+          <ProtectedRoute>
+            <CreateGroup />
+          </ProtectedRoute>
+        } />
+        <Route path="/create-group/:type" element={
+          <ProtectedRoute>
+            <CreateGroup />
+          </ProtectedRoute>
+        } />
 
-      {/* Business Function Routes */}
-      <Route path="/suppliers" element={<Suppliers />} />
-      <Route path="/suppliers/register" element={
-        <ProtectedRoute>
-          <div className="min-h-screen bg-background py-8">
-            <div className="container mx-auto px-4">
-              <div className="max-w-6xl mx-auto">
-                <h1 className="text-3xl font-bold text-center mb-8">تسجيل كمورد معتمد</h1>
-                <Suspense fallback={<div>جاري التحميل...</div>}>
-                  {React.createElement(React.lazy(() => import('@/components/suppliers/SupplierRegistration')))}
-                </Suspense>
+        {/* Business Function Routes */}
+        <Route path="/suppliers" element={<Suppliers />} />
+        <Route path="/suppliers/register" element={
+          <ProtectedRoute>
+            <div className="min-h-screen bg-background py-8">
+              <div className="container mx-auto px-4">
+                <div className="max-w-6xl mx-auto">
+                  <h1 className="text-3xl font-bold text-center mb-8">تسجيل كمورد معتمد</h1>
+                  <Suspense fallback={<LoadingSpinner />}>
+                    {React.createElement(React.lazy(() => import('@/components/suppliers/SupplierRegistration')))}
+                  </Suspense>
+                </div>
               </div>
             </div>
-          </div>
-        </ProtectedRoute>
-      } />
-      <Route path="/freelance" element={<Freelance />} />
-      <Route path="/governance" element={<Governance />} />
-      <Route path="/investment" element={<Investment />} />
-      
-      {/* Company Formation Routes */}
-      <Route path="/company-incorporation" element={<CompanyIncorporation />} />
-      <Route path="/company-formation" element={<CompanyFormation />} />
-      
-      {/* Service and Management Routes */}
-      <Route path="/services" element={<Services />} />
-      <Route path="/contracts" element={
-        <ProtectedRoute>
-          <Contracts />
-        </ProtectedRoute>
-      } />
-      <Route path="/offers" element={
-        <ProtectedRoute>
-          <Offers />
-        </ProtectedRoute>
-      } />
-      <Route path="/wallet" element={
-        <ProtectedRoute>
-          <Wallet />
-        </ProtectedRoute>
-      } />
-      
-      {/* Communication and Support Routes */}
-      <Route path="/notifications" element={
-        <ProtectedRoute>
-          <Notifications />
-        </ProtectedRoute>
-      } />
-      <Route path="/arbitration" element={<Arbitration />} />
-      <Route path="/documents" element={
-        <ProtectedRoute>
-          <DocumentManagement />
-        </ProtectedRoute>
-      } />
+          </ProtectedRoute>
+        } />
+        <Route path="/freelance" element={<Freelance />} />
+        <Route path="/governance" element={
+          <ProtectedRoute>
+            <Governance />
+          </ProtectedRoute>
+        } />
+        <Route path="/investment" element={
+          <ProtectedRoute>
+            <Investment />
+          </ProtectedRoute>
+        } />
+        
+        {/* Company Formation Routes */}
+        <Route path="/company-incorporation" element={
+          <ProtectedRoute>
+            <CompanyIncorporation />
+          </ProtectedRoute>
+        } />
+        <Route path="/company-formation" element={
+          <ProtectedRoute>
+            <CompanyFormation />
+          </ProtectedRoute>
+        } />
+        
+        {/* Service and Management Routes */}
+        <Route path="/services" element={<Services />} />
+        <Route path="/contracts" element={
+          <ProtectedRoute>
+            <Contracts />
+          </ProtectedRoute>
+        } />
+        <Route path="/offers" element={
+          <ProtectedRoute>
+            <Offers />
+          </ProtectedRoute>
+        } />
+        <Route path="/wallet" element={
+          <ProtectedRoute>
+            <Wallet />
+          </ProtectedRoute>
+        } />
+        
+        {/* Communication and Support Routes */}
+        <Route path="/notifications" element={
+          <ProtectedRoute>
+            <Notifications />
+          </ProtectedRoute>
+        } />
+        <Route path="/arbitration" element={
+          <ProtectedRoute>
+            <Arbitration />
+          </ProtectedRoute>
+        } />
+        <Route path="/documents" element={
+          <ProtectedRoute>
+            <DocumentManagement />
+          </ProtectedRoute>
+        } />
 
-      {/* Service-specific routes */}
-      <Route path="/services/*" element={<ServiceRoutes />} />
-      
-      {/* Catch-all route for 404 */}
-      <Route path="*" element={
-        <div className="min-h-screen flex items-center justify-center bg-background">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold text-foreground mb-4">404</h1>
-            <p className="text-muted-foreground mb-6">الصفحة غير موجودة</p>
-            <a href="/" className="text-primary hover:underline">العودة للصفحة الرئيسية</a>
+        {/* Service-specific routes */}
+        <Route path="/services/*" element={<ServiceRoutes />} />
+        
+        {/* Catch-all route for 404 */}
+        <Route path="*" element={
+          <div className="min-h-screen flex items-center justify-center bg-background">
+            <div className="text-center">
+              <h1 className="text-4xl font-bold text-foreground mb-4">404</h1>
+              <p className="text-muted-foreground mb-6">الصفحة غير موجودة</p>
+              <a 
+                href="/" 
+                className="text-primary hover:underline inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-md hover:bg-primary/20 transition-colors"
+              >
+                العودة للصفحة الرئيسية
+              </a>
+            </div>
           </div>
-        </div>
-      } />
-    </Routes>
+        } />
+      </Routes>
+    </Suspense>
   );
 };
 
