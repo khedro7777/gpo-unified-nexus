@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -20,7 +19,10 @@ export const useGroupLifecycle = (groupId: string) => {
   const convertDbLifecycleToGroupLifecycle = (dbRow: DbGroupLifecycle): GroupLifecycle => {
     return {
       ...dbRow,
-      settings: dbRow.settings as GroupSettings
+      current_phase: dbRow.current_phase as GroupLifecycle['current_phase'],
+      status: dbRow.status as GroupLifecycle['status'],
+      visibility: dbRow.visibility as GroupLifecycle['visibility'],
+      settings: dbRow.settings as unknown as GroupSettings
     };
   };
 
@@ -28,6 +30,7 @@ export const useGroupLifecycle = (groupId: string) => {
   const convertDbRoleToGroupRole = (dbRow: DbGroupRole & { profiles?: any }): GroupRole => {
     return {
       ...dbRow,
+      role: dbRow.role as GroupRole['role'],
       profiles: dbRow.profiles
     };
   };
@@ -36,6 +39,8 @@ export const useGroupLifecycle = (groupId: string) => {
   const convertDbVoteToGroupVote = (dbRow: DbGroupVote): GroupVote => {
     return {
       ...dbRow,
+      vote_type: dbRow.vote_type as GroupVote['vote_type'],
+      status: dbRow.status as GroupVote['status'],
       options: dbRow.options as any,
       results: dbRow.results as any,
       metadata: dbRow.metadata as any
