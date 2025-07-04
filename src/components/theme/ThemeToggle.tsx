@@ -17,24 +17,24 @@ const ThemeToggle = () => {
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-lg z-50">
+      <DropdownMenuContent align="end" className="bg-white dark:bg-gray-900 border shadow-lg z-50">
         <DropdownMenuItem 
           onClick={() => setTheme('light')} 
-          className="hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer text-gray-900 dark:text-gray-100"
+          className="hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"
         >
           <Sun className="mr-2 h-4 w-4" />
           <span>Light</span>
         </DropdownMenuItem>
         <DropdownMenuItem 
           onClick={() => setTheme('dark')} 
-          className="hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer text-gray-900 dark:text-gray-100"
+          className="hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"
         >
           <Moon className="mr-2 h-4 w-4" />
           <span>Dark</span>
         </DropdownMenuItem>
         <DropdownMenuItem 
           onClick={() => setTheme('system')} 
-          className="hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer text-gray-900 dark:text-gray-100"
+          className="hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"
         >
           <Monitor className="mr-2 h-4 w-4" />
           <span>System</span>

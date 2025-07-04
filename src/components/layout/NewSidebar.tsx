@@ -32,7 +32,6 @@ import {
   Factory,
   Building2,
   CheckCircle,
-  Store,
 } from 'lucide-react';
 
 interface NewSidebarProps {
@@ -51,7 +50,7 @@ const NewSidebar = ({ isCollapsed, setIsCollapsed }: NewSidebarProps) => {
       "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 w-full text-right",
       isActive(path) 
         ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium shadow-md" 
-        : "text-gray-900 dark:text-gray-100 hover:bg-gradient-to-r hover:from-blue-100 hover:to-purple-100 dark:hover:from-blue-900/30 dark:hover:to-purple-900/30 hover:text-blue-700 dark:hover:text-blue-300 hover:shadow-sm"
+        : "text-gray-700 hover:bg-gradient-to-r hover:from-blue-100 hover:to-purple-100 hover:text-blue-700 hover:shadow-sm"
     );
   };
 
@@ -74,8 +73,6 @@ const NewSidebar = ({ isCollapsed, setIsCollapsed }: NewSidebarProps) => {
   ];
 
   const systemMenuItems = [
-    { name: 'بوابة الاستثمار', path: '/investment', icon: Building },
-    { name: 'شبكة الموردين', path: '/suppliers', icon: Store },
     { name: 'نزاعات ORDA', path: '/disputes', icon: Gavel },
     { name: 'العقود', path: '/contracts', icon: FileText },
     { name: 'الدعم', path: '/support', icon: MessageSquare },
@@ -87,14 +84,14 @@ const NewSidebar = ({ isCollapsed, setIsCollapsed }: NewSidebarProps) => {
   return (
     <Sidebar 
       className={cn(
-        "fixed top-16 bottom-0 z-10 hidden md:flex flex-col border-r border-gray-200 dark:border-gray-700 transition-all duration-300 bg-white dark:bg-gray-900 shadow-lg",
+        "fixed top-16 bottom-0 z-10 hidden md:flex flex-col border-r border-gray-200 transition-all duration-300 bg-gradient-to-b from-blue-50 to-purple-50 shadow-lg",
         isCollapsed ? "w-16" : "w-64"
       )}
     >
-      <SidebarContent className="py-4 px-2 bg-white dark:bg-gray-900">
+      <SidebarContent className="py-4 px-2 bg-gradient-to-b from-blue-50 to-purple-50">
         <SidebarGroup>
           <SidebarGroupLabel className={cn(
-            "text-xs font-semibold text-blue-900 dark:text-blue-300 uppercase tracking-wider mb-3 px-3",
+            "text-xs font-semibold text-blue-700 uppercase tracking-wider mb-3 px-3",
             isCollapsed ? "sr-only" : ""
           )}>
             القائمة الرئيسية
@@ -117,7 +114,7 @@ const NewSidebar = ({ isCollapsed, setIsCollapsed }: NewSidebarProps) => {
 
         <SidebarGroup>
           <SidebarGroupLabel className={cn(
-            "text-xs font-semibold text-purple-900 dark:text-purple-300 uppercase tracking-wider mb-3 px-3 mt-6",
+            "text-xs font-semibold text-purple-700 uppercase tracking-wider mb-3 px-3 mt-6",
             isCollapsed ? "sr-only" : ""
           )}>
             إدارة الشركات
@@ -140,7 +137,7 @@ const NewSidebar = ({ isCollapsed, setIsCollapsed }: NewSidebarProps) => {
 
         <SidebarGroup>
           <SidebarGroupLabel className={cn(
-            "text-xs font-semibold text-teal-900 dark:text-teal-300 uppercase tracking-wider mb-3 px-3 mt-6",
+            "text-xs font-semibold text-teal-700 uppercase tracking-wider mb-3 px-3 mt-6",
             isCollapsed ? "sr-only" : ""
           )}>
             أدوات النظام
@@ -161,13 +158,13 @@ const NewSidebar = ({ isCollapsed, setIsCollapsed }: NewSidebarProps) => {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <div className="mt-auto pt-4 border-t border-gray-300 dark:border-gray-600">
+        <div className="mt-auto pt-4 border-t border-gray-300">
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton asChild>
                 <button 
                   onClick={logout} 
-                  className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 w-full text-right text-red-600 dark:text-red-400 hover:bg-gradient-to-r hover:from-red-100 hover:to-pink-100 dark:hover:from-red-900/30 dark:hover:to-pink-900/30 hover:text-red-700 dark:hover:text-red-300 hover:shadow-sm"
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 w-full text-right text-red-600 hover:bg-gradient-to-r hover:from-red-100 hover:to-pink-100 hover:text-red-700 hover:shadow-sm"
                 >
                   <LogOut className="h-5 w-5 flex-shrink-0" />
                   {!isCollapsed && <span className="text-sm font-medium">تسجيل الخروج</span>}

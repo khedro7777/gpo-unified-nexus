@@ -14,13 +14,13 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ children }) => {
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="lg:hidden text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800">
+        <Button variant="ghost" size="icon" className="lg:hidden text-gray-700 hover:text-gray-900 hover:bg-gray-100">
           <Menu className="h-6 w-6" />
         </Button>
       </SheetTrigger>
-      <SheetContent side="right" className="w-80 p-0 bg-white dark:bg-gray-900 border-l border-gray-200 dark:border-gray-700">
-        <div className="flex flex-col h-full bg-white dark:bg-gray-900">
-          <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-600 to-purple-600">
+      <SheetContent side="right" className="w-80 p-0 bg-white border-l border-gray-200">
+        <div className="flex flex-col h-full bg-white">
+          <div className="p-4 border-b border-gray-200 bg-gradient-to-r from-blue-600 to-purple-600">
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-lg font-bold text-white">منصة التعاون الذكي</h2>
@@ -36,7 +36,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ children }) => {
               </Button>
             </div>
           </div>
-          <div className="flex-1 overflow-y-auto bg-white dark:bg-gray-900">
+          <div className="flex-1 overflow-y-auto bg-white">
             {children}
           </div>
         </div>

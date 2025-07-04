@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -7,12 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Eye, Users, Briefcase, FileText, Vote, MessageSquare, Bell } from 'lucide-react';
 
-// Import lifecycle components
-import GroupLifecycleManager from '@/components/groups/lifecycle/GroupLifecycleManager';
-import ConditionalGroupUI from '@/components/groups/lifecycle/ConditionalGroupUI';
-import { useGroupLifecycle } from '@/hooks/useGroupLifecycle';
-
-// Import existing components
+// Import refactored components
 import GroupHeader from '@/components/groups/details/GroupHeader';
 import GroupProgress from '@/components/groups/details/GroupProgress';
 import GroupOverview from '@/components/groups/details/GroupOverview';
@@ -27,13 +23,6 @@ const GroupDetails = () => {
   const { t, i18n } = useTranslation();
   const isRTL = i18n.language === 'ar';
   const [activeTab, setActiveTab] = useState('overview');
-  
-  // Mock current user ID - في التطبيق الحقيقي سيتم الحصول عليه من المصادقة
-  const currentUserId = 'user-123';
-  const isUserMember = true; // Mock membership status
-
-  // Use lifecycle hook
-  const { lifecycle, loading } = useGroupLifecycle(id || '1');
 
   // Mock data - في التطبيق الحقيقي سيتم جلبها من API
   const groupData = {
@@ -90,47 +79,23 @@ const GroupDetails = () => {
     }
   ];
 
-  if (loading) {
-    return (
-      <NewMainLayout>
-        <div className="flex justify-center items-center min-h-96">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-        </div>
-      </NewMainLayout>
-    );
-  }
-
   return (
     <NewMainLayout>
       <div className="space-y-8" dir={isRTL ? 'rtl' : 'ltr'}>
         {/* Enhanced Header */}
         <GroupHeader groupData={groupData} />
 
-        {/* Group Lifecycle Manager */}
-        <GroupLifecycleManager 
-          groupId={groupData.id}
-          isUserMember={isUserMember}
-          currentUserId={currentUserId}
-        />
-
-        {/* Conditional UI based on lifecycle phase */}
-        <ConditionalGroupUI 
-          groupId={groupData.id}
-          isUserMember={isUserMember}
-          currentUserId={currentUserId}
-        />
-
         {/* Enhanced Progress Card */}
         <GroupProgress 
           targetAmount={groupData.targetAmount}
           currentAmount={groupData.currentAmount}
           memberCount={groupData.memberCount}
-          offersCount={2}
+          offersCount={offers.length}
         />
 
-        {/* Enhanced Tabs - only show relevant tabs based on phase */}
+        {/* Enhanced Tabs with better styling */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
-          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-6 h-12 bg-muted/30 rounded-xl">
+          <TabsList className="grid w-full grid-cols-6 lg:grid-cols-6 h-12 bg-muted/30 rounded-xl">
             <TabsTrigger value="overview" className="text-xs lg:text-sm rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
               <Eye className="h-4 w-4 mr-1" />
               {t('overview')}
@@ -139,31 +104,18 @@ const GroupDetails = () => {
               <Users className="h-4 w-4 mr-1" />
               {t('members')}
             </TabsTrigger>
-            
-            {/* Only show offers tab in negotiation phase */}
-            {lifecycle?.current_phase === 'negotiation' && (
-              <TabsTrigger value="offers" className="text-xs lg:text-sm rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
-                <Briefcase className="h-4 w-4 mr-1" />
-                {t('offers')}
-              </TabsTrigger>
-            )}
-            
-            {/* Only show contract tab in contracting phase */}
-            {lifecycle?.current_phase === 'contracting' && (
-              <TabsTrigger value="contract" className="text-xs lg:text-sm rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
-                <FileText className="h-4 w-4 mr-1" />
-                {t('contract')}
-              </TabsTrigger>
-            )}
-            
-            {/* Only show voting tab when there are active votes */}
-            {lifecycle?.current_phase !== 'under_arbitration' && (
-              <TabsTrigger value="voting" className="text-xs lg:text-sm rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
-                <Vote className="h-4 w-4 mr-1" />
-                {t('voting')}
-              </TabsTrigger>
-            )}
-            
+            <TabsTrigger value="offers" className="text-xs lg:text-sm rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
+              <Briefcase className="h-4 w-4 mr-1" />
+              {t('offers')}
+            </TabsTrigger>
+            <TabsTrigger value="contract" className="text-xs lg:text-sm rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
+              <FileText className="h-4 w-4 mr-1" />
+              {t('contract')}
+            </TabsTrigger>
+            <TabsTrigger value="voting" className="text-xs lg:text-sm rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
+              <Vote className="h-4 w-4 mr-1" />
+              {t('voting')}
+            </TabsTrigger>
             <TabsTrigger value="chat" className="text-xs lg:text-sm rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
               <MessageSquare className="h-4 w-4 mr-1" />
               {t('chat')}

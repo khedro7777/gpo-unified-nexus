@@ -17,8 +17,8 @@ const ModernSidebar = () => {
   const isCollapsed = state === 'collapsed';
   
   return (
-    <Sidebar className={`bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 ${isCollapsed ? "w-16" : "w-64"}`} collapsible="icon">
-      <div className="p-2 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-600 to-purple-600">
+    <Sidebar className={`bg-gradient-to-b from-blue-50 to-purple-50 border-r border-gray-200 ${isCollapsed ? "w-16" : "w-64"}`} collapsible="icon">
+      <div className="p-2 border-b border-gray-200 bg-gradient-to-r from-blue-600 to-purple-600">
         <SidebarTrigger className="mb-2 text-white hover:bg-white/20 hover:text-white" />
         {!isCollapsed && (
           <div className="text-center py-2">
@@ -28,7 +28,7 @@ const ModernSidebar = () => {
         )}
       </div>
       
-      <SidebarContent className="px-2 py-4 bg-white dark:bg-gray-900">
+      <SidebarContent className="px-2 py-4 bg-gradient-to-b from-blue-50 to-purple-50">
         <BuyingGroupSection isCollapsed={isCollapsed} />
         <AccountSection isCollapsed={isCollapsed} />
         <ServicesSection isCollapsed={isCollapsed} />
