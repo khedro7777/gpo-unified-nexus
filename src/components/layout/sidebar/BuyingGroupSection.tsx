@@ -28,14 +28,14 @@ const BuyingGroupSection: React.FC<BuyingGroupSectionProps> = ({ isCollapsed }) 
       icon: Plus 
     },
     { 
-      title: isRTL ? 'العروض المرسلة والمستلمة' : 'Sent & Received Offers', 
-      url: '/offers', 
-      icon: FileCheck 
+      title: isRTL ? 'طلبات التسعير' : 'Price Requests', 
+      url: '/groups?filter=price-requests', 
+      icon: TrendingUp 
     },
     { 
-      title: isRTL ? 'الموردين المعتمدين' : 'Certified Suppliers', 
-      url: '/suppliers', 
-      icon: Package 
+      title: isRTL ? 'عروض الموردين' : 'Supplier Offers', 
+      url: '/offers?type=supplier', 
+      icon: FileCheck 
     },
     { 
       title: isRTL ? 'المفاوضات الجماعية' : 'Group Negotiations', 
