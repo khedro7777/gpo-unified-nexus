@@ -11,6 +11,14 @@ import PaymentMethods from '@/components/wallet/PaymentMethods';
 import Subscriptions from '@/components/wallet/Subscriptions';
 import { useAuth } from '@/hooks/use-auth';
 
+// Sample transaction data
+const transactionData = [
+  { id: 1, type: 'deposit', amount: 500, status: 'completed', date: '2025-01-07', description: 'إيداع من باي بال' },
+  { id: 2, type: 'withdrawal', amount: 150, status: 'completed', date: '2025-01-05', description: 'سحب إلى باي بال' },
+  { id: 3, type: 'earning', amount: 320, status: 'completed', date: '2025-01-03', description: 'أرباح من المشروع #122' },
+  { id: 4, type: 'fee', amount: 25, status: 'completed', date: '2025-01-01', description: 'رسوم النظام' }
+];
+
 const Wallet = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -94,11 +102,11 @@ const Wallet = () => {
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
-            <WalletOverview />
+            <WalletOverview recentTransactions={transactionData} />
           </TabsContent>
 
           <TabsContent value="transactions" className="space-y-6">
-            <TransactionsView />
+            <TransactionsView transactions={transactionData} />
           </TabsContent>
 
           <TabsContent value="payments" className="space-y-6">
