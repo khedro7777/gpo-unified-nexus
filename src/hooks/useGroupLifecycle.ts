@@ -31,7 +31,9 @@ export const useGroupLifecycle = (groupId: string) => {
         throw error;
       }
 
-      setLifecycle(data);
+      if (data) {
+        setLifecycle(data as GroupLifecycle);
+      }
     } catch (error) {
       console.error('Error fetching group lifecycle:', error);
     }
@@ -49,7 +51,7 @@ export const useGroupLifecycle = (groupId: string) => {
         .order('assigned_at', { ascending: false });
 
       if (error) throw error;
-      setRoles(data || []);
+      setRoles((data || []) as GroupRole[]);
     } catch (error) {
       console.error('Error fetching group roles:', error);
     }
@@ -65,7 +67,7 @@ export const useGroupLifecycle = (groupId: string) => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setActiveVotes(data || []);
+      setActiveVotes((data || []) as GroupVote[]);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching active votes:', error);
@@ -110,7 +112,7 @@ export const useGroupLifecycle = (groupId: string) => {
 
       if (roleError) throw roleError;
 
-      setLifecycle(lifecycleData);
+      setLifecycle(lifecycleData as GroupLifecycle);
       await fetchGroupRoles();
 
       toast({
@@ -195,7 +197,7 @@ export const useGroupLifecycle = (groupId: string) => {
 
       const options = members?.map((member, index) => ({
         id: `option_${index}`,
-        text: member.profiles?.full_name || `عضو ${index + 1}`,
+        text: (member as any).profiles?.full_name || `عضو ${index + 1}`,
         votes_count: 0
       })) || [];
 
@@ -230,13 +232,15 @@ export const useGroupLifecycle = (groupId: string) => {
     if (!lifecycle) return;
 
     try {
+      const { data: userData } = await supabase.auth.getUser();
+      
       const { error: transitionError } = await supabase
         .from('group_phase_transitions')
         .insert({
           group_id: groupId,
           from_phase: lifecycle.current_phase,
           to_phase: newPhase,
-          triggered_by: (await supabase.auth.getUser()).data.user?.id,
+          triggered_by: userData.user?.id,
           reason: reason
         });
 

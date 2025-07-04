@@ -8,10 +8,10 @@ export interface GroupLifecycle {
   associated_gateway?: string;
   target_country: string;
   current_round: number;
-  round_ends_at?: Date;
+  round_ends_at?: string;
   settings: GroupSettings;
-  created_at: Date;
-  updated_at: Date;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface GroupSettings {
@@ -26,23 +26,27 @@ export interface GroupRole {
   group_id: string;
   user_id: string;
   role: 'member' | 'admin' | 'creator';
-  assigned_at: Date;
-  expires_at?: Date;
+  assigned_at: string;
+  expires_at?: string;
   round_bound: boolean;
   round_number?: number;
+  profiles?: {
+    full_name?: string;
+    email?: string;
+  };
 }
 
 export interface GroupVote {
   id: string;
   group_id: string;
   title: string;
-  description: string;
+  description?: string;
   vote_type: 'admin_election' | 'proposal' | 'contract_approval';
-  options: VoteOption[];
+  options: any;
   results?: any;
   status: 'active' | 'completed' | 'expired';
-  created_at: Date;
-  expires_at: Date;
+  created_at: string;
+  expires_at: string;
   metadata?: any;
 }
 
@@ -57,7 +61,7 @@ export interface GroupPhaseTransition {
   group_id: string;
   from_phase: string;
   to_phase: string;
-  triggered_by: string;
+  triggered_by?: string;
   reason: string;
-  created_at: Date;
+  created_at: string;
 }
