@@ -48,32 +48,32 @@ const EnhancedTopBar = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b shadow-sm">
+    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b shadow-sm dark:bg-gray-900/95 dark:border-gray-800">
       {/* Top Info Bar */}
-      <div className="bg-primary/5 border-b">
+      <div className="bg-primary/5 border-b dark:bg-primary/10 dark:border-gray-800">
         <div className="container mx-auto px-4 py-2">
           <div className="flex items-center justify-between text-sm">
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
                 <Clock className="h-4 w-4 text-primary" />
-                <span className="font-medium">{currentTime}</span>
+                <span className="font-medium text-foreground">{currentTime}</span>
               </div>
               <div className="flex items-center gap-2">
                 <DollarSign className="h-4 w-4 text-green-600" />
-                <span>{currencies.find(c => c.code === currency)?.symbol} {currency.toUpperCase()}</span>
+                <span className="text-foreground">{currencies.find(c => c.code === currency)?.symbol} {currency.toUpperCase()}</span>
               </div>
             </div>
             
             <div className="flex items-center gap-3">
               {/* Language Selector */}
               <Select value={language} onValueChange={setLanguage}>
-                <SelectTrigger className="w-32 h-8 text-xs">
+                <SelectTrigger className="w-32 h-8 text-xs bg-background border-border">
                   <Globe className="h-3 w-3 mr-1" />
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-background border-border">
                   {languages.map((lang) => (
-                    <SelectItem key={lang.code} value={lang.code} className="text-xs">
+                    <SelectItem key={lang.code} value={lang.code} className="text-xs hover:bg-muted">
                       <span className="flex items-center gap-2">
                         <span>{lang.flag}</span>
                         <span>{lang.name}</span>
@@ -85,12 +85,12 @@ const EnhancedTopBar = () => {
 
               {/* Country Selector */}
               <Select value={country} onValueChange={setCountry}>
-                <SelectTrigger className="w-32 h-8 text-xs">
+                <SelectTrigger className="w-32 h-8 text-xs bg-background border-border">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-background border-border">
                   {countries.map((country) => (
-                    <SelectItem key={country.code} value={country.code} className="text-xs">
+                    <SelectItem key={country.code} value={country.code} className="text-xs hover:bg-muted">
                       <span className="flex items-center gap-2">
                         <span>{country.flag}</span>
                         <span>{country.name}</span>
@@ -102,12 +102,12 @@ const EnhancedTopBar = () => {
 
               {/* Currency Selector */}
               <Select value={currency} onValueChange={setCurrency}>
-                <SelectTrigger className="w-32 h-8 text-xs">
+                <SelectTrigger className="w-32 h-8 text-xs bg-background border-border">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-background border-border">
                   {currencies.map((curr) => (
-                    <SelectItem key={curr.code} value={curr.code} className="text-xs">
+                    <SelectItem key={curr.code} value={curr.code} className="text-xs hover:bg-muted">
                       <span className="flex items-center gap-2">
                         <span>{curr.symbol}</span>
                         <span>{curr.name}</span>
@@ -139,13 +139,13 @@ const EnhancedTopBar = () => {
 
           {/* Navigation Links */}
           <nav className="hidden md:flex items-center gap-6">
-            <Link to="/about" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link to="/about" className="text-sm font-medium hover:text-primary transition-colors text-foreground">
               من نحن
             </Link>
-            <Link to="/how-it-works" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link to="/how-it-works" className="text-sm font-medium hover:text-primary transition-colors text-foreground">
               كيف تعمل
             </Link>
-            <Link to="/support" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link to="/support" className="text-sm font-medium hover:text-primary transition-colors text-foreground">
               الدعم
             </Link>
           </nav>
@@ -157,7 +157,7 @@ const EnhancedTopBar = () => {
                 <Link to="/dashboard">
                   <Button variant="ghost" size="sm" className="flex items-center gap-2">
                     <User className="h-4 w-4" />
-                    <span className="hidden md:inline">{user?.name || 'لوحة التحكم'}</span>
+                    <span className="hidden md:inline">لوحة التحكم</span>
                   </Button>
                 </Link>
                 <Button variant="outline" size="sm" onClick={logout}>

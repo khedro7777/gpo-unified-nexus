@@ -8,6 +8,8 @@ import Index from '@/pages/Index';
 import EnhancedHomePage from '@/pages/EnhancedHomePage';
 import Dashboard from '@/pages/Dashboard';
 import Profile from '@/pages/Profile';
+import About from '@/pages/About';
+import Support from '@/pages/Support';
 import HowItWorks from '@/pages/HowItWorks';
 import CreateGroup from '@/pages/groups/CreateGroup';
 import GroupDetails from '@/pages/groups/GroupDetails';
@@ -45,6 +47,8 @@ const AppRoutes = () => {
       {/* Public Routes - Accessible without authentication */}
       <Route path="/" element={<EnhancedHomePage />} />
       <Route path="/old-home" element={<Index />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/support" element={<Support />} />
       <Route path="/how-it-works" element={<HowItWorks />} />
       
       {/* Auth Routes */}
@@ -125,10 +129,10 @@ const AppRoutes = () => {
       
       {/* Catch-all route for 404 */}
       <Route path="*" element={
-        <div className="min-h-screen flex items-center justify-center">
+        <div className="min-h-screen flex items-center justify-center bg-background">
           <div className="text-center">
-            <h1 className="text-4xl font-bold text-gray-800 mb-4">404</h1>
-            <p className="text-gray-600 mb-6">الصفحة غير موجودة</p>
+            <h1 className="text-4xl font-bold text-foreground mb-4">404</h1>
+            <p className="text-muted-foreground mb-6">الصفحة غير موجودة</p>
             <a href="/" className="text-primary hover:underline">العودة للصفحة الرئيسية</a>
           </div>
         </div>

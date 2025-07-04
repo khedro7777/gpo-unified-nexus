@@ -32,7 +32,7 @@ const SidebarSection: React.FC<SidebarSectionProps> = ({
 }) => {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel className={isCollapsed ? 'sr-only' : `${colorClass} font-semibold text-sm`}>
+      <SidebarGroupLabel className={isCollapsed ? 'sr-only' : `${colorClass} dark:text-gray-300 font-semibold text-sm`}>
         {title}
       </SidebarGroupLabel>
       <SidebarGroupContent>
@@ -46,7 +46,7 @@ const SidebarSection: React.FC<SidebarSectionProps> = ({
                     `flex items-center gap-3 px-3 py-2 rounded-md transition-all duration-200 text-sm ${
                       isActive 
                         ? 'bg-primary text-primary-foreground shadow-sm font-medium' 
-                        : 'hover:bg-muted text-muted-foreground hover:text-foreground'
+                        : 'hover:bg-muted text-muted-foreground hover:text-foreground dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700'
                     }`
                   }
                 >
