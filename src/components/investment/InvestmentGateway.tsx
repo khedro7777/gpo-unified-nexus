@@ -1,6 +1,9 @@
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { Plus, ArrowRight } from 'lucide-react';
 import InvestmentStats from './InvestmentStats';
 import InvestmentOverview from './InvestmentOverview';
 import InvestmentOpportunities from './InvestmentOpportunities';
@@ -14,9 +17,33 @@ import PortfolioManagement from './PortfolioManagement';
  */
 const InvestmentGateway = () => {
   const [activeTab, setActiveTab] = useState('overview');
+  const navigate = useNavigate();
+
+  const handleCreateInvestment = () => {
+    navigate('/create-group/investment');
+  };
+
+  const handleJoinInvestment = () => {
+    navigate('/groups?filter=investment');
+  };
 
   return (
     <div className="space-y-6">
+      {/* Quick Actions Bar */}
+      <div className="flex flex-wrap gap-3 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+        <Button onClick={handleCreateInvestment} className="flex-1 min-w-[200px]">
+          <Plus className="h-4 w-4 mr-2" />
+          إنشاء استثمار جديد
+        </Button>
+        <Button variant="outline" onClick={handleJoinInvestment} className="flex-1 min-w-[200px]">
+          <ArrowRight className="h-4 w-4 mr-2" />
+          انضمام لاستثمار موجود
+        </Button>
+        <Button variant="outline" onClick={() => navigate('/governance')} className="flex-1 min-w-[200px]">
+          الانتقال للحوكمة
+        </Button>
+      </div>
+
       {/* Investment Stats Cards */}
       <InvestmentStats />
 

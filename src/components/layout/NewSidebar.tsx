@@ -32,6 +32,7 @@ import {
   Factory,
   Building2,
   CheckCircle,
+  Store,
 } from 'lucide-react';
 
 interface NewSidebarProps {
@@ -50,7 +51,7 @@ const NewSidebar = ({ isCollapsed, setIsCollapsed }: NewSidebarProps) => {
       "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 w-full text-right",
       isActive(path) 
         ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium shadow-md" 
-        : "text-gray-700 dark:text-gray-200 hover:bg-gradient-to-r hover:from-blue-100 hover:to-purple-100 dark:hover:from-blue-900/30 dark:hover:to-purple-900/30 hover:text-blue-700 dark:hover:text-blue-300 hover:shadow-sm"
+        : "text-gray-900 dark:text-gray-100 hover:bg-gradient-to-r hover:from-blue-100 hover:to-purple-100 dark:hover:from-blue-900/30 dark:hover:to-purple-900/30 hover:text-blue-700 dark:hover:text-blue-300 hover:shadow-sm"
     );
   };
 
@@ -73,6 +74,8 @@ const NewSidebar = ({ isCollapsed, setIsCollapsed }: NewSidebarProps) => {
   ];
 
   const systemMenuItems = [
+    { name: 'بوابة الاستثمار', path: '/investment', icon: Building },
+    { name: 'شبكة الموردين', path: '/suppliers', icon: Store },
     { name: 'نزاعات ORDA', path: '/disputes', icon: Gavel },
     { name: 'العقود', path: '/contracts', icon: FileText },
     { name: 'الدعم', path: '/support', icon: MessageSquare },
@@ -91,7 +94,7 @@ const NewSidebar = ({ isCollapsed, setIsCollapsed }: NewSidebarProps) => {
       <SidebarContent className="py-4 px-2 bg-white dark:bg-gray-900">
         <SidebarGroup>
           <SidebarGroupLabel className={cn(
-            "text-xs font-semibold text-blue-700 dark:text-blue-300 uppercase tracking-wider mb-3 px-3",
+            "text-xs font-semibold text-blue-900 dark:text-blue-300 uppercase tracking-wider mb-3 px-3",
             isCollapsed ? "sr-only" : ""
           )}>
             القائمة الرئيسية
@@ -114,7 +117,7 @@ const NewSidebar = ({ isCollapsed, setIsCollapsed }: NewSidebarProps) => {
 
         <SidebarGroup>
           <SidebarGroupLabel className={cn(
-            "text-xs font-semibold text-purple-700 dark:text-purple-300 uppercase tracking-wider mb-3 px-3 mt-6",
+            "text-xs font-semibold text-purple-900 dark:text-purple-300 uppercase tracking-wider mb-3 px-3 mt-6",
             isCollapsed ? "sr-only" : ""
           )}>
             إدارة الشركات
@@ -137,7 +140,7 @@ const NewSidebar = ({ isCollapsed, setIsCollapsed }: NewSidebarProps) => {
 
         <SidebarGroup>
           <SidebarGroupLabel className={cn(
-            "text-xs font-semibold text-teal-700 dark:text-teal-300 uppercase tracking-wider mb-3 px-3 mt-6",
+            "text-xs font-semibold text-teal-900 dark:text-teal-300 uppercase tracking-wider mb-3 px-3 mt-6",
             isCollapsed ? "sr-only" : ""
           )}>
             أدوات النظام

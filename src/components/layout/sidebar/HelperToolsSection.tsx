@@ -1,7 +1,8 @@
 
 import React from 'react';
-import { Bell, Calendar, Terminal, Wrench, HelpCircle } from 'lucide-react';
+import { Bell, Calendar, Terminal, Wrench, HelpCircle, Zap } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '@/hooks/use-auth';
 import SidebarSection from './SidebarSection';
 
 interface HelperToolsSectionProps {
@@ -10,28 +11,31 @@ interface HelperToolsSectionProps {
 
 const HelperToolsSection: React.FC<HelperToolsSectionProps> = ({ isCollapsed }) => {
   const { i18n } = useTranslation();
+  const { user } = useAuth();
   const isRTL = i18n.language === 'ar';
+
+  if (!user) return null;
 
   const helperItems = [
     { 
-      title: isRTL ? 'الإشعارات' : 'Notifications', 
-      url: '/notifications', 
-      icon: Bell 
-    },
-    { 
       title: isRTL ? 'التقويم والمواعيد' : 'Calendar & Schedules', 
-      url: '/calendar', 
+      url: '/dashboard?tab=calendar', 
       icon: Calendar 
     },
     { 
       title: isRTL ? 'صندوق MCP الذكي' : 'Smart MCP Box', 
-      url: '/mcp', 
+      url: '/dashboard?tab=mcp', 
       icon: Terminal 
     },
     { 
       title: isRTL ? 'الوضع اليدوي' : 'Manual Mode', 
-      url: '/manual-mode', 
+      url: '/dashboard?mode=manual', 
       icon: Wrench 
+    },
+    { 
+      title: isRTL ? 'الأتمتة الذكية' : 'Smart Automation', 
+      url: '/dashboard?mode=auto', 
+      icon: Zap 
     },
     { 
       title: isRTL ? 'الدعم الفني' : 'Technical Support', 
@@ -45,7 +49,7 @@ const HelperToolsSection: React.FC<HelperToolsSectionProps> = ({ isCollapsed }) 
       title={isRTL ? '🔧 أدوات مساعدة' : '🔧 Helper Tools'}
       items={helperItems}
       isCollapsed={isCollapsed}
-      colorClass="text-purple-600"
+      colorClass="text-orange-600 dark:text-orange-400"
     />
   );
 };
