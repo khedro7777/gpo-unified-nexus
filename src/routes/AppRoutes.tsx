@@ -8,8 +8,8 @@ import Login from '@/pages/auth/Login';
 import Register from '@/pages/auth/Register';
 import RoleSelection from '@/pages/auth/RoleSelection';
 
-// Main pages
-import EnhancedHomePage from '@/pages/EnhancedHomePage';
+// Main pages - using Index as the main homepage
+import Index from '@/pages/Index';
 import Dashboard from '@/pages/Dashboard';
 import Profile from '@/pages/Profile';
 import Wallet from '@/pages/Wallet';
@@ -39,8 +39,8 @@ const AppRoutes = () => {
 
   return (
     <Routes>
-      {/* Public routes */}
-      <Route path="/" element={<EnhancedHomePage />} />
+      {/* Public routes - Main homepage */}
+      <Route path="/" element={<Index />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/role-selection" element={<RoleSelection />} />
@@ -140,6 +140,15 @@ const AppRoutes = () => {
         }
       />
 
+      <Route
+        path="/mcp"
+        element={
+          <ProtectedRoute>
+            <ToolsAIAgent />
+          </ProtectedRoute>
+        }
+      />
+
       {/* New service routes */}
       <Route
         path="/create-group/:type"
@@ -159,10 +168,13 @@ const AppRoutes = () => {
         }
       />
 
-      {/* Additional routes */}
-      <Route path="/about" element={<div>من نحن - قيد التطوير</div>} />
-      <Route path="/how-it-works" element={<div>كيف تعمل المنصة - قيد التطوير</div>} />
-      <Route path="/support" element={<div>الدعم والمساعدة - قيد التطوير</div>} />
+      {/* Static content pages */}
+      <Route path="/about" element={<div className="container mx-auto px-4 py-16"><h1 className="text-3xl font-bold mb-8">من نحن</h1><p className="text-lg text-muted-foreground">منصة GPO WORLD هي منصة التعاون الذكي الشاملة للشراء التعاوني والتسويق المشترك وإدارة المستقلين وتأسيس الشركات والتحكيم الرقمي.</p></div>} />
+      <Route path="/how-it-works" element={<div className="container mx-auto px-4 py-16"><h1 className="text-3xl font-bold mb-8">كيف تعمل المنصة</h1><p className="text-lg text-muted-foreground">ستجد هنا دليلاً شاملاً حول كيفية استخدام المنصة والاستفادة من جميع خدماتها.</p></div>} />
+      <Route path="/support" element={<div className="container mx-auto px-4 py-16"><h1 className="text-3xl font-bold mb-8">الدعم والمساعدة</h1><p className="text-lg text-muted-foreground">فريق الدعم متاح لمساعدتك في أي استفسار. تواصل معنا عبر البريد الإلكتروني أو الدردشة المباشرة.</p></div>} />
+      <Route path="/suppliers" element={<div className="container mx-auto px-4 py-16"><h1 className="text-3xl font-bold mb-8">الموردون</h1><p className="text-lg text-muted-foreground">اكتشف شبكة الموردين الموثوقة وقدم عروضك للمجموعات النشطة.</p></div>} />
+      <Route path="/investment" element={<div className="container mx-auto px-4 py-16"><h1 className="text-3xl font-bold mb-8">بوابة الاستثمار</h1><p className="text-lg text-muted-foreground">منصة الاستثمار الجماعي وإدارة الشركات الاستثمارية.</p></div>} />
+      <Route path="/arbitration" element={<div className="container mx-auto px-4 py-16"><h1 className="text-3xl font-bold mb-8">التحكيم والتوثيق</h1><p className="text-lg text-muted-foreground">نظام ORDA لحل النزاعات والتحكيم الرقمي المتقدم.</p></div>} />
 
       {/* Catch-all redirect */}
       <Route 
