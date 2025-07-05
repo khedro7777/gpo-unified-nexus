@@ -27,7 +27,7 @@ import { Moon, Sun, User, LogOut } from 'lucide-react';
 
 const ThemeSidebar = () => {
   const { state: sidebarState } = useSidebar();
-  const { user, signOut } = useAuth();
+  const { user, logout } = useAuth();
   const { theme, setTheme } = useTheme();
   const isCollapsed = sidebarState === 'collapsed';
 
@@ -102,7 +102,7 @@ const ThemeSidebar = () => {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => signOut()}
+              onClick={() => logout()}
               className="text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400"
             >
               <LogOut className="h-4 w-4" />
