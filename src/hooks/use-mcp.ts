@@ -1,37 +1,74 @@
 
-import { create } from 'zustand';
+import { useState, useEffect } from 'react';
 
-type MCPMode = 'auto' | 'ask' | 'manual';
+export type MCPMode = 'auto' | 'ask' | 'manual';
 
-interface MCPState {
-  mode: MCPMode;
-  serverStatus: 'online' | 'offline';
-  isOpen: boolean;
-  rasaConnected: boolean;
-  activeTasks: number;
-  completedTasks: number;
-  setMode: (mode: MCPMode) => void;
-  setServerStatus: (status: 'online' | 'offline') => void;
-  setRasaConnected: (connected: boolean) => void;
-  toggleMCP: () => void;
-  incrementCompletedTasks: () => void;
-  setActiveTasks: (count: number) => void;
+export interface MCPServerStatus {
+  connected: boolean;
+  lastSeen?: Date;
+  capabilities: string[];
 }
 
-export const useMCP = create<MCPState>((set) => ({
-  mode: 'ask', // Default to ask mode
-  serverStatus: 'online',
-  isOpen: false,
-  rasaConnected: true,
-  activeTasks: 3,
-  completedTasks: 24,
-  setMode: (mode) => set({ mode }),
-  setServerStatus: (status) => set({ serverStatus: status }),
-  setRasaConnected: (connected) => set({ rasaConnected: connected }),
-  toggleMCP: () => set((state) => ({ isOpen: !state.isOpen })),
-  incrementCompletedTasks: () => set((state) => ({ 
-    completedTasks: state.completedTasks + 1,
-    activeTasks: Math.max(0, state.activeTasks - 1)
-  })),
-  setActiveTasks: (count) => set({ activeTasks: count })
-}));
+export const useMCP = () => {
+  const [mode, setMode] = useState<MCPMode>('manual');
+  const [serverStatus, setServerStatus] = useState<MCPServerStatus>({
+    connected: false,
+    capabilities: []
+  });
+
+  useEffect(() => {
+    // Simulate MCP server connection
+    const timer = setTimeout(() => {
+      setServerStatus({
+        connected: true,
+        lastSeen: new Date(),
+        capabilities: [
+          'group_management',
+          'voting_automation',
+          'document_processing',
+          'notification_service',
+          'analytics_reporting'
+        ]
+      });
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const executeAction = async (action: string, params?: any) => {
+    console.log(`Executing MCP action: ${action}`, params);
+    
+    // Simulate API call based on mode
+    switch (mode) {
+      case 'auto':
+        // Execute immediately
+        return { success: true, result: 'Action executed automatically' };
+      
+      case 'ask':
+        // Ask for confirmation first
+        const confirmed = window.confirm(`Execute action: ${action}?`);
+        if (confirmed) {
+          return { success: true, result: 'Action executed after confirmation' };
+        }
+        return { success: false, result: 'Action cancelled by user' };
+      
+      case 'manual':
+        // Return instructions for manual execution
+        return { 
+          success: false, 
+          result: 'Manual execution required',
+          instructions: `Please manually execute: ${action}`
+        };
+      
+      default:
+        return { success: false, result: 'Unknown mode' };
+    }
+  };
+
+  return {
+    mode,
+    setMode,
+    serverStatus,
+    executeAction
+  };
+};

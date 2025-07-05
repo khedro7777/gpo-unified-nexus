@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import NewMainLayout from '@/components/layout/NewMainLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Eye, Users, Briefcase, FileText, Vote, MessageSquare, Bell } from 'lucide-react';
+import { Eye, Users, Briefcase, FileText, Vote, MessageSquare, Bell, Settings } from 'lucide-react';
 
 // Import lifecycle components
 import GroupLifecycleManager from '@/components/groups/lifecycle/GroupLifecycleManager';
@@ -28,14 +28,15 @@ const GroupDetails = () => {
   const isRTL = i18n.language === 'ar';
   const [activeTab, setActiveTab] = useState('overview');
   
-  // Mock current user ID - في التطبيق الحقيقي سيتم الحصول عليه من المصادقة
+  // Mock current user ID - in real app this would come from auth
   const currentUserId = 'user-123';
   const isUserMember = true; // Mock membership status
+  const isAdmin = true; // Mock admin status
 
   // Use lifecycle hook
   const { lifecycle, loading } = useGroupLifecycle(id || '1');
 
-  // Mock data - في التطبيق الحقيقي سيتم جلبها من API
+  // Mock data - in real app this would be fetched from API
   const groupData = {
     id: id || '1',
     name: isRTL ? 'مجموعة شراء الأجهزة الذكية' : 'Smart Devices Buying Group',
@@ -103,8 +104,20 @@ const GroupDetails = () => {
   return (
     <NewMainLayout>
       <div className="space-y-8" dir={isRTL ? 'rtl' : 'ltr'}>
-        {/* Enhanced Header */}
-        <GroupHeader groupData={groupData} />
+        {/* Enhanced Header with Management Room Button */}
+        <div className="flex justify-between items-start">
+          <div className="flex-1">
+            <GroupHeader groupData={groupData} />
+          </div>
+          {isAdmin && (
+            <Link to={`/groups/${id}/management`}>
+              <Button className="ml-4">
+                <Settings className="h-4 w-4 mr-2" />
+                غرفة الإدارة
+              </Button>
+            </Link>
+          )}
+        </div>
 
         {/* Group Lifecycle Manager */}
         <GroupLifecycleManager 
