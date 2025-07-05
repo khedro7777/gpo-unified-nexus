@@ -2,6 +2,7 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/use-auth';
+import NewMainLayout from '@/components/layout/NewMainLayout';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -24,11 +25,15 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   // If role check is required, and user doesn't have the required role
   if (requiredRole && role && !requiredRole.includes(role)) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/dashboard" replace />;
   }
 
   // User is authenticated and has the required role
-  return <>{children}</>;
+  return (
+    <NewMainLayout>
+      {children}
+    </NewMainLayout>
+  );
 };
 
 export default ProtectedRoute;

@@ -64,11 +64,12 @@ const RoleSelection = () => {
       description: `مرحبًا بك في منصة GPO كـ ${roleOptions.find(r => r.id === role)?.title}`,
     });
     
-    navigate('/');
+    // التوجيه إلى لوحة التحكم بدلاً من الصفحة الرئيسية
+    navigate('/dashboard');
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-background to-muted/30 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-background py-12 px-4 sm:px-6 lg:px-8">
       <div className="mb-8 text-center">
         <h2 className="text-4xl font-bold text-primary mb-2">GPO</h2>
         <p className="text-lg text-muted-foreground">Smart Cooperation Platform</p>
@@ -86,7 +87,7 @@ const RoleSelection = () => {
           {roleOptions.map((role) => (
             <Card 
               key={role.id} 
-              className="transition-all duration-200 hover:shadow-lg border-2 hover:border-primary/50 overflow-hidden"
+              className="transition-all duration-200 hover:shadow-lg border-2 hover:border-primary/50 overflow-hidden cursor-pointer"
               onClick={() => handleRoleSelection(role.id)}
             >
               <div className={`h-2 ${role.color}`}></div>
@@ -100,7 +101,7 @@ const RoleSelection = () => {
                 <CardDescription className="text-base">{role.description}</CardDescription>
               </CardHeader>
               <CardContent className="pb-6">
-                <Button className={`w-full mt-4`}>
+                <Button className="w-full mt-4">
                   اختيار هذا الدور
                 </Button>
               </CardContent>

@@ -1,115 +1,114 @@
 
-import React, { useState } from 'react';
-import NewMainLayout from '@/components/layout/NewMainLayout';
+import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Building, Users, Gavel, TrendingUp, FileText, Vote } from 'lucide-react';
-import CompanyOverview from '@/components/companies/CompanyOverview';
-import ShareholderManagement from '@/components/companies/ShareholderManagement';
-import BoardVoting from '@/components/companies/BoardVoting';
-import CompanyFinancials from '@/components/companies/CompanyFinancials';
+import { Building, Users, FileText, TrendingUp, Settings, Plus } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/hooks/use-auth';
 
 const CompanyManagement = () => {
-  const [activeTab, setActiveTab] = useState('overview');
+  const navigate = useNavigate();
+  const { role } = useAuth();
+
+  const managementAreas = [
+    {
+      title: 'تأسيس شركة جديدة',
+      description: 'إنشاء كيان قانوني جديد للأعمال',
+      icon: Plus,
+      action: () => navigate('/company-formation'),
+      color: 'text-green-600'
+    },
+    {
+      title: 'إدارة الشركات الحالية',
+      description: 'عرض وإدارة الشركات التي تملكها أو تديرها',
+      icon: Building,
+      action: () => navigate('/companies'),
+      color: 'text-blue-600'
+    },
+    {
+      title: 'إدارة المساهمين',
+      description: 'إدارة المساهمين وحصصهم في الشركات',
+      icon: Users,
+      action: () => navigate('/shareholders'),
+      color: 'text-purple-600'
+    },
+    {
+      title: 'الوثائق القانونية',
+      description: 'عرض وإدارة جميع الوثائق القانونية للشركات',
+      icon: FileText,
+      action: () => navigate('/documents'),
+      color: 'text-orange-600'
+    },
+    {
+      title: 'التقارير المالية',
+      description: 'عرض التقارير المالية وحالة الشركات',
+      icon: TrendingUp,
+      action: () => navigate('/financial-reports'),
+      color: 'text-emerald-600'
+    },
+    {
+      title: 'إعدادات الشركة',
+      description: 'تحديث معلومات وإعدادات الشركات',
+      icon: Settings,
+      action: () => navigate('/company-settings'),
+      color: 'text-gray-600'
+    }
+  ];
 
   return (
-    <NewMainLayout>
-      <div className="space-y-6">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <div>
-            <h1 className="text-2xl md:text-3xl font-bold">إدارة الشركة</h1>
-            <p className="text-muted-foreground text-sm md:text-base">
-              إدارة شركة التقنية المتقدمة المحدودة
-            </p>
-          </div>
-          <div className="flex gap-2">
-            <Badge variant="default">نشطة</Badge>
-            <Badge variant="outline">LLC</Badge>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium">إجمالي المساهمين</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">12</div>
-              <p className="text-xs text-green-600">+2 هذا الشهر</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium">رأس المال</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">$250K</div>
-              <p className="text-xs text-muted-foreground">مدفوع بالكامل</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium">اقتراحات نشطة</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">3</div>
-              <p className="text-xs text-yellow-600">2 تحتاج تصويت</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium">الإيرادات الشهرية</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">$45K</div>
-              <p className="text-xs text-green-600">+15% من الشهر الماضي</p>
-            </CardContent>
-          </Card>
-        </div>
-
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
-            <TabsTrigger value="overview" className="text-xs md:text-sm">
-              <Building className="h-4 w-4 mr-1 md:mr-2" />
-              نظرة عامة
-            </TabsTrigger>
-            <TabsTrigger value="shareholders" className="text-xs md:text-sm">
-              <Users className="h-4 w-4 mr-1 md:mr-2" />
-              المساهمون
-            </TabsTrigger>
-            <TabsTrigger value="voting" className="text-xs md:text-sm">
-              <Vote className="h-4 w-4 mr-1 md:mr-2" />
-              التصويت
-            </TabsTrigger>
-            <TabsTrigger value="financials" className="text-xs md:text-sm">
-              <TrendingUp className="h-4 w-4 mr-1 md:mr-2" />
-              الماليات
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="overview" className="space-y-6">
-            <CompanyOverview />
-          </TabsContent>
-
-          <TabsContent value="shareholders" className="space-y-6">
-            <ShareholderManagement />
-          </TabsContent>
-
-          <TabsContent value="voting" className="space-y-6">
-            <BoardVoting />
-          </TabsContent>
-
-          <TabsContent value="financials" className="space-y-6">
-            <CompanyFinancials />
-          </TabsContent>
-        </Tabs>
+    <div className="container mx-auto px-4 py-8">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-foreground mb-2">إدارة الشركات</h1>
+        <p className="text-muted-foreground">
+          إدارة شاملة لجميع الشركات والكيانات القانونية
+        </p>
       </div>
-    </NewMainLayout>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {managementAreas.map((area, index) => (
+          <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer" onClick={area.action}>
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <div className={`p-2 rounded-lg bg-muted ${area.color}`}>
+                  <area.icon className="h-6 w-6" />
+                </div>
+                <div>
+                  <CardTitle className="text-lg">{area.title}</CardTitle>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <CardDescription className="mb-4">{area.description}</CardDescription>
+              <Button variant="outline" className="w-full">
+                الانتقال إلى {area.title}
+              </Button>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {role === 'founder' && (
+        <div className="mt-12 p-6 bg-muted/50 rounded-lg">
+          <h2 className="text-xl font-semibold mb-4">أدوات المؤسسين المتقدمة</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Button onClick={() => navigate('/company-incorporation')} className="h-auto p-4 justify-start">
+              <Building className="mr-2 h-5 w-5" />
+              <div className="text-left">
+                <div className="font-medium">بوابة التأسيس المتقدم</div>
+                <div className="text-sm opacity-70">أدوات متقدمة لتأسيس الشركات</div>
+              </div>
+            </Button>
+            <Button onClick={() => navigate('/investment')} variant="outline" className="h-auto p-4 justify-start">
+              <TrendingUp className="mr-2 h-5 w-5" />
+              <div className="text-left">
+                <div className="font-medium">إدارة الاستثمارات</div>
+                <div className="text-sm opacity-70">تتبع وإدارة الاستثمارات</div>
+              </div>
+            </Button>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 
