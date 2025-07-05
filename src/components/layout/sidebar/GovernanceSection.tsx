@@ -1,8 +1,7 @@
 
 import React from 'react';
-import { CheckCircle, MessageSquare, Gavel, Settings, Vote } from 'lucide-react';
+import { CheckCircle, MessageSquare, Gavel, Settings } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from '@/hooks/use-auth';
 import SidebarSection from './SidebarSection';
 
 interface GovernanceSectionProps {
@@ -11,22 +10,18 @@ interface GovernanceSectionProps {
 
 const GovernanceSection: React.FC<GovernanceSectionProps> = ({ isCollapsed }) => {
   const { i18n } = useTranslation();
-  const { user } = useAuth();
   const isRTL = i18n.language === 'ar';
-
-  if (!user) return null;
 
   const governanceItems = [
     { 
       title: isRTL ? 'التصويت والحوكمة' : 'Voting & Governance', 
       url: '/governance', 
-      icon: Vote 
+      icon: CheckCircle 
     },
     { 
       title: isRTL ? 'مناقشات لووميو' : 'Loomio Discussions', 
-      url: '/governance?tab=loomio', 
-      icon: MessageSquare,
-      disabled: true // Will be enabled when Loomio integration is ready
+      url: '/loomio', 
+      icon: MessageSquare 
     },
     { 
       title: isRTL ? 'نزاعات ORDA' : 'ORDA Disputes', 
@@ -35,9 +30,8 @@ const GovernanceSection: React.FC<GovernanceSectionProps> = ({ isCollapsed }) =>
     },
     { 
       title: isRTL ? 'OpenZeppelin Governor' : 'OpenZeppelin Governor', 
-      url: '/governance?tab=openzeppelin', 
-      icon: Settings,
-      disabled: true // Will be enabled when OpenZeppelin integration is ready
+      url: '/openzeppelin', 
+      icon: Settings 
     }
   ];
 
@@ -46,7 +40,7 @@ const GovernanceSection: React.FC<GovernanceSectionProps> = ({ isCollapsed }) =>
       title={isRTL ? '⚖️ الحوكمة والتصويت' : '⚖️ Governance & Voting'}
       items={governanceItems}
       isCollapsed={isCollapsed}
-      colorClass="text-purple-600 dark:text-purple-400"
+      colorClass="text-blue-600"
     />
   );
 };

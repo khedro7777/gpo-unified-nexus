@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Mail, User, Lock, Building } from 'lucide-react';
+import { Mail, User, Lock } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const Register = () => {
@@ -47,30 +47,24 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-50 to-white dark:from-gray-950 dark:to-gray-900 py-12 px-4 sm:px-6 lg:px-8">
-      {/* Logo Section */}
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-background to-muted/30 py-12 px-4 sm:px-6 lg:px-8">
       <div className="mb-8 text-center">
-        <div className="flex items-center justify-center mb-4">
-          <Building className="h-12 w-12 text-primary" />
-          <div className="mr-3">
-            <div className="text-3xl font-bold text-primary">GPO WORLD</div>
-            <div className="text-sm text-muted-foreground">Smart Cooperation Platform</div>
-          </div>
-        </div>
+        <h2 className="text-4xl font-bold text-primary mb-2">GPO</h2>
+        <p className="text-lg text-muted-foreground">Smart Cooperation Platform</p>
       </div>
       
-      <Card className="w-full max-w-md shadow-xl border-0">
-        <CardHeader className="space-y-1 text-center pb-6">
-          <CardTitle className="text-2xl font-bold">إنشاء حساب جديد</CardTitle>
+      <Card className="w-full max-w-md shadow-lg">
+        <CardHeader className="space-y-1 text-center pb-4">
+          <CardTitle className="text-2xl font-bold">إنشاء حساب</CardTitle>
           <CardDescription className="text-muted-foreground">
-            انضم إلى منصة GPO وابدأ رحلة التعاون الذكي
+            أدخل معلوماتك للتسجيل في منصة GPO
           </CardDescription>
         </CardHeader>
         
         <CardContent>
           {!otpSent ? (
             <form onSubmit={handleSendOTP} className="space-y-5">
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <div className="relative">
                   <User className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
                   <Input
@@ -106,7 +100,7 @@ const Register = () => {
             </form>
           ) : (
             <form onSubmit={handleVerifyOTP} className="space-y-5">
-              <div className="space-y-3">
+              <div className="space-y-2">
                 <div className="relative">
                   <Lock className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
                   <Input
@@ -115,13 +109,12 @@ const Register = () => {
                     value={otp}
                     onChange={(e) => setOtp(e.target.value)}
                     required
-                    className="text-center text-lg tracking-widest h-12 pl-10"
+                    className="text-center text-lg tracking-widest h-12"
                     maxLength={6}
-                    dir="ltr"
                   />
                 </div>
                 <p className="text-sm text-muted-foreground text-center">
-                  تم إرسال رمز التحقق إلى: {email}
+                  تم إرسال رمز التحقق إلى بريدك الإلكتروني
                 </p>
               </div>
               <Button 
@@ -144,7 +137,7 @@ const Register = () => {
           )}
         </CardContent>
         
-        <CardFooter className="flex flex-col space-y-4 pt-2">
+        <CardFooter className="flex flex-col space-y-3 pt-0">
           <div className="relative w-full my-2">
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t border-muted" />
@@ -156,14 +149,8 @@ const Register = () => {
           
           <div className="text-sm text-center text-muted-foreground">
             لديك حساب بالفعل؟{" "}
-            <Link to="/login" className="text-primary font-medium hover:underline transition-colors">
+            <Link to="/login" className="text-primary font-medium hover:underline">
               تسجيل الدخول
-            </Link>
-          </div>
-          
-          <div className="text-sm text-center text-muted-foreground">
-            <Link to="/" className="text-primary font-medium hover:underline transition-colors">
-              العودة للصفحة الرئيسية
             </Link>
           </div>
         </CardFooter>

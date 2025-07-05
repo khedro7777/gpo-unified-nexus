@@ -56,7 +56,7 @@ const MCPPanel: React.FC = () => {
             <MCPModeSelector
               currentMode={mode}
               onModeChange={setMode}
-              serverStatus={serverStatus.connected ? 'online' : 'offline'}
+              serverStatus={serverStatus}
             />
           </TabsContent>
 

@@ -1,195 +1,156 @@
 
-import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { useAuth } from '@/hooks/use-auth';
+import React, { Suspense } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
 
-// Auth pages
+// Pages
+import Index from '@/pages/Index';
+import EnhancedHomePage from '@/pages/EnhancedHomePage';
+import Dashboard from '@/pages/Dashboard';
+import Profile from '@/pages/Profile';
+import About from '@/pages/About';
+import Support from '@/pages/Support';
+import HowItWorks from '@/pages/HowItWorks';
+import CreateGroup from '@/pages/groups/CreateGroup';
+import GroupDetails from '@/pages/groups/GroupDetails';
+import Groups from '@/pages/Groups';
+import Suppliers from '@/pages/suppliers/Suppliers';
+import Services from '@/pages/Services';
+import Arbitration from '@/pages/arbitration/Arbitration';
+import CompanyIncorporation from '@/pages/gateways/CompanyIncorporation';
+import CompanyFormation from '@/pages/formation/CompanyFormation';
+import DocumentManagement from '@/pages/documents/DocumentManagement';
+import Freelance from '@/pages/freelance/Freelance';
+import Governance from '@/pages/governance/Governance';
+import Contracts from '@/pages/contracts/Contracts';
+import Notifications from '@/pages/notifications/Notifications';
+import Offers from '@/pages/offers/Offers';
+import Wallet from '@/pages/Wallet';
+import Investment from '@/pages/investment/Investment';
+
+// Auth Routes
 import Login from '@/pages/auth/Login';
 import Register from '@/pages/auth/Register';
 import RoleSelection from '@/pages/auth/RoleSelection';
 
-// Main pages - using Index as the main homepage
-import Index from '@/pages/Index';
-import Dashboard from '@/pages/Dashboard';
-import Profile from '@/pages/Profile';
-import Wallet from '@/pages/Wallet';
+// Service Routes
+import { ServiceRoutes } from './ServiceRoutes';
 
-// Group pages
-import GroupDetails from '@/pages/groups/GroupDetails';
-import MyGroups from '@/pages/groups/MyGroups';
-import GroupManagementPage from '@/pages/groups/GroupManagementPage';
-import CreateGroup from '@/pages/groups/CreateGroup';
-import CreateFormationGroup from '@/pages/groups/CreateFormationGroup';
-
-// Service pages
-import Freelance from '@/pages/freelance/Freelance';
-import CompanyFormation from '@/pages/formation/CompanyFormation';
-
-// Company pages
-import CompanyManagement from '@/pages/companies/CompanyManagement';
-
-// Tool pages
-import ToolsAIAgent from '@/pages/tools/ToolsAIAgent';
-
-// Protected route wrapper
-import ProtectedRoute from '@/components/auth/ProtectedRoute';
-
+/**
+ * Main Application Routes Configuration
+ * Organized by access level: Public, Protected, and Service routes
+ * Each route includes proper authentication and navigation handling
+ */
 const AppRoutes = () => {
-  const { isAuthenticated } = useAuth();
-
   return (
     <Routes>
-      {/* Public routes - Main homepage */}
-      <Route path="/" element={<Index />} />
+      {/* Public Routes - Accessible without authentication */}
+      <Route path="/" element={<EnhancedHomePage />} />
+      <Route path="/old-home" element={<Index />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/support" element={<Support />} />
+      <Route path="/how-it-works" element={<HowItWorks />} />
+      
+      {/* Auth Routes */}
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/role-selection" element={<RoleSelection />} />
-
-      {/* Protected routes */}
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        }
-      />
       
-      <Route
-        path="/profile"
-        element={
-          <ProtectedRoute>
-            <Profile />
-          </ProtectedRoute>
-        }
-      />
+      {/* Protected Routes - Require authentication */}
+      <Route path="/dashboard" element={
+        <ProtectedRoute>
+          <Dashboard />
+        </ProtectedRoute>
+      } />
       
-      <Route
-        path="/wallet"
-        element={
-          <ProtectedRoute>
-            <Wallet />
-          </ProtectedRoute>
-        }
-      />
+      <Route path="/profile" element={
+        <ProtectedRoute>
+          <Profile />
+        </ProtectedRoute>
+      } />
 
-      {/* Group routes */}
-      <Route
-        path="/groups"
-        element={
-          <ProtectedRoute>
-            <MyGroups />
-          </ProtectedRoute>
-        }
-      />
+      {/* Group Management Routes */}
+      <Route path="/groups" element={<Groups />} />
+      <Route path="/groups/:id" element={<GroupDetails />} />
+      <Route path="/create-group" element={
+        <ProtectedRoute>
+          <CreateGroup />
+        </ProtectedRoute>
+      } />
+      <Route path="/create-group/:type" element={
+        <ProtectedRoute>
+          <CreateGroup />
+        </ProtectedRoute>
+      } />
+
+      {/* Business Function Routes */}
+      <Route path="/suppliers" element={<Suppliers />} />
+      <Route path="/suppliers/register" element={
+        <ProtectedRoute>
+          <div className="min-h-screen bg-background py-8">
+            <div className="container mx-auto px-4">
+              <div className="max-w-6xl mx-auto">
+                <h1 className="text-3xl font-bold text-center mb-8">تسجيل كمورد معتمد</h1>
+                <Suspense fallback={<div>جاري التحميل...</div>}>
+                  {React.createElement(React.lazy(() => import('@/components/suppliers/SupplierRegistration')))}
+                </Suspense>
+              </div>
+            </div>
+          </div>
+        </ProtectedRoute>
+      } />
+      <Route path="/freelance" element={<Freelance />} />
+      <Route path="/governance" element={<Governance />} />
+      <Route path="/investment" element={<Investment />} />
       
-      <Route
-        path="/groups/:id"
-        element={
-          <ProtectedRoute>
-            <GroupDetails />
-          </ProtectedRoute>
-        }
-      />
+      {/* Company Formation Routes */}
+      <Route path="/company-incorporation" element={<CompanyIncorporation />} />
+      <Route path="/company-formation" element={<CompanyFormation />} />
       
-      <Route
-        path="/groups/:id/management"
-        element={
-          <ProtectedRoute>
-            <GroupManagementPage />
-          </ProtectedRoute>
-        }
-      />
+      {/* Service and Management Routes */}
+      <Route path="/services" element={<Services />} />
+      <Route path="/contracts" element={
+        <ProtectedRoute>
+          <Contracts />
+        </ProtectedRoute>
+      } />
+      <Route path="/offers" element={
+        <ProtectedRoute>
+          <Offers />
+        </ProtectedRoute>
+      } />
+      <Route path="/wallet" element={
+        <ProtectedRoute>
+          <Wallet />
+        </ProtectedRoute>
+      } />
+      
+      {/* Communication and Support Routes */}
+      <Route path="/notifications" element={
+        <ProtectedRoute>
+          <Notifications />
+        </ProtectedRoute>
+      } />
+      <Route path="/arbitration" element={<Arbitration />} />
+      <Route path="/documents" element={
+        <ProtectedRoute>
+          <DocumentManagement />
+        </ProtectedRoute>
+      } />
 
-      {/* Service routes */}
-      <Route
-        path="/freelance"
-        element={
-          <ProtectedRoute>
-            <Freelance />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/company-incorporation"
-        element={
-          <ProtectedRoute>
-            <CompanyFormation />
-          </ProtectedRoute>
-        }
-      />
-
-      {/* Company routes */}
-      <Route
-        path="/company-management"
-        element={
-          <ProtectedRoute>
-            <CompanyManagement />
-          </ProtectedRoute>
-        }
-      />
-
-      {/* Tools routes */}
-      <Route
-        path="/tools/ai-agent"
-        element={
-          <ProtectedRoute>
-            <ToolsAIAgent />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/mcp"
-        element={
-          <ProtectedRoute>
-            <ToolsAIAgent />
-          </ProtectedRoute>
-        }
-      />
-
-      {/* New service routes */}
-      <Route
-        path="/create-group/:type"
-        element={
-          <ProtectedRoute>
-            <CreateGroup />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/create-group/formation"
-        element={
-          <ProtectedRoute>
-            <CreateFormationGroup />
-          </ProtectedRoute>
-        }
-      />
-
-      {/* Static content pages */}
-      <Route path="/about" element={<div className="container mx-auto px-4 py-16"><h1 className="text-3xl font-bold mb-8">من نحن</h1><p className="text-lg text-muted-foreground">منصة GPO WORLD هي منصة التعاون الذكي الشاملة للشراء التعاوني والتسويق المشترك وإدارة المستقلين وتأسيس الشركات والتحكيم الرقمي.</p></div>} />
-      <Route path="/how-it-works" element={<div className="container mx-auto px-4 py-16"><h1 className="text-3xl font-bold mb-8">كيف تعمل المنصة</h1><p className="text-lg text-muted-foreground">ستجد هنا دليلاً شاملاً حول كيفية استخدام المنصة والاستفادة من جميع خدماتها.</p></div>} />
-      <Route path="/support" element={<div className="container mx-auto px-4 py-16"><h1 className="text-3xl font-bold mb-8">الدعم والمساعدة</h1><p className="text-lg text-muted-foreground">فريق الدعم متاح لمساعدتك في أي استفسار. تواصل معنا عبر البريد الإلكتروني أو الدردشة المباشرة.</p></div>} />
-      <Route path="/suppliers" element={<div className="container mx-auto px-4 py-16"><h1 className="text-3xl font-bold mb-8">الموردون</h1><p className="text-lg text-muted-foreground">اكتشف شبكة الموردين الموثوقة وقدم عروضك للمجموعات النشطة.</p></div>} />
-      <Route path="/investment" element={<div className="container mx-auto px-4 py-16"><h1 className="text-3xl font-bold mb-8">بوابة الاستثمار</h1><p className="text-lg text-muted-foreground">منصة الاستثمار الجماعي وإدارة الشركات الاستثمارية.</p></div>} />
-      <Route path="/arbitration" element={<div className="container mx-auto px-4 py-16"><h1 className="text-3xl font-bold mb-8">التحكيم والتوثيق</h1><p className="text-lg text-muted-foreground">نظام ORDA لحل النزاعات والتحكيم الرقمي المتقدم.</p></div>} />
-
-      {/* Admin route */}
-      <Route path="/admin-monitor-access" element={<div className="min-h-screen flex items-center justify-center bg-background"><div className="text-center"><h1 className="text-2xl font-bold mb-4">GPO Admin Monitor</h1><p className="text-muted-foreground mb-6">Restricted access for authorized personnel only</p><Button asChild><a href="https://cms.gpo.example.com/admin" target="_blank" rel="noopener noreferrer">Access Admin Panel</a></Button></div></div>} />
-
-      {/* Catch-all redirect */}
-      <Route 
-        path="*" 
-        element={
-          isAuthenticated ? (
-            <Navigate to="/dashboard" replace />
-          ) : (
-            <Navigate to="/" replace />
-          )
-        } 
-      />
+      {/* Service-specific routes */}
+      <Route path="/services/*" element={<ServiceRoutes />} />
+      
+      {/* Catch-all route for 404 */}
+      <Route path="*" element={
+        <div className="min-h-screen flex items-center justify-center bg-background">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold text-foreground mb-4">404</h1>
+            <p className="text-muted-foreground mb-6">الصفحة غير موجودة</p>
+            <a href="/" className="text-primary hover:underline">العودة للصفحة الرئيسية</a>
+          </div>
+        </div>
+      } />
     </Routes>
   );
 };

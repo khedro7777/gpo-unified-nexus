@@ -44,13 +44,13 @@ const Login = () => {
         title: "تم تسجيل الدخول بنجاح",
         description: "مرحبًا بك في منصة GPO – Smart Cooperation Platform",
       });
-      navigate('/dashboard');
+      navigate('/');
       setIsLoading(false);
     }, 1500);
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-background py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-background to-muted/30 py-12 px-4 sm:px-6 lg:px-8">
       <div className="mb-8 text-center">
         <h2 className="text-4xl font-bold text-primary mb-2">GPO</h2>
         <p className="text-lg text-muted-foreground">Smart Cooperation Platform</p>

@@ -1,12 +1,8 @@
+
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { GroupLifecycle, GroupRole, GroupVote, GroupSettings } from '@/types/group-lifecycle';
-import type { Database } from '@/integrations/supabase/types';
-
-type DbGroupLifecycle = Database['public']['Tables']['group_lifecycle']['Row'];
-type DbGroupRole = Database['public']['Tables']['group_roles']['Row'];
-type DbGroupVote = Database['public']['Tables']['group_votes']['Row'];
+import { GroupLifecycle, GroupRole, GroupVote } from '@/types/group-lifecycle';
 
 export const useGroupLifecycle = (groupId: string) => {
   const [lifecycle, setLifecycle] = useState<GroupLifecycle | null>(null);
@@ -14,38 +10,6 @@ export const useGroupLifecycle = (groupId: string) => {
   const [activeVotes, setActiveVotes] = useState<GroupVote[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
-
-  // Helper function to convert database row to GroupLifecycle
-  const convertDbLifecycleToGroupLifecycle = (dbRow: DbGroupLifecycle): GroupLifecycle => {
-    return {
-      ...dbRow,
-      current_phase: dbRow.current_phase as GroupLifecycle['current_phase'],
-      status: dbRow.status as GroupLifecycle['status'],
-      visibility: dbRow.visibility as GroupLifecycle['visibility'],
-      settings: dbRow.settings as unknown as GroupSettings
-    };
-  };
-
-  // Helper function to convert database row to GroupRole
-  const convertDbRoleToGroupRole = (dbRow: DbGroupRole & { profiles?: any }): GroupRole => {
-    return {
-      ...dbRow,
-      role: dbRow.role as GroupRole['role'],
-      profiles: dbRow.profiles
-    };
-  };
-
-  // Helper function to convert database row to GroupVote
-  const convertDbVoteToGroupVote = (dbRow: DbGroupVote): GroupVote => {
-    return {
-      ...dbRow,
-      vote_type: dbRow.vote_type as GroupVote['vote_type'],
-      status: dbRow.status as GroupVote['status'],
-      options: dbRow.options as any,
-      results: dbRow.results as any,
-      metadata: dbRow.metadata as any
-    };
-  };
 
   useEffect(() => {
     if (groupId) {
@@ -68,7 +32,7 @@ export const useGroupLifecycle = (groupId: string) => {
       }
 
       if (data) {
-        setLifecycle(convertDbLifecycleToGroupLifecycle(data));
+        setLifecycle(data as GroupLifecycle);
       }
     } catch (error) {
       console.error('Error fetching group lifecycle:', error);
@@ -87,8 +51,7 @@ export const useGroupLifecycle = (groupId: string) => {
         .order('assigned_at', { ascending: false });
 
       if (error) throw error;
-      const convertedRoles = (data || []).map(convertDbRoleToGroupRole);
-      setRoles(convertedRoles);
+      setRoles((data || []) as GroupRole[]);
     } catch (error) {
       console.error('Error fetching group roles:', error);
     }
@@ -104,8 +67,7 @@ export const useGroupLifecycle = (groupId: string) => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      const convertedVotes = (data || []).map(convertDbVoteToGroupVote);
-      setActiveVotes(convertedVotes);
+      setActiveVotes((data || []) as GroupVote[]);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching active votes:', error);
@@ -150,7 +112,7 @@ export const useGroupLifecycle = (groupId: string) => {
 
       if (roleError) throw roleError;
 
-      setLifecycle(convertDbLifecycleToGroupLifecycle(lifecycleData));
+      setLifecycle(lifecycleData as GroupLifecycle);
       await fetchGroupRoles();
 
       toast({
