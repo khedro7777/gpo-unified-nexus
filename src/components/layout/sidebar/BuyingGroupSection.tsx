@@ -19,7 +19,7 @@ const BuyingGroupSection: React.FC<BuyingGroupSectionProps> = ({ isCollapsed }) 
   const buyingGroupItems = [
     { 
       title: isRTL ? 'مجموعات الشراء النشطة' : 'Active Buying Groups', 
-      url: '/groups', 
+      url: '/groups?filter=purchasing', 
       icon: ShoppingCart 
     },
     { 
