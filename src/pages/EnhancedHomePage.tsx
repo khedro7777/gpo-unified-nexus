@@ -342,8 +342,8 @@ const EnhancedHomePage = () => {
                       
                       <CardContent className="pt-0">
                         <Button className="w-full justify-between group-hover:bg-primary group-hover:text-primary-foreground transition-all">
-                          ادخل إلى {portal.title}
-                          <ArrowRight className="mr-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                          ابدأ الآن
+                          <ArrowRight className="h-4 w-4" />
                         </Button>
                       </CardContent>
                     </Card>
@@ -356,92 +356,89 @@ const EnhancedHomePage = () => {
             <TabsContent value="groups">
               <div className="text-center mb-12">
                 <h2 className="text-4xl font-bold mb-4 text-foreground">المجموعات النشطة</h2>
-                <p className="text-xl text-muted-foreground">انضم إلى المجموعات أو قدم خدماتك</p>
+                <p className="text-xl text-muted-foreground">انضم لمجموعة أو قدم خدماتك</p>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {activeGroups.map((group) => (
-                  <Card key={group.id} className="hover:shadow-xl transition-all duration-300 border-border shadow-lg overflow-hidden bg-card">
-                    <div className={`h-1 ${getStatusColor(group.status).replace('text-', 'bg-').replace('100', '500')}`}></div>
-                    
-                    <CardHeader>
-                      <div className="flex items-center justify-between mb-3">
-                        <Badge className={getStatusColor(group.status)}>
+                  <Card key={group.id} className="hover:shadow-lg transition-shadow border-border bg-card">
+                    <CardHeader className="pb-4">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex items-center gap-2">
+                          {getTypeIcon(group.type)}
+                          <Badge variant="outline" className="text-xs border-border">
+                            {group.sector}
+                          </Badge>
+                        </div>
+                        <Badge className={`text-xs ${getStatusColor(group.status)}`}>
                           {group.status}
                         </Badge>
-                        <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                          <MapPin className="h-3 w-3" />
-                          {group.country}
-                        </div>
                       </div>
                       
-                      <CardTitle className="text-lg flex items-center gap-2 text-card-foreground">
-                        {getTypeIcon(group.type)}
+                      <CardTitle className="text-lg leading-tight text-card-foreground">
                         {group.title}
                       </CardTitle>
                       
-                      <CardDescription>
-                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                          <span>{group.members}/{group.maxMembers} أعضاء</span>
-                          <span>{group.budget}</span>
+                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-1">
+                          <MapPin className="h-3 w-3" />
+                          {group.country}
                         </div>
-                      </CardDescription>
+                        <div className="flex items-center gap-1">
+                          <Users className="h-3 w-3" />
+                          {group.members}/{group.maxMembers}
+                        </div>
+                      </div>
                     </CardHeader>
                     
-                    <CardContent className="space-y-4">
-                      <div className="flex flex-wrap gap-2">
-                        <Badge variant="outline" className="text-xs border-border">
-                          {group.sector}
-                        </Badge>
-                        {group.needsSuppliers && (
-                          <Badge variant="secondary" className="text-xs bg-green-50 text-green-600 dark:bg-green-900 dark:text-green-200">
-                            يحتاج موردين
-                          </Badge>
-                        )}
-                        {group.needsFreelancers && (
-                          <Badge variant="secondary" className="text-xs bg-purple-50 text-purple-600 dark:bg-purple-900 dark:text-purple-200">
-                            يحتاج مستقلين
-                          </Badge>
-                        )}
-                      </div>
-                      
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <Clock className="h-4 w-4" />
-                        <span>ينتهي في {group.deadline}</span>
-                      </div>
-                      
-                      <div className="flex gap-2">
-                        <Button asChild className="flex-1">
+                    <CardContent>
+                      <div className="space-y-3">
+                        <div className="flex justify-between items-center text-sm">
+                          <span className="text-muted-foreground">الميزانية:</span>
+                          <span className="font-medium text-foreground">{group.budget}</span>
+                        </div>
+                        
+                        <div className="flex justify-between items-center text-sm">
+                          <span className="text-muted-foreground">الموعد النهائي:</span>
+                          <span className="font-medium text-foreground">{group.deadline}</span>
+                        </div>
+                        
+                        <div className="flex gap-2 flex-wrap">
+                          {group.needsSuppliers && (
+                            <Badge variant="secondary" className="text-xs bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200">
+                              يحتاج موردين
+                            </Badge>
+                          )}
+                          {group.needsFreelancers && (
+                            <Badge variant="secondary" className="text-xs bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
+                              يحتاج مستقلين
+                            </Badge>
+                          )}
+                        </div>
+                        
+                        <Button className="w-full mt-4" asChild>
                           <Link to={`/groups/${group.id}`}>
                             عرض التفاصيل
+                            <ArrowRight className="mr-2 h-4 w-4" />
                           </Link>
-                        </Button>
-                        <Button variant="outline" size="sm" className="border-border">
-                          <Eye className="h-4 w-4" />
                         </Button>
                       </div>
                     </CardContent>
                   </Card>
                 ))}
               </div>
-              
-              <div className="text-center mt-12">
-                <Button variant="outline" size="lg" asChild className="border-border">
-                  <Link to="/groups">
-                    عرض جميع المجموعات
-                    <ArrowRight className="mr-2 h-4 w-4" />
-                  </Link>
-                </Button>
-              </div>
             </TabsContent>
           </Tabs>
         </div>
       </section>
 
-      {/* MCP Assistant */}
-      <MCPAssistantBox />
-      
-      {/* Footer */}
+      {/* MCP Assistant Box */}
+      <section className="py-12">
+        <div className="container mx-auto px-4">
+          <MCPAssistantBox />
+        </div>
+      </section>
+
       <Footer />
     </div>
   );

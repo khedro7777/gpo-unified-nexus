@@ -9,7 +9,7 @@ import Register from '@/pages/auth/Register';
 import RoleSelection from '@/pages/auth/RoleSelection';
 
 // Main pages
-import Landing from '@/pages/Landing';
+import EnhancedHomePage from '@/pages/EnhancedHomePage';
 import Dashboard from '@/pages/Dashboard';
 import Profile from '@/pages/Profile';
 import Wallet from '@/pages/Wallet';
@@ -18,6 +18,12 @@ import Wallet from '@/pages/Wallet';
 import GroupDetails from '@/pages/groups/GroupDetails';
 import MyGroups from '@/pages/groups/MyGroups';
 import GroupManagementPage from '@/pages/groups/GroupManagementPage';
+import CreateGroup from '@/pages/groups/CreateGroup';
+import CreateFormationGroup from '@/pages/groups/CreateFormationGroup';
+
+// Service pages
+import Freelance from '@/pages/freelance/Freelance';
+import CompanyFormation from '@/pages/formation/CompanyFormation';
 
 // Company pages
 import CompanyManagement from '@/pages/companies/CompanyManagement';
@@ -34,7 +40,7 @@ const AppRoutes = () => {
   return (
     <Routes>
       {/* Public routes */}
-      <Route path="/" element={<Landing />} />
+      <Route path="/" element={<EnhancedHomePage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/role-selection" element={<RoleSelection />} />
@@ -95,6 +101,25 @@ const AppRoutes = () => {
         }
       />
 
+      {/* Service routes */}
+      <Route
+        path="/freelance"
+        element={
+          <ProtectedRoute>
+            <Freelance />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/company-incorporation"
+        element={
+          <ProtectedRoute>
+            <CompanyFormation />
+          </ProtectedRoute>
+        }
+      />
+
       {/* Company routes */}
       <Route
         path="/company-management"
@@ -114,6 +139,30 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+
+      {/* New service routes */}
+      <Route
+        path="/create-group/:type"
+        element={
+          <ProtectedRoute>
+            <CreateGroup />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/create-group/formation"
+        element={
+          <ProtectedRoute>
+            <CreateFormationGroup />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Additional routes */}
+      <Route path="/about" element={<div>من نحن - قيد التطوير</div>} />
+      <Route path="/how-it-works" element={<div>كيف تعمل المنصة - قيد التطوير</div>} />
+      <Route path="/support" element={<div>الدعم والمساعدة - قيد التطوير</div>} />
 
       {/* Catch-all redirect */}
       <Route 

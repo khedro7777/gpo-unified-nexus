@@ -1,257 +1,357 @@
 
 import React, { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import NewMainLayout from '@/components/layout/NewMainLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { useParams, useNavigate } from 'react-router-dom';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { ShoppingCart, BarChart3, ArrowLeft, CheckCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { BarChart3, ShoppingCart, Users, Building } from 'lucide-react';
+
+const createGroupSchema = z.object({
+  name: z.string().min(3, 'اسم المجموعة يجب أن يكون على الأقل 3 أحرف'),
+  country: z.string().min(1, 'اختر الدولة'),
+  sector: z.string().min(1, 'اختر القطاع'),
+  description: z.string().min(20, 'الوصف يجب أن يكون على الأقل 20 حرف'),
+  maxMembers: z.string().min(1, 'عدد الأعضاء المستهدف مطلوب'),
+  contractType: z.enum(['individual', 'group']),
+  requiresSuppliers: z.boolean().default(false),
+  negotiationRounds: z.string().min(1, 'عدد جولات التفاوض مطلوب'),
+  minEntryAmount: z.string().optional()
+});
+
+type CreateGroupData = z.infer<typeof createGroupSchema>;
 
 const CreateGroup = () => {
   const { type } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
-  
-  const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    country: '',
-    sector: '',
-    budget: '',
-    duration: '',
-    members: '10'
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const form = useForm<CreateGroupData>({
+    resolver: zodResolver(createGroupSchema),
+    defaultValues: {
+      name: '',
+      country: '',
+      sector: '',
+      description: '',
+      maxMembers: '',
+      contractType: 'group',
+      requiresSuppliers: false,
+      negotiationRounds: '1',
+      minEntryAmount: ''
+    }
   });
 
-  const getGroupInfo = () => {
+  const getGroupTypeInfo = () => {
     switch (type) {
-      case 'marketing':
-        return {
-          title: 'إنشاء مجموعة تسويق جماعي',
-          description: 'إنشاء مجموعة للتعاون في الحملات التسويقية وتقليل التكاليف',
-          icon: <BarChart3 className="h-8 w-8 text-green-600" />,
-          color: 'green'
-        };
       case 'purchasing':
         return {
           title: 'إنشاء مجموعة شراء تعاوني',
-          description: 'إنشاء مجموعة للشراء بكميات كبيرة والحصول على أسعار أفضل',
+          description: 'قم بإنشاء مجموعة للشراء التعاوني والحصول على أفضل الأسعار',
           icon: <ShoppingCart className="h-8 w-8 text-blue-600" />,
-          color: 'blue'
+          color: 'from-blue-500 to-blue-600'
+        };
+      case 'marketing':
+        return {
+          title: 'إنشاء مجموعة التسويق التعاوني',
+          description: 'قم بإنشاء مجموعة للتسويق المشترك وتقليل تكاليف الحملات',
+          icon: <BarChart3 className="h-8 w-8 text-green-600" />,
+          color: 'from-green-500 to-green-600'
         };
       default:
         return {
           title: 'إنشاء مجموعة جديدة',
-          description: 'إنشاء مجموعة تعاونية جديدة',
-          icon: <Users className="h-8 w-8 text-purple-600" />,
-          color: 'purple'
+          description: 'قم بإنشاء مجموعة للتعاون',
+          icon: <ShoppingCart className="h-8 w-8 text-primary" />,
+          color: 'from-primary to-primary'
         };
     }
   };
 
-  const groupInfo = getGroupInfo();
+  const groupInfo = getGroupTypeInfo();
 
-  const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: CreateGroupData) => {
+    setIsSubmitting(true);
     
-    if (!formData.name || !formData.description) {
+    try {
+      // Here you would typically make an API call to create the group
+      console.log('Creating group:', { ...data, groupType: type });
+      
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
       toast({
-        title: "خطأ في البيانات",
-        description: "يرجى ملء جميع الحقول المطلوبة",
+        title: "تم إنشاء المجموعة بنجاح",
+        description: "سيتم مراجعة طلبك من قبل الإدارة خلال 24 ساعة",
+      });
+      
+      navigate('/groups');
+    } catch (error) {
+      toast({
+        title: "خطأ في إنشاء المجموعة",
+        description: "حدث خطأ أثناء إنشاء المجموعة، يرجى المحاولة مرة أخرى",
         variant: "destructive"
       });
-      return;
+    } finally {
+      setIsSubmitting(false);
     }
-
-    toast({
-      title: "تم إنشاء المجموعة بنجاح",
-      description: `تم إنشاء مجموعة "${formData.name}" بنجاح`,
-    });
-
-    // Simulate navigation to the new group
-    setTimeout(() => {
-      navigate('/groups');
-    }, 1500);
   };
+
+  const countries = [
+    { code: 'SA', name: 'السعودية' },
+    { code: 'AE', name: 'الإمارات' },
+    { code: 'EG', name: 'مصر' },
+    { code: 'JO', name: 'الأردن' },
+    { code: 'KW', name: 'الكويت' },
+    { code: 'QA', name: 'قطر' },
+    { code: 'BH', name: 'البحرين' },
+    { code: 'OM', name: 'عمان' }
+  ];
+
+  const sectors = [
+    'تكنولوجيا',
+    'صحة وطب',
+    'تعليم',
+    'زراعة وأغذية',
+    'نقل ولوجستيات',
+    'عقارات وإنشاءات',
+    'مالية ومصرفية',
+    'طاقة ومياه',
+    'تجارة وتسوق',
+    'سياحة وضيافة',
+    'أخرى'
+  ];
 
   return (
     <NewMainLayout>
-      <div className="space-y-6 max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex items-center gap-4">
-          {groupInfo.icon}
+          <Button variant="outline" onClick={() => navigate(-1)}>
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            رجوع
+          </Button>
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">{groupInfo.title}</h1>
-            <p className="text-gray-600 mt-1">{groupInfo.description}</p>
+            <h1 className="text-2xl font-bold">{groupInfo.title}</h1>
+            <p className="text-muted-foreground">{groupInfo.description}</p>
           </div>
-          <Badge variant="outline" className={`ml-auto text-${groupInfo.color}-600 border-${groupInfo.color}-200`}>
-            {type === 'marketing' ? 'تسويق جماعي' : type === 'purchasing' ? 'شراء تعاوني' : 'مجموعة عامة'}
-          </Badge>
         </div>
 
-        {/* Main Form */}
-        <Card>
+        {/* Form Card */}
+        <Card className="shadow-lg">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Building className="h-5 w-5" />
-              تفاصيل المجموعة
-            </CardTitle>
-            <CardDescription>
-              أكمل النموذج أدناه لإنشاء مجموعة {type === 'marketing' ? 'التسويق الجماعي' : 'الشراء التعاوني'}
-            </CardDescription>
+            <div className="flex items-center gap-4">
+              <div className={`p-3 rounded-lg bg-gradient-to-r ${groupInfo.color} bg-opacity-10`}>
+                {groupInfo.icon}
+              </div>
+              <div>
+                <CardTitle>معلومات المجموعة</CardTitle>
+                <CardDescription>
+                  قم بتعبئة جميع المعلومات المطلوبة لإنشاء المجموعة
+                </CardDescription>
+              </div>
+            </div>
           </CardHeader>
+
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Basic Information */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">اسم المجموعة *</label>
-                  <Input
-                    placeholder={type === 'marketing' ? 'مثال: حملة تسويق المنتجات الرقمية' : 'مثال: شراء معدات المكاتب'}
-                    value={formData.name}
-                    onChange={(e) => handleInputChange('name', e.target.value)}
-                    required
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                {/* Basic Info */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>اسم المجموعة</FormLabel>
+                        <FormControl>
+                          <Input placeholder="مجموعة شراء المعدات الطبية" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="country"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>الدولة</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="اختر الدولة" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {countries.map((country) => (
+                              <SelectItem key={country.code} value={country.code}>
+                                {country.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">الدولة</label>
-                  <Select value={formData.country} onValueChange={(value) => handleInputChange('country', value)}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="اختر الدولة" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="sa">السعودية</SelectItem>
-                      <SelectItem value="ae">الإمارات</SelectItem>
-                      <SelectItem value="eg">مصر</SelectItem>
-                      <SelectItem value="kw">الكويت</SelectItem>
-                      <SelectItem value="qa">قطر</SelectItem>
-                    </SelectContent>
-                  </Select>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="sector"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>القطاع</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="اختر القطاع" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {sectors.map((sector) => (
+                              <SelectItem key={sector} value={sector}>
+                                {sector}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="maxMembers"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>عدد الأعضاء المستهدف</FormLabel>
+                        <FormControl>
+                          <Input type="number" placeholder="10" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">القطاع</label>
-                  <Select value={formData.sector} onValueChange={(value) => handleInputChange('sector', value)}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="اختر القطاع" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="technology">التكنولوجيا</SelectItem>
-                      <SelectItem value="retail">التجزئة</SelectItem>
-                      <SelectItem value="manufacturing">التصنيع</SelectItem>
-                      <SelectItem value="services">الخدمات</SelectItem>
-                      <SelectItem value="food">الأغذية</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">عدد الأعضاء المطلوب</label>
-                  <Select value={formData.members} onValueChange={(value) => handleInputChange('members', value)}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="اختر العدد" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="5">5 أعضاء</SelectItem>
-                      <SelectItem value="10">10 أعضاء</SelectItem>
-                      <SelectItem value="20">20 عضو</SelectItem>
-                      <SelectItem value="50">50 عضو</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {type === 'marketing' && (
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">الميزانية المقترحة</label>
-                    <Input
-                      placeholder="مثال: 50,000 ريال"
-                      value={formData.budget}
-                      onChange={(e) => handleInputChange('budget', e.target.value)}
-                    />
-                  </div>
-                )}
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">مدة المشروع</label>
-                  <Select value={formData.duration} onValueChange={(value) => handleInputChange('duration', value)}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="اختر المدة" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="1">شهر واحد</SelectItem>
-                      <SelectItem value="3">3 أشهر</SelectItem>
-                      <SelectItem value="6">6 أشهر</SelectItem>
-                      <SelectItem value="12">سنة كاملة</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              {/* Description */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium">وصف المجموعة *</label>
-                <Textarea
-                  placeholder={type === 'marketing' 
-                    ? 'اكتب وصفاً مفصلاً للحملة التسويقية المطلوبة، الأهداف، والجمهور المستهدف...'
-                    : 'اكتب وصفاً مفصلاً للمنتجات أو الخدمات المطلوب شراؤها، المواصفات، والكميات...'
-                  }
-                  value={formData.description}
-                  onChange={(e) => handleInputChange('description', e.target.value)}
-                  rows={5}
-                  required
+                {/* Description */}
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>وصف المجموعة والهدف</FormLabel>
+                      <FormControl>
+                        <Textarea 
+                          placeholder="اكتب وصفاً مفصلاً للمجموعة وأهدافها..."
+                          className="min-h-24"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
 
-              {/* Actions */}
-              <div className="flex gap-4 pt-4">
-                <Button type="submit" className="flex-1">
-                  إنشاء المجموعة
-                </Button>
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  onClick={() => navigate('/groups')}
-                  className="flex-1"
-                >
-                  إلغاء
-                </Button>
-              </div>
-            </form>
+                {/* Advanced Settings */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="negotiationRounds"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>عدد جولات التفاوض</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="اختر عدد الجولات" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="1">جولة واحدة</SelectItem>
+                            <SelectItem value="2">جولتان</SelectItem>
+                            <SelectItem value="3">ثلاث جولات</SelectItem>
+                            <SelectItem value="4">أربع جولات أو أكثر</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="minEntryAmount"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>الحد الأدنى للدخول (اختياري)</FormLabel>
+                        <FormControl>
+                          <Input placeholder="1000" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                {/* Contract Type */}
+                <FormField
+                  control={form.control}
+                  name="contractType"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>نوع العقد</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="group">عقد جماعي</SelectItem>
+                          <SelectItem value="individual">عقد فردي</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Submit Button */}
+                <div className="flex justify-end gap-4 pt-6">
+                  <Button type="button" variant="outline" onClick={() => navigate(-1)}>
+                    إلغاء
+                  </Button>
+                  <Button type="submit" disabled={isSubmitting} className="min-w-32">
+                    {isSubmitting ? (
+                      <div className="flex items-center gap-2">
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        جاري الإنشاء...
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4" />
+                        إنشاء المجموعة
+                      </div>
+                    )}
+                  </Button>
+                </div>
+              </form>
+            </Form>
           </CardContent>
         </Card>
-
-        {/* Info Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Card className="bg-blue-50 border-blue-200">
-            <CardContent className="p-4">
-              <h3 className="font-semibold text-blue-900 mb-2">مزايا التعاون الجماعي</h3>
-              <ul className="text-sm text-blue-700 space-y-1">
-                <li>• تقليل التكاليف بنسبة تصل إلى 40%</li>
-                <li>• الوصول لموردين وخدمات أفضل</li>
-                <li>• تبادل الخبرات والمعرفة</li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-green-50 border-green-200">
-            <CardContent className="p-4">
-              <h3 className="font-semibold text-green-900 mb-2">خطوات العمل</h3>
-              <ul className="text-sm text-green-700 space-y-1">
-                <li>• إنشاء المجموعة وانتظار الأعضاء</li>
-                <li>• التصويت على العروض المقدمة</li>
-                <li>• تنفيذ المشروع والمتابعة</li>
-              </ul>
-            </CardContent>
-          </Card>
-        </div>
       </div>
     </NewMainLayout>
   );
