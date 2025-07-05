@@ -176,6 +176,9 @@ const AppRoutes = () => {
       <Route path="/investment" element={<div className="container mx-auto px-4 py-16"><h1 className="text-3xl font-bold mb-8">بوابة الاستثمار</h1><p className="text-lg text-muted-foreground">منصة الاستثمار الجماعي وإدارة الشركات الاستثمارية.</p></div>} />
       <Route path="/arbitration" element={<div className="container mx-auto px-4 py-16"><h1 className="text-3xl font-bold mb-8">التحكيم والتوثيق</h1><p className="text-lg text-muted-foreground">نظام ORDA لحل النزاعات والتحكيم الرقمي المتقدم.</p></div>} />
 
+      {/* Admin route */}
+      <Route path="/admin-monitor-access" element={<div className="min-h-screen flex items-center justify-center bg-background"><div className="text-center"><h1 className="text-2xl font-bold mb-4">GPO Admin Monitor</h1><p className="text-muted-foreground mb-6">Restricted access for authorized personnel only</p><Button asChild><a href="https://cms.gpo.example.com/admin" target="_blank" rel="noopener noreferrer">Access Admin Panel</a></Button></div></div>} />
+
       {/* Catch-all redirect */}
       <Route 
         path="*" 
