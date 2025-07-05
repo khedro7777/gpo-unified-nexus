@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -445,7 +446,7 @@ const Index = () => {
         </div>
       </div>
       
-      <Footer className="hidden md:block" />
+      <Footer />
     </div>
   );
 };

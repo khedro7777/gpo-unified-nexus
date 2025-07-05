@@ -1,10 +1,13 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Building, Mail, Phone, MapPin, ExternalLink } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 
-const Footer = () => {
+interface FooterProps {
+  className?: string;
+}
+
+const Footer: React.FC<FooterProps> = ({ className }) => {
   const currentYear = new Date().getFullYear();
 
   const footerSections = [
@@ -78,7 +81,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-gray-900 text-white">
+    <footer className={`bg-gray-900 text-white ${className || ''}`}>
       {/* Main Footer Content */}
       <div className="container mx-auto px-4 py-16">
         {/* Top Section - Logo and Description */}
