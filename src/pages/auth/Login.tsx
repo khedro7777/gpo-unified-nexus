@@ -7,7 +7,6 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Mail, Lock } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
-import BackToHome from '@/components/common/BackToHome';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -45,114 +44,108 @@ const Login = () => {
         title: "تم تسجيل الدخول بنجاح",
         description: "مرحبًا بك في منصة GPO – Smart Cooperation Platform",
       });
-      navigate('/dashboard');
+      navigate('/');
       setIsLoading(false);
     }, 1500);
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-background to-muted/30 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="container mx-auto">
-        <BackToHome />
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-background to-muted/30 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="mb-8 text-center">
+        <h2 className="text-4xl font-bold text-primary mb-2">GPO</h2>
+        <p className="text-lg text-muted-foreground">Smart Cooperation Platform</p>
+      </div>
+      
+      <Card className="w-full max-w-md shadow-lg">
+        <CardHeader className="space-y-1 text-center pb-4">
+          <CardTitle className="text-2xl font-bold">تسجيل الدخول</CardTitle>
+          <CardDescription className="text-muted-foreground">
+            أدخل بريدك الإلكتروني لتلقي رمز التحقق
+          </CardDescription>
+        </CardHeader>
         
-        <div className="flex flex-col items-center justify-center flex-1">
-          <div className="mb-8 text-center">
-            <h2 className="text-4xl font-bold text-primary mb-2">GPO</h2>
-            <p className="text-lg text-muted-foreground">Smart Cooperation Platform</p>
+        <CardContent>
+          {!otpSent ? (
+            <form onSubmit={handleSendOTP} className="space-y-5">
+              <div className="space-y-2">
+                <div className="relative">
+                  <Mail className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
+                  <Input
+                    type="email"
+                    placeholder="البريد الإلكتروني"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="pl-10 h-12 text-base"
+                    required
+                    dir="rtl"
+                  />
+                </div>
+              </div>
+              <Button 
+                type="submit" 
+                className="w-full h-12 text-base font-medium" 
+                disabled={isLoading}
+              >
+                {isLoading ? "جاري الإرسال..." : "إرسال رمز التحقق"}
+              </Button>
+            </form>
+          ) : (
+            <form onSubmit={handleVerifyOTP} className="space-y-5">
+              <div className="space-y-2">
+                <div className="relative">
+                  <Lock className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
+                  <Input
+                    type="text"
+                    placeholder="رمز التحقق"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value)}
+                    required
+                    className="text-center text-lg tracking-widest h-12"
+                    maxLength={6}
+                  />
+                </div>
+                <p className="text-sm text-muted-foreground text-center">
+                  تم إرسال رمز التحقق إلى بريدك الإلكتروني
+                </p>
+              </div>
+              <Button 
+                type="submit" 
+                className="w-full h-12 text-base font-medium" 
+                disabled={isLoading}
+              >
+                {isLoading ? "جاري التحقق..." : "تحقق من الرمز"}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full h-12 text-base"
+                onClick={() => setOtpSent(false)}
+                disabled={isLoading}
+              >
+                العودة لتغيير البريد الإلكتروني
+              </Button>
+            </form>
+          )}
+        </CardContent>
+        
+        <CardFooter className="flex flex-col space-y-3 pt-0">
+          <div className="relative w-full my-2">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t border-muted" />
+            </div>
+            <div className="relative flex justify-center text-xs">
+              <span className="bg-card px-2 text-muted-foreground">أو</span>
+            </div>
           </div>
           
-          <Card className="w-full max-w-md shadow-lg">
-            <CardHeader className="space-y-1 text-center pb-4">
-              <CardTitle className="text-2xl font-bold">تسجيل الدخول</CardTitle>
-              <CardDescription className="text-muted-foreground">
-                أدخل بريدك الإلكتروني لتلقي رمز التحقق
-              </CardDescription>
-            </CardHeader>
-            
-            <CardContent>
-              {!otpSent ? (
-                <form onSubmit={handleSendOTP} className="space-y-5">
-                  <div className="space-y-2">
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
-                      <Input
-                        type="email"
-                        placeholder="البريد الإلكتروني"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="pl-10 h-12 text-base"
-                        required
-                        dir="rtl"
-                      />
-                    </div>
-                  </div>
-                  <Button 
-                    type="submit" 
-                    className="w-full h-12 text-base font-medium" 
-                    disabled={isLoading}
-                  >
-                    {isLoading ? "جاري الإرسال..." : "إرسال رمز التحقق"}
-                  </Button>
-                </form>
-              ) : (
-                <form onSubmit={handleVerifyOTP} className="space-y-5">
-                  <div className="space-y-2">
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
-                      <Input
-                        type="text"
-                        placeholder="رمز التحقق"
-                        value={otp}
-                        onChange={(e) => setOtp(e.target.value)}
-                        required
-                        className="text-center text-lg tracking-widest h-12"
-                        maxLength={6}
-                      />
-                    </div>
-                    <p className="text-sm text-muted-foreground text-center">
-                      تم إرسال رمز التحقق إلى بريدك الإلكتروني
-                    </p>
-                  </div>
-                  <Button 
-                    type="submit" 
-                    className="w-full h-12 text-base font-medium" 
-                    disabled={isLoading}
-                  >
-                    {isLoading ? "جاري التحقق..." : "تحقق من الرمز"}
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="w-full h-12 text-base"
-                    onClick={() => setOtpSent(false)}
-                    disabled={isLoading}
-                  >
-                    العودة لتغيير البريد الإلكتروني
-                  </Button>
-                </form>
-              )}
-            </CardContent>
-            
-            <CardFooter className="flex flex-col space-y-3 pt-0">
-              <div className="relative w-full my-2">
-                <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t border-muted" />
-                </div>
-                <div className="relative flex justify-center text-xs">
-                  <span className="bg-card px-2 text-muted-foreground">أو</span>
-                </div>
-              </div>
-              
-              <div className="text-sm text-center text-muted-foreground">
-                ليس لديك حساب؟{" "}
-                <Link to="/register" className="text-primary font-medium hover:underline">
-                  إنشاء حساب جديد
-                </Link>
-              </div>
-            </CardFooter>
-          </Card>
-        </div>
-      </div>
+          <div className="text-sm text-center text-muted-foreground">
+            ليس لديك حساب؟{" "}
+            <Link to="/register" className="text-primary font-medium hover:underline">
+              إنشاء حساب جديد
+            </Link>
+          </div>
+        </CardFooter>
+      </Card>
     </div>
   );
 };

@@ -15,8 +15,6 @@ import {
   AlertCircle,
   Plus
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import BackToHome from '@/components/common/BackToHome';
 
 const Dashboard = () => {
   const { user, name, email, role } = useAuth();
@@ -91,8 +89,6 @@ const Dashboard = () => {
   return (
     <NewMainLayout>
       <div className="space-y-6">
-        <BackToHome />
-        
         {/* Welcome Section */}
         <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-6 text-white">
           <h1 className="text-2xl md:text-3xl font-bold mb-2">
@@ -102,16 +98,12 @@ const Dashboard = () => {
             {email || user?.email || 'user@example.com'} | {role || 'عضو'}
           </p>
           <div className="flex flex-wrap gap-3">
-            <Button variant="secondary" size="sm" asChild>
-              <Link to="/create-group">
-                <Plus className="h-4 w-4 mr-2" />
-                إنشاء مجموعة جديدة
-              </Link>
+            <Button variant="secondary" size="sm">
+              <Plus className="h-4 w-4 mr-2" />
+              إنشاء مجموعة جديدة
             </Button>
-            <Button variant="outline" size="sm" className="text-white border-white hover:bg-white hover:text-blue-600" asChild>
-              <Link to="/groups">
-                عرض جميع المجموعات
-              </Link>
+            <Button variant="outline" size="sm" className="text-white border-white hover:bg-white hover:text-blue-600">
+              عرض جميع المجموعات
             </Button>
           </div>
         </div>
@@ -144,29 +136,21 @@ const Dashboard = () => {
               <CardDescription>الأنشطة الأكثر استخدامًا</CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
-              <Button className="w-full justify-start" variant="outline" asChild>
-                <Link to="/create-group">
-                  <Users className="h-4 w-4 mr-2" />
-                  إنشاء مجموعة شراء جديدة
-                </Link>
+              <Button className="w-full justify-start" variant="outline">
+                <Users className="h-4 w-4 mr-2" />
+                إنشاء مجموعة شراء جديدة
               </Button>
-              <Button className="w-full justify-start" variant="outline" asChild>
-                <Link to="/groups">
-                  <ShoppingCart className="h-4 w-4 mr-2" />
-                  تصفح العروض المتاحة
-                </Link>
+              <Button className="w-full justify-start" variant="outline">
+                <ShoppingCart className="h-4 w-4 mr-2" />
+                تصفح العروض المتاحة
               </Button>
-              <Button className="w-full justify-start" variant="outline" asChild>
-                <Link to="/contracts">
-                  <FileText className="h-4 w-4 mr-2" />
-                  إدارة العقود والاتفاقيات
-                </Link>
+              <Button className="w-full justify-start" variant="outline">
+                <FileText className="h-4 w-4 mr-2" />
+                إدارة العقود والاتفاقيات
               </Button>
-              <Button className="w-full justify-start" variant="outline" asChild>
-                <Link to="/my-groups">
-                  <TrendingUp className="h-4 w-4 mr-2" />
-                  عرض مجموعاتي
-                </Link>
+              <Button className="w-full justify-start" variant="outline">
+                <TrendingUp className="h-4 w-4 mr-2" />
+                عرض الإحصائيات التفصيلية
               </Button>
             </CardContent>
           </Card>
