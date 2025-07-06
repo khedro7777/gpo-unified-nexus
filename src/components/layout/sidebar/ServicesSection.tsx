@@ -6,9 +6,7 @@ import {
   Building, 
   TrendingUp, 
   Gavel, 
-  FileText,
-  HelpCircle,
-  Wrench
+  FileText 
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/use-auth';
@@ -38,12 +36,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isCollapsed }) => {
     },
     { 
       title: isRTL ? 'تأسيس الشركات' : 'Company Formation', 
-      url: '/company-formation', 
-      icon: Building 
-    },
-    { 
-      title: isRTL ? 'إدارة الشركات' : 'Company Management', 
-      url: '/company-management', 
+      url: '/company-incorporation', 
       icon: Building 
     },
     { 
@@ -60,30 +53,15 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isCollapsed }) => {
       title: isRTL ? 'إدارة الوثائق' : 'Documents', 
       url: '/documents', 
       icon: FileText 
-    },
-    { 
-      title: isRTL ? 'الأدوات القانونية' : 'Legal Tools', 
-      url: '/legal', 
-      icon: FileText 
-    },
-    { 
-      title: isRTL ? 'الأدوات المساعدة' : 'Tools', 
-      url: '/tools', 
-      icon: Wrench 
-    },
-    { 
-      title: isRTL ? 'الدعم' : 'Support', 
-      url: '/support', 
-      icon: HelpCircle 
     }
   ];
 
   return (
     <SidebarSection
-      title={isRTL ? '🔧 الخدمات المتقدمة' : '🔧 Advanced Services'}
+      title={isRTL ? '🔧 الخدمات' : '🔧 Services'}
       items={servicesItems}
       isCollapsed={isCollapsed}
-      colorClass="text-blue-900 dark:text-blue-300 font-bold"
+      colorClass="text-green-600 dark:text-green-400"
     />
   );
 };

@@ -18,48 +18,38 @@ const BuyingGroupSection: React.FC<BuyingGroupSectionProps> = ({ isCollapsed }) 
 
   const buyingGroupItems = [
     { 
-      title: isRTL ? 'جميع المجموعات' : 'All Groups', 
-      url: '/groups', 
-      icon: Users 
-    },
-    { 
-      title: isRTL ? 'مجموعاتي' : 'My Groups', 
-      url: '/my-groups', 
+      title: isRTL ? 'مجموعات الشراء النشطة' : 'Active Buying Groups', 
+      url: '/groups?filter=purchasing', 
       icon: ShoppingCart 
     },
     { 
-      title: isRTL ? 'مجموعات الشراء' : 'Buying Groups', 
-      url: '/groups?type=purchasing', 
-      icon: ShoppingCart 
-    },
-    { 
-      title: isRTL ? 'مجموعات التسويق' : 'Marketing Groups', 
-      url: '/groups?type=marketing', 
-      icon: TrendingUp 
-    },
-    { 
-      title: isRTL ? 'إنشاء مجموعة' : 'Create Group', 
-      url: '/create-group', 
+      title: isRTL ? 'إنشاء مجموعة شراء' : 'Create Buying Group', 
+      url: '/create-group/purchasing', 
       icon: Plus 
     },
     { 
-      title: isRTL ? 'العروض المرسلة' : 'Sent Offers', 
-      url: '/offers/sent', 
+      title: isRTL ? 'طلبات التسعير' : 'Price Requests', 
+      url: '/groups?filter=price-requests', 
+      icon: TrendingUp 
+    },
+    { 
+      title: isRTL ? 'عروض الموردين' : 'Supplier Offers', 
+      url: '/offers?type=supplier', 
       icon: FileCheck 
     },
     { 
-      title: isRTL ? 'العروض المستلمة' : 'Received Offers', 
-      url: '/offers/received', 
-      icon: Package 
+      title: isRTL ? 'المفاوضات الجماعية' : 'Group Negotiations', 
+      url: '/groups?phase=negotiation', 
+      icon: Users 
     }
   ];
 
   return (
     <SidebarSection
-      title={isRTL ? '🛒 المجموعات والتعاون' : '🛒 Groups & Cooperation'}
+      title={isRTL ? '🛒 الشراء التعاوني' : '🛒 Cooperative Buying'}
       items={buyingGroupItems}
       isCollapsed={isCollapsed}
-      colorClass="text-blue-900 dark:text-blue-300 font-bold"
+      colorClass="text-primary dark:text-primary"
     />
   );
 };
