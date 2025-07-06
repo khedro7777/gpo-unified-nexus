@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { User, Wallet, Bell, FileText, Settings, CreditCard } from 'lucide-react';
+import { User, Wallet, Bell, FileText, Settings, CreditCard, Home } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/use-auth';
 import SidebarSection from './SidebarSection';
@@ -17,6 +17,16 @@ const AccountSection: React.FC<AccountSectionProps> = ({ isCollapsed }) => {
   if (!user) return null;
 
   const accountItems = [
+    { 
+      title: isRTL ? 'الصفحة الرئيسية' : 'Home', 
+      url: '/', 
+      icon: Home 
+    },
+    { 
+      title: isRTL ? 'لوحة التحكم' : 'Dashboard', 
+      url: '/dashboard', 
+      icon: User 
+    },
     { 
       title: isRTL ? 'الملف الشخصي' : 'Profile', 
       url: '/profile', 
@@ -44,8 +54,13 @@ const AccountSection: React.FC<AccountSectionProps> = ({ isCollapsed }) => {
       icon: FileText 
     },
     { 
+      title: isRTL ? 'الفواتير' : 'Invoices', 
+      url: '/invoices', 
+      icon: FileText 
+    },
+    { 
       title: isRTL ? 'الإعدادات' : 'Settings', 
-      url: '/profile?tab=settings', 
+      url: '/settings', 
       icon: Settings 
     }
   ];
@@ -55,7 +70,7 @@ const AccountSection: React.FC<AccountSectionProps> = ({ isCollapsed }) => {
       title={isRTL ? '👤 الحساب الشخصي' : '👤 Account'}
       items={accountItems}
       isCollapsed={isCollapsed}
-      colorClass="text-blue-600 dark:text-blue-400"
+      colorClass="text-blue-900 dark:text-blue-300 font-bold"
     />
   );
 };

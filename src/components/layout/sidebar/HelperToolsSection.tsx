@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { Bell, Calendar, Terminal, Wrench, HelpCircle, Zap } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
+import { Bell, Calendar, Terminal, Wrench, HelpCircle, Zap, BookOpen, Users } from 'lucide-react';
+import { useTranslation } from 'react-i18n';
 import { useAuth } from '@/hooks/use-auth';
 import SidebarSection from './SidebarSection';
 
@@ -18,13 +18,8 @@ const HelperToolsSection: React.FC<HelperToolsSectionProps> = ({ isCollapsed }) 
 
   const helperItems = [
     { 
-      title: isRTL ? 'التقويم والمواعيد' : 'Calendar & Schedules', 
-      url: '/dashboard?tab=calendar', 
-      icon: Calendar 
-    },
-    { 
       title: isRTL ? 'صندوق MCP الذكي' : 'Smart MCP Box', 
-      url: '/dashboard?tab=mcp', 
+      url: '/mcp', 
       icon: Terminal 
     },
     { 
@@ -38,6 +33,26 @@ const HelperToolsSection: React.FC<HelperToolsSectionProps> = ({ isCollapsed }) 
       icon: Zap 
     },
     { 
+      title: isRTL ? 'من نحن' : 'About Us', 
+      url: '/about', 
+      icon: BookOpen 
+    },
+    { 
+      title: isRTL ? 'كيف يعمل' : 'How It Works', 
+      url: '/how-it-works', 
+      icon: HelpCircle 
+    },
+    { 
+      title: isRTL ? 'مهمتنا' : 'Our Mission', 
+      url: '/mission', 
+      icon: Users 
+    },
+    { 
+      title: isRTL ? 'الخدمات' : 'Services Overview', 
+      url: '/services', 
+      icon: Bell 
+    },
+    { 
       title: isRTL ? 'الدعم الفني' : 'Technical Support', 
       url: '/support', 
       icon: HelpCircle 
@@ -46,10 +61,10 @@ const HelperToolsSection: React.FC<HelperToolsSectionProps> = ({ isCollapsed }) 
 
   return (
     <SidebarSection
-      title={isRTL ? '🔧 أدوات مساعدة' : '🔧 Helper Tools'}
+      title={isRTL ? '🔧 أدوات وصفحات مساعدة' : '🔧 Helper Tools & Pages'}
       items={helperItems}
       isCollapsed={isCollapsed}
-      colorClass="text-orange-600 dark:text-orange-400"
+      colorClass="text-blue-900 dark:text-blue-300 font-bold"
     />
   );
 };
