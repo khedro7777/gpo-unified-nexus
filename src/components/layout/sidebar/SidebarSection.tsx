@@ -37,7 +37,7 @@ const SidebarSection: React.FC<SidebarSectionProps> = ({
       <SidebarGroupLabel className={
         isCollapsed 
           ? 'sr-only' 
-          : `${colorClass} text-sm px-2 py-1 mb-2`
+          : `text-gray-900 dark:text-gray-100 font-black text-sm px-2 py-1 mb-2`
       }>
         {title}
       </SidebarGroupLabel>
