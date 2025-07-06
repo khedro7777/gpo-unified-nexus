@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { CheckCircle, MessageSquare, Gavel, Settings, Vote } from 'lucide-react';
+import { CheckCircle, MessageSquare, Gavel, Settings, Vote, Building } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/use-auth';
 import SidebarSection from './SidebarSection';
@@ -18,26 +18,39 @@ const GovernanceSection: React.FC<GovernanceSectionProps> = ({ isCollapsed }) =>
 
   const governanceItems = [
     { 
-      title: isRTL ? 'التصويت والحوكمة' : 'Voting & Governance', 
+      title: isRTL ? 'الحوكمة العامة' : 'Governance', 
       url: '/governance', 
       icon: Vote 
     },
     { 
-      title: isRTL ? 'مناقشات لووميو' : 'Loomio Discussions', 
-      url: '/governance?tab=loomio', 
-      icon: MessageSquare,
-      disabled: true // Will be enabled when Loomio integration is ready
+      title: isRTL ? 'التصويت والاقتراحات' : 'Voting & Proposals', 
+      url: '/governance/voting', 
+      icon: CheckCircle 
+    },
+    { 
+      title: isRTL ? 'مناقشات الحوكمة' : 'Governance Discussions', 
+      url: '/governance/deliberation', 
+      icon: MessageSquare 
+    },
+    { 
+      title: isRTL ? 'إدارة DAO' : 'DAO Management', 
+      url: '/dao', 
+      icon: Building 
+    },
+    { 
+      title: isRTL ? 'أعضاء DAO' : 'DAO Members', 
+      url: '/dao/members', 
+      icon: MessageSquare 
+    },
+    { 
+      title: isRTL ? 'مشاريع DAO' : 'DAO Projects', 
+      url: '/dao/projects', 
+      icon: Settings 
     },
     { 
       title: isRTL ? 'نزاعات ORDA' : 'ORDA Disputes', 
-      url: '/arbitration', 
+      url: '/disputes', 
       icon: Gavel 
-    },
-    { 
-      title: isRTL ? 'OpenZeppelin Governor' : 'OpenZeppelin Governor', 
-      url: '/governance?tab=openzeppelin', 
-      icon: Settings,
-      disabled: true // Will be enabled when OpenZeppelin integration is ready
     }
   ];
 
@@ -46,7 +59,7 @@ const GovernanceSection: React.FC<GovernanceSectionProps> = ({ isCollapsed }) =>
       title={isRTL ? '⚖️ الحوكمة والتصويت' : '⚖️ Governance & Voting'}
       items={governanceItems}
       isCollapsed={isCollapsed}
-      colorClass="text-purple-600 dark:text-purple-400"
+      colorClass="text-blue-900 dark:text-blue-300 font-bold"
     />
   );
 };

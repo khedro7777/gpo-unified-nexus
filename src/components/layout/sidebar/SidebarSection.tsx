@@ -37,7 +37,7 @@ const SidebarSection: React.FC<SidebarSectionProps> = ({
       <SidebarGroupLabel className={
         isCollapsed 
           ? 'sr-only' 
-          : `${colorClass} dark:text-gray-300 font-semibold text-sm px-2 py-1`
+          : `${colorClass} text-sm px-2 py-1 mb-2`
       }>
         {title}
       </SidebarGroupLabel>
@@ -53,8 +53,8 @@ const SidebarSection: React.FC<SidebarSectionProps> = ({
                       item.disabled 
                         ? 'opacity-50 cursor-not-allowed text-gray-400 dark:text-gray-600'
                         : isActive 
-                          ? 'bg-primary text-primary-foreground shadow-sm font-medium dark:bg-primary dark:text-primary-foreground' 
-                          : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
+                          ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-md font-semibold' 
+                          : 'text-gray-700 dark:text-gray-200 hover:bg-gradient-to-r hover:from-blue-100 hover:to-purple-100 dark:hover:from-blue-900/30 dark:hover:to-purple-900/30 hover:text-blue-700 dark:hover:text-blue-300 hover:shadow-sm'
                     }`
                   }
                   onClick={item.disabled ? (e) => e.preventDefault() : undefined}
@@ -64,7 +64,7 @@ const SidebarSection: React.FC<SidebarSectionProps> = ({
                     <>
                       <span className="flex-1">{item.title}</span>
                       {item.badge && (
-                        <span className="bg-red-500 text-white text-xs rounded-full px-2 py-0.5 ml-2">
+                        <span className="bg-red-500 text-white text-xs rounded-full px-2 py-0.5 ml-2 font-medium">
                           {item.badge}
                         </span>
                       )}
