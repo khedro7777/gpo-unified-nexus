@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 
 // Pages
 import Index from '@/pages/Index';
-import EnhancedHomePage from '@/pages/EnhancedHomePage';
 import Dashboard from '@/pages/Dashboard';
 import Profile from '@/pages/Profile';
 import About from '@/pages/About';
@@ -14,6 +13,7 @@ import Support from '@/pages/Support';
 import HowItWorks from '@/pages/HowItWorks';
 import CreateGroup from '@/pages/groups/CreateGroup';
 import GroupDetails from '@/pages/groups/GroupDetails';
+import MyGroups from '@/pages/groups/MyGroups';
 import Groups from '@/pages/Groups';
 import Suppliers from '@/pages/suppliers/Suppliers';
 import Services from '@/pages/Services';
@@ -50,7 +50,6 @@ const AppRoutes = () => {
       <Routes>
         {/* Public Routes - Accessible without authentication */}
         <Route path="/" element={<Index />} />
-        <Route path="/old-home" element={<EnhancedHomePage />} />
         <Route path="/about" element={<About />} />
         <Route path="/support" element={<Support />} />
         <Route path="/how-it-works" element={<HowItWorks />} />
@@ -77,6 +76,11 @@ const AppRoutes = () => {
         <Route path="/groups" element={
           <ProtectedRoute>
             <Groups />
+          </ProtectedRoute>
+        } />
+        <Route path="/my-groups" element={
+          <ProtectedRoute>
+            <MyGroups />
           </ProtectedRoute>
         } />
         <Route path="/groups/:id" element={
