@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Bell, Calendar, Terminal, Wrench, HelpCircle, Zap, BookOpen, Users } from 'lucide-react';
-import { useTranslation } from 'react-i18n';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/use-auth';
 import SidebarSection from './SidebarSection';
 
