@@ -2,6 +2,7 @@
 import React, { Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
+import { Button } from '@/components/ui/button';
 
 // Pages
 import Index from '@/pages/Index';
@@ -48,8 +49,8 @@ const AppRoutes = () => {
     <Suspense fallback={<LoadingSpinner />}>
       <Routes>
         {/* Public Routes - Accessible without authentication */}
-        <Route path="/" element={<EnhancedHomePage />} />
-        <Route path="/old-home" element={<Index />} />
+        <Route path="/" element={<Index />} />
+        <Route path="/old-home" element={<EnhancedHomePage />} />
         <Route path="/about" element={<About />} />
         <Route path="/support" element={<Support />} />
         <Route path="/how-it-works" element={<HowItWorks />} />
@@ -178,12 +179,12 @@ const AppRoutes = () => {
             <div className="text-center">
               <h1 className="text-4xl font-bold text-foreground mb-4">404</h1>
               <p className="text-muted-foreground mb-6">الصفحة غير موجودة</p>
-              <a 
-                href="/" 
+              <Button
+                onClick={() => window.location.href = '/'}
                 className="text-primary hover:underline inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-md hover:bg-primary/20 transition-colors"
               >
                 العودة للصفحة الرئيسية
-              </a>
+              </Button>
             </div>
           </div>
         } />

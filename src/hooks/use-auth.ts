@@ -8,6 +8,7 @@ interface User {
   email: string;
   user_metadata?: {
     full_name?: string;
+    [key: string]: any;
   };
 }
 
