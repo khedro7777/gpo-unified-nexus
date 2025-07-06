@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -13,13 +14,20 @@ import {
   Play,
   Rocket,
   TrendingUp,
-  Users
+  Users,
+  ShoppingCart,
+  Briefcase,
+  Building,
+  DollarSign,
+  Scale
 } from 'lucide-react';
 
 import GroupSearch from '@/components/groups/GroupSearch';
 import OpenGroups from '@/components/groups/OpenGroups';
+import { useAuth } from '@/hooks/use-auth';
 
 const Index = () => {
+  const { isAuthenticated } = useAuth();
   const [searchFilters, setSearchFilters] = useState({
     gateway: '',
     country: '',
@@ -33,15 +41,15 @@ const Index = () => {
       id: 'buying',
       title: 'الشراء التعاوني',
       description: 'تجميع طلبات الشراء للحصول على أفضل العروض والخصومات من الموردين',
-      icon: Users,
+      icon: ShoppingCart,
       bgColor: 'bg-blue-100',
       iconColor: 'text-blue-600',
       features: [
-        'توفير المال',
-        'الحصول على جودة عالية',
-        'تسهيل عملية الشراء'
+        'توفير المال من خلال الشراء الجماعي',
+        'الحصول على جودة عالية بأسعار منافسة',
+        'تسهيل عملية الشراء والتفاوض'
       ],
-      link: '/groups?type=buying',
+      link: isAuthenticated ? '/groups?type=buying' : '/login',
       buttonText: 'اكتشف المزيد',
       activeGroups: 42
     },
@@ -54,10 +62,10 @@ const Index = () => {
       iconColor: 'text-green-600',
       features: [
         'زيادة الوعي بالعلامة التجارية',
-        'توسيع نطاق الوصول',
-        'تقليل تكاليف التسويق'
+        'توسيع نطاق الوصول للعملاء الجدد',
+        'تقليل تكاليف التسويق والإعلان'
       ],
-      link: '/groups?type=marketing',
+      link: isAuthenticated ? '/groups?type=marketing' : '/login',
       buttonText: 'اكتشف المزيد',
       activeGroups: 28
     },
@@ -65,15 +73,15 @@ const Index = () => {
       id: 'freelance',
       title: 'المستقلون',
       description: 'تجميع مهارات المستقلين لتنفيذ مشاريع متكاملة بأعلى جودة وكفاءة',
-      icon: Brain,
+      icon: Briefcase,
       bgColor: 'bg-purple-100',
       iconColor: 'text-purple-600',
       features: [
-        'الحصول على مهارات متنوعة',
-        'تنفيذ مشاريع متكاملة',
-        'توفير الوقت والجهد'
+        'الحصول على مهارات متنوعة ومتخصصة',
+        'تنفيذ مشاريع متكاملة وعالية الجودة',
+        'توفير الوقت والجهد في البحث عن المواهب'
       ],
-      link: '/groups?type=freelancers',
+      link: isAuthenticated ? '/groups?type=freelancers' : '/login',
       buttonText: 'اكتشف المزيد',
       activeGroups: 15
     },
@@ -81,15 +89,15 @@ const Index = () => {
       id: 'suppliers',
       title: 'الموردون',
       description: 'منصة للشركات والمؤسسات لعرض منتجاتها وخدماتها على مجموعات الشراء التعاوني',
-      icon: Globe,
+      icon: Building,
       bgColor: 'bg-orange-100',
       iconColor: 'text-orange-600',
       features: [
-        'الوصول إلى عملاء جدد',
-        'زيادة المبيعات',
-        'بناء علاقات تجارية قوية'
+        'الوصول إلى عملاء جدد ومجموعات شراء',
+        'زيادة المبيعات وتوسيع النطاق التجاري',
+        'بناء علاقات تجارية قوية ومستدامة'
       ],
-      link: '/suppliers',
+      link: isAuthenticated ? '/suppliers' : '/login',
       buttonText: 'اكتشف المزيد',
       activeGroups: 35
     },
@@ -101,43 +109,43 @@ const Index = () => {
       bgColor: 'bg-indigo-100',
       iconColor: 'text-indigo-600',
       features: [
-        'تسهيل عملية التأسيس',
-        'توفير الدعم القانوني والإداري',
-        'تجميع المؤسسين'
+        'تسهيل عملية التأسيس والإجراءات القانونية',
+        'توفير الدعم القانوني والإداري المتخصص',
+        'تجميع المؤسسين والشركاء المحتملين'
       ],
-      link: '/company-formation',
+      link: isAuthenticated ? '/company-formation' : '/login',
       buttonText: 'اكتشف المزيد',
       activeGroups: 12
     },
     {
       id: 'investment',
       title: 'الاستثمار الذكي',
-      description: 'تجميع المستثمرين لتمويل المشاريع الواعدة وتقليل المخاطر',
-      icon: TrendingUp,
+      description: 'تجميع المستثمرين لتمويل المشاريع الواعدة وتقليل المخاطر من خلال الاستثمار الجماعي',
+      icon: DollarSign,
       bgColor: 'bg-teal-100',
       iconColor: 'text-teal-600',
       features: [
-        'تجميع المستثمرين',
-        'تمويل المشاريع الواعدة',
-        'تقليل المخاطر'
+        'تجميع المستثمرين لفرص استثمارية مميزة',
+        'تمويل المشاريع الواعدة والناشئة',
+        'تقليل المخاطر من خلال التنويع'
       ],
-      link: '/investment',
+      link: isAuthenticated ? '/investment' : '/login',
       buttonText: 'اكتشف المزيد',
       activeGroups: 8
     },
     {
       id: 'arbitration',
-      title: 'التحكيم',
-      description: 'منصة للتحكيم في النزاعات التجارية بطريقة عادلة وشفافة',
-      icon: Globe,
+      title: 'التحكيم والتوثيق',
+      description: 'منصة للتحكيم في النزاعات التجارية بطريقة عادلة وشفافة مع توثيق العقود',
+      icon: Scale,
       bgColor: 'bg-yellow-100',
       iconColor: 'text-yellow-600',
       features: [
-        'حل النزاعات بطريقة عادلة',
-        'توفير الوقت والجهد',
-        'الحفاظ على العلاقات التجارية'
+        'حل النزاعات بطريقة عادلة وشفافة',
+        'توفير الوقت والجهد في الإجراءات القانونية',
+        'الحفاظ على العلاقات التجارية والمهنية'
       ],
-      link: '/arbitration',
+      link: isAuthenticated ? '/arbitration' : '/login',
       buttonText: 'اكتشف المزيد',
       activeGroups: 5
     }
@@ -150,7 +158,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b bg-white sticky top-0 z-50">
+      <header className="border-b bg-white sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-8">
@@ -193,14 +201,25 @@ const Index = () => {
                 </Select>
               </div>
               
-              <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" asChild>
-                  <Link to="/login">تسجيل دخول</Link>
-                </Button>
-                <Button size="sm" asChild>
-                  <Link to="/register">إنشاء حساب</Link>
-                </Button>
-              </div>
+              {!isAuthenticated ? (
+                <div className="flex items-center gap-2">
+                  <Button variant="outline" size="sm" asChild>
+                    <Link to="/login">تسجيل دخول</Link>
+                  </Button>
+                  <Button size="sm" asChild>
+                    <Link to="/register">إنشاء حساب</Link>
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <Button variant="outline" size="sm" asChild>
+                    <Link to="/dashboard">لوحة التحكم</Link>
+                  </Button>
+                  <Button variant="outline" size="sm" asChild>
+                    <Link to="/my-groups">مجموعاتي</Link>
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -221,18 +240,37 @@ const Index = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-              <Button size="lg" className="text-lg px-8 py-4" asChild>
-                <Link to="/register">
-                  <Rocket className="h-5 w-5 mr-2" />
-                  ابدأ الآن مجاناً
-                </Link>
-              </Button>
-              <Button variant="outline" size="lg" className="text-lg px-8 py-4" asChild>
-                <Link to="/how-it-works">
-                  <Play className="h-5 w-5 mr-2" />
-                  شاهد كيف تعمل
-                </Link>
-              </Button>
+              {!isAuthenticated ? (
+                <>
+                  <Button size="lg" className="text-lg px-8 py-4" asChild>
+                    <Link to="/register">
+                      <Rocket className="h-5 w-5 mr-2" />
+                      ابدأ الآن مجاناً
+                    </Link>
+                  </Button>
+                  <Button variant="outline" size="lg" className="text-lg px-8 py-4" asChild>
+                    <Link to="/how-it-works">
+                      <Play className="h-5 w-5 mr-2" />
+                      شاهد كيف تعمل
+                    </Link>
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button size="lg" className="text-lg px-8 py-4" asChild>
+                    <Link to="/dashboard">
+                      <Users className="h-5 w-5 mr-2" />
+                      لوحة التحكم
+                    </Link>
+                  </Button>
+                  <Button variant="outline" size="lg" className="text-lg px-8 py-4" asChild>
+                    <Link to="/my-groups">
+                      <ShoppingCart className="h-5 w-5 mr-2" />
+                      مجموعاتي
+                    </Link>
+                  </Button>
+                </>
+              )}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
@@ -364,8 +402,8 @@ const Index = () => {
             <div>
               <h4 className="font-semibold text-lg mb-6">الخدمات</h4>
               <ul className="space-y-3">
-                <li><Link to="/buying" className="text-gray-400 hover:text-white transition-colors">الشراء التعاوني</Link></li>
-                <li><Link to="/marketing" className="text-gray-400 hover:text-white transition-colors">التسويق التعاوني</Link></li>
+                <li><Link to="/groups?type=buying" className="text-gray-400 hover:text-white transition-colors">الشراء التعاوني</Link></li>
+                <li><Link to="/groups?type=marketing" className="text-gray-400 hover:text-white transition-colors">التسويق التعاوني</Link></li>
                 <li><Link to="/freelance" className="text-gray-400 hover:text-white transition-colors">المستقلون</Link></li>
                 <li><Link to="/suppliers" className="text-gray-400 hover:text-white transition-colors">الموردون</Link></li>
                 <li><Link to="/company-formation" className="text-gray-400 hover:text-white transition-colors">تأسيس الشركات</Link></li>
@@ -376,10 +414,8 @@ const Index = () => {
               <h4 className="font-semibold text-lg mb-6">المساعدة</h4>
               <ul className="space-y-3">
                 <li><Link to="/support" className="text-gray-400 hover:text-white transition-colors">الدعم الفني</Link></li>
-                <li><Link to="/faq" className="text-gray-400 hover:text-white transition-colors">الأسئلة الشائعة</Link></li>
                 <li><Link to="/how-it-works" className="text-gray-400 hover:text-white transition-colors">كيف تعمل</Link></li>
-                <li><Link to="/terms" className="text-gray-400 hover:text-white transition-colors">الشروط والأحكام</Link></li>
-                <li><Link to="/privacy" className="text-gray-400 hover:text-white transition-colors">سياسة الخصوصية</Link></li>
+                <li><Link to="/about" className="text-gray-400 hover:text-white transition-colors">من نحن</Link></li>
               </ul>
             </div>
 
