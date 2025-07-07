@@ -72,6 +72,13 @@ const AppRoutes = () => {
           </ProtectedRoute>
         } />
 
+        {/* MCP Smart Box */}
+        <Route path="/mcp" element={
+          <ProtectedRoute>
+            {React.createElement(React.lazy(() => import('@/pages/mcp/MCPPage')))}
+          </ProtectedRoute>
+        } />
+
         {/* Group Management Routes */}
         <Route path="/groups" element={
           <ProtectedRoute>
@@ -151,6 +158,26 @@ const AppRoutes = () => {
             <Offers />
           </ProtectedRoute>
         } />
+        <Route path="/offers/sent" element={
+          <ProtectedRoute>
+            <div className="min-h-screen bg-background py-8">
+              <div className="container mx-auto px-4">
+                <h1 className="text-3xl font-bold mb-8">العروض المرسلة</h1>
+                <p className="text-muted-foreground">عرض جميع العروض التي قمت بإرسالها</p>
+              </div>
+            </div>
+          </ProtectedRoute>
+        } />
+        <Route path="/offers/received" element={
+          <ProtectedRoute>
+            <div className="min-h-screen bg-background py-8">
+              <div className="container mx-auto px-4">
+                <h1 className="text-3xl font-bold mb-8">العروض المستلمة</h1>
+                <p className="text-muted-foreground">عرض جميع العروض التي تلقيتها</p>
+              </div>
+            </div>
+          </ProtectedRoute>
+        } />
         <Route path="/wallet" element={
           <ProtectedRoute>
             <Wallet />
@@ -168,14 +195,86 @@ const AppRoutes = () => {
             <Arbitration />
           </ProtectedRoute>
         } />
+        <Route path="/disputes" element={
+          <ProtectedRoute>
+            <div className="min-h-screen bg-background py-8">
+              <div className="container mx-auto px-4">
+                <h1 className="text-3xl font-bold mb-8">إدارة النزاعات - ORDA</h1>
+                <p className="text-muted-foreground">نظام حل النزاعات الرقمي المتقدم</p>
+              </div>
+            </div>
+          </ProtectedRoute>
+        } />
         <Route path="/documents" element={
           <ProtectedRoute>
             <DocumentManagement />
           </ProtectedRoute>
         } />
 
+        {/* Additional Portal Routes */}
+        <Route path="/products" element={
+          <ProtectedRoute>
+            <div className="min-h-screen bg-background py-8">
+              <div className="container mx-auto px-4">
+                <h1 className="text-3xl font-bold mb-8">قوائم المنتجات</h1>
+                <p className="text-muted-foreground">عرض وتسويق المنتجات للمجموعات المختلفة</p>
+              </div>
+            </div>
+          </ProtectedRoute>
+        } />
+        <Route path="/negotiation" element={
+          <ProtectedRoute>
+            <div className="min-h-screen bg-background py-8">
+              <div className="container mx-auto px-4">
+                <h1 className="text-3xl font-bold mb-8">حلول التفاوض الذكية</h1>
+                <p className="text-muted-foreground">أدوات ذكية لتسهيل التفاوض والتوصل لاتفاقات</p>
+              </div>
+            </div>
+          </ProtectedRoute>
+        } />
+
+        {/* Verification and Settings */}
+        <Route path="/verification" element={
+          <ProtectedRoute>
+            <div className="min-h-screen bg-background py-8">
+              <div className="container mx-auto px-4">
+                <h1 className="text-3xl font-bold mb-8">التحقق من الهوية</h1>
+                <p className="text-muted-foreground">أكمل عملية التحقق من هويتك لتفعيل جميع المزايا</p>
+              </div>
+            </div>
+          </ProtectedRoute>
+        } />
+        <Route path="/settings" element={
+          <ProtectedRoute>
+            <div className="min-h-screen bg-background py-8">
+              <div className="container mx-auto px-4">
+                <h1 className="text-3xl font-bold mb-8">إعدادات الحساب</h1>
+                <p className="text-muted-foreground">إدارة إعدادات حسابك وتفضيلاتك</p>
+              </div>
+            </div>
+          </ProtectedRoute>
+        } />
+
         {/* Service-specific routes */}
         <Route path="/services/*" element={<ServiceRoutes />} />
+
+        {/* Admin Monitor Access - Hidden route */}
+        <Route path="/admin-monitor-access" element={
+          <div className="min-h-screen flex items-center justify-center bg-background">
+            <div className="max-w-md mx-auto text-center p-8">
+              <h1 className="text-2xl font-bold mb-4">GPO Admin Access Portal</h1>
+              <p className="text-muted-foreground mb-6">
+                This area is reserved for internal governance, observation, and content control.
+              </p>
+              <Button 
+                onClick={() => window.open('https://cms.gpo.example.com/admin', '_blank')}
+                className="w-full"
+              >
+                Enter Admin Dashboard
+              </Button>
+            </div>
+          </div>
+        } />
         
         {/* Catch-all route for 404 */}
         <Route path="*" element={
